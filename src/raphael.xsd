@@ -1,0 +1,290 @@
+<?xml version="1.0"?>
+
+<!-- xml document refinition for raphael -->
+<!-- @author: sgurin -->
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://raphaeljs.com" xmlns="http://raphaeljs.com"
+	elementFormDefault="qualified">
+
+	<xs:element name="raphael">
+        <xs:annotation>
+        	<xs:documentation>raphael is the main element. it contains one or more papers.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+			<xs:choice maxOccurs="unbounded">
+				<xs:element ref="paper" />
+				<xs:element ref="style" />
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	
+	
+	<xs:complexType name="BaseType">
+		<xs:annotation><xs:documentation>All raphael objects are suceptible o fhaving and id and class attributes, even sets and papers. </xs:documentation></xs:annotation>
+		<xs:attribute name="id" type="xs:ID">
+			<xs:annotation><xs:documentation>id of the raphael shape for retrieving it from dictionary and for referencing it in css using #shape1.</xs:documentation></xs:annotation>
+		</xs:attribute>
+		
+		<!-- type like class attr in xhtml schema at http://www.w3.org/TR/xhtml1-schema/ -->
+		<xs:attribute name="class" type="xs:NMTOKENS">
+			<xs:annotation><xs:documentation>class of the raphael shape for retrieving it from dictionary and for referencing it in css using .shapeClass1</xs:documentation></xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+
+
+	<!-- paper type extends BaseType -->
+	<xs:element name="paper">
+        <xs:annotation>
+        	<xs:documentation>a paper contains shapes. it can be related to a html element using the elid attr</xs:documentation>
+        </xs:annotation>        
+        <xs:complexType>
+        <xs:complexContent>
+			<xs:extension base="BaseType">
+			<xs:choice maxOccurs="unbounded">
+				<xs:element ref="rect" />
+				<xs:element ref="circle" />
+				<xs:element ref="set" />
+				<xs:element ref="image" />
+				<xs:element ref="ellipse" />
+				<xs:element ref="path" />
+			</xs:choice>
+	        <xs:attribute name="containerId" type="xs:string">
+				<xs:annotation><xs:documentation>ID of DOM element which is going to be a parent for drawing surface</xs:documentation></xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="x" type="xs:int">
+				<xs:annotation><xs:documentation>x coord of the paper's top-left corner</xs:documentation></xs:annotation>
+			</xs:attribute>		
+			<xs:attribute name="y" type="xs:int">
+				<xs:annotation><xs:documentation>y coord of the paper's top-left corner</xs:documentation></xs:annotation>
+			</xs:attribute>		
+			<xs:attribute name="width" type="xs:int" use="required">
+				<xs:annotation><xs:documentation>width in pixels</xs:documentation></xs:annotation>
+			</xs:attribute>		
+			<xs:attribute name="height" type="xs:int" use="required">
+				<xs:annotation><xs:documentation>height in pixels</xs:documentation></xs:annotation>
+			</xs:attribute>				
+			</xs:extension>
+		</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+
+
+	
+	<!-- attrsType extends BaseType -->
+	<xs:complexType name="AttrsType">
+	
+		<xs:complexContent>
+			<xs:extension base="BaseType">
+				<xs:attribute name="x" type="xs:int">
+					<xs:annotation><xs:documentation>x coordinate of the top left corner</xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="y" type="xs:int">
+					<xs:annotation><xs:documentation>y coordinate of the top left corner</xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="width" type="xs:int">
+					<xs:annotation><xs:documentation>rectangle width</xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="height" type="xs:int">
+					<xs:annotation><xs:documentation>rectangle height</xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="src" type="xs:string" use="required">
+					<xs:annotation><xs:documentation>radius for rounded corners, default is 0</xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="cx" type="xs:int">
+					<xs:annotation><xs:documentation>x coordinate of the top left corner</xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="cy" type="xs:int">
+					<xs:annotation><xs:documentation>y coordinate of the top left corner</xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="radius" type="xs:int">
+					<xs:annotation><xs:documentation>y coordinate of the top left corner</xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="rx" type="xs:int">
+					<xs:annotation><xs:documentation>horizontal radius</xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="ry" type="xs:int">
+					<xs:annotation><xs:documentation>vertical radius</xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="path" type="xs:string">
+					<xs:annotation><xs:documentation>path string in SVG format.</xs:documentation></xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>		
+		
+	</xs:complexType>
+	
+	<!-- the RectType extends AttrsType but making attributes x,y,width,height mandatory -->
+	<xs:complexType name="RectType">		
+				
+		<xs:complexContent>
+		
+			<xs:restriction base="AttrsType">
+				<xs:attribute name="x" type="xs:int"  use="required">
+					<xs:annotation><xs:documentation>x coordinate of the top left corner</xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="y" type="xs:int"  use="required">
+					<xs:annotation><xs:documentation>y coordinate of the top left corner</xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="width" type="xs:int"  use="required">
+					<xs:annotation><xs:documentation>rectangle width</xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="height" type="xs:int"  use="required">
+					<xs:annotation><xs:documentation>rectangle height</xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="radius" type="xs:int">
+					<xs:annotation><xs:documentation>radius for rounded corners, default is 0</xs:documentation></xs:annotation>
+				</xs:attribute>
+			</xs:restriction>
+			
+		</xs:complexContent>	
+		
+	</xs:complexType>
+	
+	<!-- the CircleType extends AttrsType but making attributes cx, cy, radius mandatory -->
+	<xs:complexType name="CircleType">		
+				
+		<xs:complexContent>
+		
+			<xs:restriction base="AttrsType">
+				<xs:attribute name="cx" type="xs:int"  use="required">
+					<xs:annotation><xs:documentation>x coordinate of the centre</xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="cy" type="xs:int"  use="required">
+					<xs:annotation><xs:documentation>y coordinate of the centre</xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="radius" type="xs:int" use="required">
+					<xs:annotation><xs:documentation>radius</xs:documentation></xs:annotation>
+				</xs:attribute>
+			</xs:restriction>
+			
+		</xs:complexContent>	
+		
+	</xs:complexType>
+	
+	<!-- the ImageType extends AttrsType but making attributes x, y, width, height, src mandatory -->
+	<xs:complexType name="ImageType">		
+				
+		<xs:complexContent>
+		
+			<xs:restriction base="AttrsType">
+				<xs:attribute name="x" type="xs:int"  use="required">
+					<xs:annotation><xs:documentation>x coordinate of the top left corner</xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="y" type="xs:int"  use="required">
+					<xs:annotation><xs:documentation>y coordinate of the top left corner</xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="width" type="xs:int"  use="required">
+					<xs:annotation><xs:documentation>rectangle width</xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="height" type="xs:int"  use="required">
+					<xs:annotation><xs:documentation>rectangle height</xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="src" type="xs:string" use="required">
+					<xs:annotation><xs:documentation>radius for rounded corners, default is 0</xs:documentation></xs:annotation>
+				</xs:attribute>
+			</xs:restriction>
+			
+		</xs:complexContent>
+	</xs:complexType>
+	
+	
+	<!-- the CircleType extends AttrsType but making attributes cx, cy, rx, ry mandatory -->
+	<xs:complexType name="EllipseType">		
+				
+		<xs:complexContent>
+		
+			<xs:restriction base="AttrsType">
+				<xs:attribute name="x" type="xs:int" use="required">
+					<xs:annotation><xs:documentation>x coordinate of the centre</xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="y" type="xs:int"  use="required">
+					<xs:annotation><xs:documentation>y coordinate of the centre</xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="rx" type="xs:int" use="required">
+					<xs:annotation><xs:documentation>horizontal radius</xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="ry" type="xs:int" use="required">
+					<xs:annotation><xs:documentation>vertical radius</xs:documentation></xs:annotation>
+				</xs:attribute>
+			</xs:restriction>
+			
+		</xs:complexContent>	
+		
+	</xs:complexType>
+	
+	
+	<!-- the PathType extends AttrsType but making attributes path mandatory -->
+	<xs:complexType name="PathType">						
+		<xs:complexContent>		
+			<xs:restriction base="AttrsType">
+				<xs:attribute name="path" type="xs:string" use="required">
+					<xs:annotation><xs:documentation>path string in SVG format.</xs:documentation></xs:annotation>
+				</xs:attribute>
+			</xs:restriction>
+			
+		</xs:complexContent>	
+		
+	</xs:complexType>
+	
+	<!-- the Set type extends AttrsType -->
+	<xs:complexType name="SetType">
+		<xs:complexContent>
+			<xs:extension base="AttrsType">
+				<xs:choice maxOccurs="unbounded">
+					<xs:element ref="rect" />
+					<xs:element ref="circle" />
+					<xs:element ref="set" />
+					<xs:element ref="image" />
+					<xs:element ref="ellipse" />
+					<xs:element ref="path" />
+				</xs:choice>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:element name="rect" type="RectType">
+	</xs:element>
+
+	<xs:element name="circle" type="CircleType">
+	</xs:element>
+	
+	<xs:element name="image" type="ImageType">
+	</xs:element>
+	
+	<xs:element name="ellipse" type="EllipseType">
+	</xs:element>
+	
+	<xs:element name="path" type="PathType">
+	</xs:element>
+	
+	<xs:element name="set" type="SetType">
+	</xs:element>
+	
+	
+	<xs:element name="style">
+	
+	<xs:annotation><xs:documentation>css style like tag for rapahël attributes.	
+	Style element is only valid as &lt;raphael> tag children
+	use jquery supported selectors and valid raphaël attribute names as propery names like: 
+	
+	&lt;raphael>
+	
+		&lt;paper id="paper1" ...>
+			&lt;set class="face1" ...>
+				....
+			&lt;/set>
+		&lt;/paper>
+	
+		&lt;style>
+		#paper1 .face1 .eye {
+			stroke-width: 4;
+		}
+		&lt;/style>
+	
+	&lt;/raphael>
+	</xs:documentation></xs:annotation>
+	</xs:element>
+
+
+</xs:schema>

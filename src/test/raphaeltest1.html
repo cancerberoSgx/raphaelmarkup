@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+	<script src="../deps/jquery-1.7.1.min.js"></script>
+	<script src="../deps/raphael-min.js"></script>
+  	<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" />
+	<script type="text/javascript" src="qunit.js"></script>
+	<script type="text/javascript" src="../rm.js"></script>
+<title>Raphael markup test 1</title>
+</head>
+<body>
+
+<!-- and now the raphael document -->
+
+<raphael id="raphaelDocument1"
+	xmlns="http://raphaeljs.com"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://raphaeljs.com ../raphael.xsd">
+	
+	<paper x="10" y="10" width="400" height="400">
+		<rect x="20" y="30" width="100" height="200"></rect>
+		<rect x="200" y="30" width="100" height="200"></rect>
+		<circle cx="20" cy="300" radius="20" stroke="red"></circle>
+	</paper>
+	
+	<style>
+	paper rect {
+		fill: blue;
+		opacity: 0.5;
+		stroke-width: 10 
+	}
+	</style>
+</raphael>
+
+
+ <h1 id="qunit-header">QUnit raphael markup tests</h1>
+ <h2 id="qunit-banner"></h2>
+ <div id="qunit-testrunner-toolbar"></div>
+ <h2 id="qunit-userAgent"></h2>
+ <ol id="qunit-tests"></ol>
+ <div id="qunit-fixture">test markup, will be hidden</div>
+ 
+
+<script type="text/javascript">
+
+/* render the raphael document */
+rm.render(document, "#raphaelDocument1", null);
+
+
+
+//some qunit testing
+$(document).ready(function(){
+    
+
+module("raphael shape types");
+
+test("parseRaphaelMarkup", function() {
+	var p = Raphael(1,1,300,400);
+	var r1 = p.rect(1,1,12,22), c1 = p.circle(4,4,2), 
+		e1 = p.ellipse(100,100,20,10), path1 = p.path("M10,20L30,40"), 
+		set1 = p.set();
+	
+	ok(p.width==300, "paper width");
+	ok(p.height==400, "paper height");
+	ok(r1.type=="rect", "rectt ype");
+	ok(c1.type=="circle", "circle type");
+	ok(e1.type=="ellipse", "ellipse type");
+	ok(path1.type=="path", "path type");
+	ok(set1.type=="set", "set type");
+	
+	p.clear();
+});
+});
+</script>
+
+</body>
+</html>
