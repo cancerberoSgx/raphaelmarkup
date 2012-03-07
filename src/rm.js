@@ -88,9 +88,17 @@ render : function(targetHtmlDoc, rdoc, css)	{
  */
 applyCSS: function(doc, cssStr) {
 	var css = rm.parseCSS(cssStr);
-	for(var sel in css) {
-		doc.find(sel).attr(css[sel]);
+	for ( var i = 0; i < css.__order.length; i++) {
+		var sel = css.__order[i];
+//		alert(sel+" - "+doc.find(sel).size());
+//		debugger;
+		var el = doc.find(sel);
+//		el.parents("set").each(function(index){
+//			
+//		});
+		el.attr(css[sel]);
 	}
+//	for(var sel in css) {}
 },
 /**
  * @param el jquery object with paper xml dom
@@ -118,9 +126,9 @@ _renderEl: function(el, paper) {
 	else if(el.get(0).tagName.toLowerCase()=="set")
 		shape=this._renderSet(el, paper);
 	else if(el.get(0).tagName.toLowerCase()=="circle")
-		shape=this._renderCircle(el, paper);
-	
-	this._renderAttrs(el, shape, paper);
+		shape=this._renderCircle(el, paper);	
+	else if(el.get(0).tagName.toLowerCase()=="ellipse")
+		shape=this._renderEllipse(el, paper);	
 	return shape;
 },
 /**
@@ -140,32 +148,68 @@ getRaphaelAttrs: function(el) {
  * @param shape - he raphael shape that presents the element
  * @param paper - the raphael paper.
  */
-_renderAttrs : function(el, shape, paper) {
+_renderAttrs : function(el, shape, paper) {	
 	var attrs = rm.getRaphaelAttrs(el);
+//	alert("_renderAttrs: "+el.attr("id")+" - "+rm._dump(attrs));
+//	debugger;
 	shape.attr(attrs);
 },
 _renderImage: function(el, paper) {
-	return paper.image(el.attr("src"), el.attr("x"), 
+	var shape = paper.image(el.attr("src"), el.attr("x"), 
 		el.attr("y"), el.attr("width"), el.attr("height"));
+	this._renderAttrs(el, shape, paper);
+	return shape;
+},
+_renderEllipse: function(el, paper) {
+	var shape =  paper.ellipse(el.attr("x"), el.attr("y"), 
+		el.attr("rx"), el.attr("ry"));
+	this._renderAttrs(el, shape, paper);
+	return shape;
 },
 _renderRect: function(el, paper) {
-	return paper.rect(el.attr("x"), el.attr("y"), 
+	var shape =  paper.rect(el.attr("x"), el.attr("y"), 
 		el.attr("width"), el.attr("height"), el.attr("radius"));
+	this._renderAttrs(el, shape, paper);
+	return shape;
 },
 _renderPath: function(el, paper) {
-	return paper.path(el.attr("path"));
+	var shape = paper.path(el.attr("path"));
+	this._renderAttrs(el, shape, paper);
+	return shape;
 },
 _renderSet: function(el, paper) {
+	/* note that we first render set attrs, and then render set's children attrs, so one can do in CSS: 
+	.set1 {
+		fill: yellow;
+	}
+	.set1 circle {
+		fill: black;
+	}
+	 */
 	var set = paper.set();
-	el.children().each(function(index){
+	
+	//one iteration for building the set.
+	el.children().each(function(index){		
 		var childShape = rm._renderEl($(this), paper);
 		set.push(childShape);
 	});
+	//render the set attributes
+	rm._renderAttrs(el, set, paper);
+	//other iteration for setting attributes of children (after set attrs )
+	el.children().each(function(index){	
+		var shape = set[index];
+//		//first stylyze according to parent set
+//		rm._renderAttrs(el, shape, paper);
+		//and then apply specific style
+		rm._renderAttrs($(this), shape, paper);
+	});	
 	return set;
 },
 _renderCircle: function(el, paper) {
-	return paper.circle(el.attr("cx"), el.attr("cy"), 
+	var shape =  paper.circle(el.attr("cx"), el.attr("cy"), 
 		el.attr("radius"));
+	this._renderAttrs(el, shape, paper);
+	return shape;
 },	
 
 
@@ -287,6 +331,13 @@ _getId: function(type, el, domEl) {
 		domEl.attr("id", id);
 	}
 },
+_dump: function(o) {
+	var s = "{";
+	for(var i in o) {
+		s+=i+", ";
+	}
+	return s;
+},
 _raphaelAttrs: {
     "arrow-end": "none",
     "arrow-start": "none",
@@ -335,13 +386,16 @@ _raphaelAttrs: {
 		
 parseCSS: function(css) {
     var rules = {};
+    rules.__order=[];
     css = this._removeComments(css);
     var blocks = css.split('}');
     blocks.pop();
     var len = blocks.length;
     for (var i = 0; i < len; i++) {
         var pair = blocks[i].split('{');
-        rules[$.trim(pair[0])] = this._parseCSSBlock(pair[1]);
+        var sel = $.trim(pair[0]);
+    	rules.__order.push(sel);
+        rules[sel] = this._parseCSSBlock(pair[1]);
     }
     return rules;
 },
