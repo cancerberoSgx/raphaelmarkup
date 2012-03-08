@@ -7,6 +7,8 @@
 
 
 
+
+
 //window.onerror=function(msg, url, linenumber){
 // alert('Error message: '+msg+'\nURL: '+url+'\nLine Number: '+linenumber)
 // return true
@@ -40,13 +42,53 @@ var rm = {
 //	renderRM(targetDoc, xml, css);
 //},
 
+/**
+ * render all <raphael elements in current document
+ */
 render: function() {
 	$("raphael").each(function(index){
-		var rdoc= $($.parseXML("<raphael>"+$(this).html()+"</raphael>"))
+		var rdoc= rm.buildRDocFromDOM($(this));
 		rm._render(document, rdoc);
 	});	
 },
-
+/**
+ * @param a jquery object with a <raphael element
+ * @return a ready to use jquery object with the passed <raphael dom inside
+ */
+buildRDocFromDOM : function(dom) {
+	var html = dom.html();
+	if(html.indexOf("<?")==0) {
+		/* IE returns the <?xml ... header, and that breaks the xml parser 
+		 * so we deleteit */
+		html=html.toLowerCase();
+		/* find where to cut from */
+		var ip = html.indexOf("<paper"), is = html.indexOf("<style"), i=0;
+		if(is>0 && ip>0)
+			i=Math.min(is, ip);
+		else if(is<1) 
+			i=ip;
+		else if(ip<1) 
+			i=is;
+		if(i<=0) { //empty or invalid paper
+			//TODO
+			i=0;
+		}
+		html = html.substring(i, html.length);
+		
+		/* fix internet  explorer that removes quotes from class and id 
+		 * attributes when calling innerHTML... this invalidates the xml 
+		 * and makes the IE XML parser fails */
+		html=html.replace(/class\=([0-9a-z\-]+)/g, "class=\"$1\"");
+		html=html.replace(/id\=([0-9a-z\-]+)/g, "id=\"$1\"");		
+	}
+	var rdoc = null;
+	try { 
+		rdoc= $($.parseXML("<raphael>"+html+"</raphael>")); 
+	} catch(ex) {
+		alert("exception parsing document: "+ex);
+	}
+	return rdoc;
+},
 
 /**
  * @param targetHtmlDoc

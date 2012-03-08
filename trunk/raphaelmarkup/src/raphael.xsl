@@ -29,15 +29,6 @@ For usng it in your raphaelmarkup xml documents,
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-<!-- <xsl:variable name="raphael.js.path" select="'deps/raphael-min.js'" /> -->
-	
-<!-- <xsl:variable name="jquery.js.path" select="'deps/jquery-1.7.1.min.js'" /> -->
-
-<!-- <xsl:variable name="rm.js.path" select="'rm.js'" /> -->
-
-<!-- <xsl:variable name="doc.title" select="'raphael markup test1'" /> -->
-
-
 <xsl:template match="/">
 	<html>
 	<head>
@@ -74,9 +65,10 @@ For usng it in your raphaelmarkup xml documents,
 	<xsl:copy-of select="/"></xsl:copy-of>
 	
 	 <xsl:element name="script">
-		<xsl:attribute name="type">text/javascript</xsl:attribute>
-		alert("hello");
-	 rm.render(document, "#<xsl:value-of select="$raphael.id" />"); 
+		<xsl:attribute name="type">text/javascript</xsl:attribute>			
+	 	$(document).ready(function(){
+	 		rm.render();
+ 		}); 
     </xsl:element>
 	</body>
 	</html>

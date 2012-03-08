@@ -2,7 +2,7 @@
 
 <?xml-stylesheet type="text/xsl" href="index2.xsl"?>
 
-<raphael>
+<raphael xmlns="http://raphaeljs.com">
 	
 	<paper x="10" y="10" width="400" height="400">
 		<rect x="20" y="30" width="100" height="200"></rect>
