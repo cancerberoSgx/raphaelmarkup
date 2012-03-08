@@ -1,7 +1,5 @@
-<?xml version="1.0"?>
-
 <!DOCTYPE html>
-<html lang="en-US">
+<html>
 <head>
 	<script src="../deps/jquery-1.7.1.js"></script>
 	<script src="../deps/raphael-min.js"></script>
@@ -42,20 +40,13 @@
  		stroke-width: 4; 
  		opacity: 0.8
 	} 
-	
-	/* note about sets. here is a difference between CSS. here, one may think that 
-	the (last) rectangle inside the set should be filled 
-	with yellow, because of the second css rule. But no, 
-	the rule affecting that rect is the first, "paper rect. 
-	Note that .set1 is affecting the last ellipse in the set.*/
-	
 	</style>
 </raphael>
 
 
 <script type="text/javascript">
 
-/* render the raphael document */
+/* render all raphaels elements in this document */
 rm.render();
 
 </script>
