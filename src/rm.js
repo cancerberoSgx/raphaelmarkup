@@ -22,34 +22,39 @@ var rm = {
 		
 		/* * * * raphael markup renderer * * * */	
 
-/**
- * main render entry point. Will render the raphael markup and css code in the given html document object.
- * Usage: 
- * <pre>
- * var rap1 = rm.render(document, "<raphael....", ".apple-class1 {stroke: ...}")
- * rap1.find("#paper2 @apple1234").addClass("apple-class1"); // access to the document dynamically and css styles will be applied.
- * @param targetDoc - html document in which to render the raphael markup
- * @param xmlCode - the raphael markup, must be valid raphel.xsd document
- * @param cssCode - css code for raphael markup
- * @return the jquery document object  
- */
-renderRMSource: function (targetHtmlDoc, xmlCode, cssCode) {	
-	var css = rm.parseCSS(cssCode), 
-		xml = $.parseXML(xmlCode);
-	
-	renderRM(targetDoc, xml, css);
+///**
+// * main render entry point. Will render the raphael markup and css code in the given html document object.
+// * Usage: 
+// * <pre>
+// * var rap1 = rm.render(document, "<raphael....", ".apple-class1 {stroke: ...}")
+// * rap1.find("#paper2 @apple1234").addClass("apple-class1"); // access to the document dynamically and css styles will be applied.
+// * @param targetDoc - html document in which to render the raphael markup
+// * @param xmlCode - the raphael markup, must be valid raphel.xsd document
+// * @param cssCode - css code for raphael markup
+// * @return the jquery document object  
+// */
+//renderRMSource: function (targetHtmlDoc, xmlCode, cssCode) {	
+//	var css = rm.parseCSS(cssCode), 
+//		xml = $.parseXML(xmlCode);
+//	
+//	renderRM(targetDoc, xml, css);
+//},
+
+render: function() {
+	$("raphael").each(function(index){
+		var rdoc= $($.parseXML("<raphael>"+$(this).html()+"</raphael>"))
+		rm._render(document, rdoc);
+	});	
 },
+
+
 /**
  * @param targetHtmlDoc
  * @param rdoc a parsed jquery object with the raphael markup document or a string for selecting the raphael element. Must be valid raphael.xsd
- * @param css a js object with the css parsed
  * @return a jquery object with the XML DOM of raphael document
  */
-render : function(targetHtmlDoc, rdoc, css)	{
+_render : function(targetHtmlDoc, rdoc)	{
 	
-	if(typeof rdoc == "string")
-		rdoc= $($.parseXML("<raphael>"+$("#raphaelDocument1").html()+"</raphael>"))
-
 	/* first of all try to hide the <raphael> element from html document */
 	rdoc.hide();
 	
