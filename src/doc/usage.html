@@ -1,0 +1,76 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>raphael markup usage</title>
+</head>
+<body>
+<h1>This document try to explain different ways of including your raphael markup drawing in html documents. </h1>
+
+
+
+
+<h2>Embedding the &lt;raphael> element in the same html file</h2>
+
+<p>You can safely put one or more &lt;raphael> elements in your html documents. 
+An example on how to do that is
+<a href="../test/raphaeltest2.html">here</a>. Please take the time to read its sourcecode.</p>
+
+<p>For portability reasons is important that the &lt;raphael> elements declaration
+contains the <pre>xmlns="http://raphaeljs.com"</pre> atribute. </p>
+
+<p>Note: &lt;raphael> elements can contain html attributes like id or class for locating the element on the dom and render each &lt;raphael> individually if neccesary.</p> 
+
+
+
+<h2>Using ajax for loading the xml file</h2>
+<p>A xml document available by ajax can be rendered in an html document like
+<a href="../test/raphaeltest_ajax.html">this example</a> shows. Take the time to read the source code. 
+It is only a matter of including the reuired .js files in your HTMl document and the following:
+</p>
+<pre>
+&lt;script type="text/javascript">
+rm.renderAjax("drawing1.xml");
+&lt;/script>
+</pre>
+
+<p>and the <a href="../test/drawing1.xml">file drawing1.xml</a> will be rendered in current document.</p>
+
+
+
+<h2>Using the XSL sylesheet for rendering the raphael .xml files directly. </h2>
+
+<p>You compose your raphael writings in a .xml file, like 
+<a href="../test/xsltest1/drawing1.xml">this drawing</a>. The previous link opened in a modern browser should show you my drawing. 
+Notice that I'm being including a xsl stylesheet called drawing1.xml using the following: </p>
+<pre>&lt;?xml-stylesheet type="text/xsl" href="drawing1.xsl"?></pre>
+
+<p>We must also write the 
+<a href="../test/xsltest1/drawing1.xsl">configuration XSL file  drawing1.xsl</a>
+that must contain some information, like the path to dependency javascripts (jquery, raphael, etc), the title of the html document, and the path of the raphael.xsl, the main raphael markup XSL file for transforming a .xml docuemnt with our drawing into an xhtml document viewable by the browser. So create drawing1.xsl file in the same folder as drawing1.xml and with a content like this:</p>
+
+<pre>
+&lt;?xml version="1.0" encoding="ISO-8859-1"?>
+&lt;xsl:stylesheet version="1.0"
+	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">		
+	
+	&lt;!-- please fix the following variables and paths -->
+	&lt;xsl:variable name="doc.title" select="'raphael markup test1'" />
+	&lt;xsl:variable name="raphael.id" select="'raphaelDocument1'" />	
+	&lt;xsl:variable name="raphael.js.path" select="'../../deps/raphael-min.js'" />
+	&lt;xsl:variable name="jquery.js.path" select="'../../deps/jquery-1.7.1.min.js'" />
+	&lt;xsl:variable name="rm.js.path" select="'../../rm.js'" />
+	&lt;xsl:include href="../../raphael.xsl"/> 	
+	
+	&lt;xsl:template match="*">
+	&lt;/xsl:template>
+&lt;/xsl:stylesheet>
+</pre>
+
+<p>IMPORTANT: this only works in firefox and chrome and it is important, 
+in the xml file to define the &lt;raphael> element just without ANY attributes, like in the demo.</p>  
+<p>For this to work on IE the &lt;raphael> element must be defined like this: </p>
+
+<pre>&lt;raphael xmlns="http://raphaeljs.com"></pre> 
+
+</body>
+</html>

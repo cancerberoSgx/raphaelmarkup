@@ -51,12 +51,33 @@ render: function() {
 		rm._render(document, rdoc);
 	});	
 },
+
+renderAjax: function(url, id) {
+	
+	$.ajax({
+		"url": url,
+		"success": function(data) {
+			var rdoc= $(data); 
+			rm._render(document, rdoc);
+		},
+		"dataType": "xml"
+	});
+},
 /**
  * @param a jquery object with a <raphael element
  * @return a ready to use jquery object with the passed <raphael dom inside
  */
 buildRDocFromDOM : function(dom) {
+	
+//	if(!$.browser.msie) {
+//		dom.removeAttr("xmlns");
+//		dom=$(dom.get(0));
+//	}
+	
+//	alert(dom.attr("xmlns"))
+
 	var html = dom.html();
+	
 	if(html.indexOf("<?")==0) {
 		/* IE returns the <?xml ... header, and that breaks the xml parser 
 		 * so we deleteit */

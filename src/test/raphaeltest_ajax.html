@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="../deps/jquery-1.7.1.js"></script>
+	<script src="../deps/raphael-min.js"></script>
+	<script type="text/javascript" src="../rm.js"></script>
+<title>Raphael markup test 1</title>
+</head>
+<body>
+
+<p>this html document contains a drawing. This drawing is defined in an .xml file
+that was loaded with ajax and rendered dynamically inside an html element.</p>
+
+<script type="text/javascript">
+/* render the xml document drawing1.xml. The document must be in the same server. */
+rm.renderAjax("drawing1.xml");
+</script>
+
+</body>
+</html>
