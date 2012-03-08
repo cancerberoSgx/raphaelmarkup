@@ -11,11 +11,15 @@
         <xs:annotation>
         	<xs:documentation>raphael is the main element. it contains one or more papers.</xs:documentation>
         </xs:annotation>
-        <xs:complexType>
+		<xs:complexType>
+        <xs:complexContent>
+			<xs:extension base="BaseType">
 			<xs:choice maxOccurs="unbounded">
 				<xs:element ref="paper" />
 				<xs:element ref="style" />
-			</xs:choice>
+			</xs:choice>			
+			</xs:extension>
+		</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
 	
@@ -88,7 +92,7 @@
 				<xs:attribute name="height" type="xs:int">
 					<xs:annotation><xs:documentation>rectangle height</xs:documentation></xs:annotation>
 				</xs:attribute>
-				<xs:attribute name="src" type="xs:string" use="required">
+				<xs:attribute name="src" type="xs:string">
 					<xs:annotation><xs:documentation>radius for rounded corners, default is 0</xs:documentation></xs:annotation>
 				</xs:attribute>
 				<xs:attribute name="cx" type="xs:int">
@@ -108,6 +112,9 @@
 				</xs:attribute>
 				<xs:attribute name="path" type="xs:string">
 					<xs:annotation><xs:documentation>path string in SVG format.</xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="stroke" type="xs:string">
+					<xs:annotation><xs:documentation>stroke color</xs:documentation></xs:annotation>
 				</xs:attribute>
 			</xs:extension>
 		</xs:complexContent>		
