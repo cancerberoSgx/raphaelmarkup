@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>raphael markup usage</title>
+</head>
+<body>
+
+
+<h1>RaphaelMarkup examples and uses </h1>
+
+<p>@author: Sebastián Gurin</p>
+<p>This document contains a set of examples that shows how to use certain features of raphael markup framework.</p>
+
+<h2><a href="../test/rm_modifydomtest.html">
+Manipulating the XML DOM and the updating the drawings</a></h2>
+
+<p>In 
+<a href="../test/rm_modifydomtest.html">this</a>
+example we render a XML drawing with ajax, then perform a serie 
+of modification using the XML DOM object with jquery API like changing 
+some elements attributes and creating some other new elements, and finally calling the framework to update the changes in the drawing itself.
+. Please take the time to read its source code</p>
+
+<p>If using jquery API form manipulating the DOM, it is important to notive that, 
+because the XML DOM is not valid HTML, jquery functions accepting markup as strings
+won't work because jquery validates these strings to be valid html markup before adding them to the DOM. So for example, the following code won't work for appending new elements to the drawing DOM:</p>
+
+<pre>
+rdoc.find(".set1").append('&lt;rect id="r1"' x="12" y="20" width="80" height="80">&lt;/rect>');
+var rect1 = rdoc.find("#r1");
+</pre> 
+
+<p>Fortunately, we have the helper tool rm.createElement to do the same as above in a single call:</p>
+
+<pre>
+var rect1 = rm.createElement(rdoc.find(".set1"), "rect", 
+	{x: 12, y: 20, width: 80, height: 80, id: "r1"});
+</pre>
+
+</body>
+</html>

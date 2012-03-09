@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+	<script src="../deps/jquery-1.7.1.js"></script>
+<title>jquery and xml dom tests</title>
+</head>
+<body>
+
+ <h1 id="qunit-header">QUnit raphael markup tests</h1>
+ <h2 id="qunit-banner"></h2>
+ <div id="qunit-testrunner-toolbar"></div>
+ <h2 id="qunit-userAgent"></h2>
+ <ol id="qunit-tests"></ol>
+ <div id="qunit-fixture">test markup, will be hidden</div>
+ 
+
+<script type="text/javascript">
+
+var xmlStr = '<p><o><b id="b11"></b></o><b id="b1"></b></p>'
+var dom = $($.parseXML(xmlStr));
+
+alert(dom.find("b").size()+"=="+2); //this is OK - so xml dom load ok.
+	
+//add an element:
+dom.find("p").append('<c id="c1">hello</c>'); //this doesn't seem work!
+alert(dom.find("c").size()+"=="+1); //assert FAIL!
+</script>
+</body>
+</html>

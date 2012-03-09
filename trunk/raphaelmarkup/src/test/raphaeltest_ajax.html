@@ -13,7 +13,11 @@ that was loaded with ajax and rendered dynamically inside an html element.</p>
 
 <script type="text/javascript">
 /* render the xml document drawing1.xml. The document must be in the same server. */
-rm.renderAjax("drawing1.xml");
+rm.renderAjax("drawing1.xml", function (rdoc) {
+	/* rdoc is a ready to use jquery DOM object with our xml dom inside. 
+	we can access it for querying or even manipulate it: */
+	alert("the document has "+rdoc.find("rect")+" rectangles.");
+});
 </script>
 
 </body>

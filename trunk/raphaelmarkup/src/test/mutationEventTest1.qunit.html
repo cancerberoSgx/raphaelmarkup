@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
-	<script src="../deps/jquery-1.7.1.min.js"></script>
+	<script src="../deps/jquery-1.7.1.js"></script>
 	<script src="../deps/raphael-min.js"></script>
   	<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" />
 	<script type="text/javascript" src="qunit.js"></script>
@@ -29,9 +29,12 @@
 	</paper>
 	
 	<style>
+	
+	paper * {
+		opacity: 0.2
+	}
 	paper rect { 
- 		fill: blue; 
- 		opacity: 0.5; 
+ 		fill: blue;  
  		stroke-width: 10  
  	} 
 	.set1 {
@@ -41,7 +44,6 @@
  		fill: black; 
  		stroke: red; 
  		stroke-width: 4; 
- 		opacity: 0.8
 	} 
 	
 	
@@ -59,53 +61,50 @@
 
 <script type="text/javascript">
 
-/* render the raphael document */
-rm.render();
-
-
-
 //some qunit testing
 $(document).ready(function(){
-    
-module("raphael shape types");
+	
+module("mutation events using embedded markup");
 
-test("parseRaphaelMarkup", function() {
-	var p = Raphael(1,1,300,400);
-	var r1 = p.rect(1,1,12,22), c1 = p.circle(4,4,2), 
-		e1 = p.ellipse(100,100,20,10), path1 = p.path("M10,20L30,40"), 
-		set1 = p.set();
-	
-	ok(p.width==300, "paper width");
-	ok(p.height==400, "paper height");
-	ok(r1.type=="rect", "rectt ype");
-	ok(c1.type=="circle", "circle type");
-	ok(e1.type=="ellipse", "ellipse type");
-	ok(path1.type=="path", "path type");
-	ok(set1.type=="set", "set type");
-	
-	p.clear();
+test("parseRaphaelembeddedMarkup", function() {	
+	var d = rm.render()[0];
+	ok(d.find(".set1 circle").size()==1, "DOM1");
+	var c1 = d.find(".set1 circle");
+	c1.bind("DOMAttrModified", function(evt){
+		var attrName = evt.attrName, newval = evt.newValue, 
+			prevval = evt.prevValue;
+		ok(attrName=="fill", "DOMAttrModifiedName");
+		ok(newval=="pink", "DOMAttrModifiedNNewValue");
+		ok(prevval=="black", "DOMAttrModifiedPrevValue");
+	});
+	c1.attr("fill", "pink");
+	ok(c1.attr("fill")=="pink", "DOM2");
 });
 
-module("mutation events");
 
-test("parseRaphaelMarkup", function() {
-	var p = Raphael(1,1,300,400);
-	var r1 = p.rect(1,1,12,22), c1 = p.circle(4,4,2), 
-		e1 = p.ellipse(100,100,20,10), path1 = p.path("M10,20L30,40"), 
-		set1 = p.set();
+
+
 	
-	ok(p.width==300, "paper width");
-	ok(p.height==400, "paper height");
-	ok(r1.type=="rect", "rectt ype");
-	ok(c1.type=="circle", "circle type");
-	ok(e1.type=="ellipse", "ellipse type");
-	ok(path1.type=="path", "path type");
-	ok(set1.type=="set", "set type");
-	
-	p.clear();
-});
+	rm.renderAjax("drawing1.xml", function(d) {
+		module("mutation events using ajax markup");
+		test("parseRaphaelembeddedMarkup", function() {	
+		alert("hehe")
+		ok(d.find(".set1 circle").size()==1, "DOM1");
+		var c1 = d.find(".set1 circle");
+		c1.bind("DOMAttrModified", function(evt){
+			var attrName = evt.attrName, newval = evt.originalEvent.newValue, 
+				prevval = evt.originalEvent.prevValue;
+			ok(attrName=="fill", "DOMAttrModifiedName");
+			ok(newval=="pink", "DOMAttrModifiedNNewValue");
+			ok(prevval=="black", "DOMAttrModifiedPrevValue");
+		});
+		c1.attr("fill", "pink");
+		ok(c1.attr("fill")=="pink", "DOM2");
+		});
+	});
+		
+
 });
 </script>
-
 </body>
 </html>

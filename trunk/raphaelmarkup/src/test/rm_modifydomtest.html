@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="../deps/jquery-1.7.1.js"></script>
+	<script src="../deps/raphael-min.js"></script>
+	<script type="text/javascript" src="../rm.js"></script>
+<title>Raphael markup test 1</title>
+</head>
+<body>
+
+<p>we load a xml drawing and then perform some changes manipulating 
+the XML dom and updating the drawing. </p>
+
+<script type="text/javascript">
+/* render the xml document drawing1.xml. The document must be in the same server. */
+rm.renderAjax("drawing1.xml", function (rdoc) {
+	
+	
+	/* paint all rectangles */
+	rdoc.find("rect").attr("fill", "pink");
+	
+	
+	/* create a new shape. Note: we cannot use append(String) or other 
+	jquery functions for adding content qith strings. Strings passed to 
+	append() must be valid html, and our XML DOM isn't. So we create the 
+	elements using XMLDocument.createElement() like this: */
+	var xmldoc = rdoc.get(0);
+	var ellipse1 = $(xmldoc.createElement("ellipse"));
+	ellipse1.attr({x: 222, y: 333, rx: 52, ry: 14, fill: "brown"});
+	rdoc.find(".set1").append(ellipse1);
+	
+	rm.update(rdoc); //update the entire document for displaying DOM changes.
+	
+	
+	
+	/* now the same, but with the following differences: */
+	
+	/* using rm.createElement helper function for creating and appending 
+	a new ellipse shape in the set .set1 */ 
+	var ellipse2 = rm.createElement(rdoc.find(".set1"), "ellipse", 
+		{x: 122, y: 233, rx: 52, ry: 14, fill: "blue"});
+	
+	/* updating not the whole document but only the new shape */
+	rm.updateShape(rdoc, ellipse2);
+	
+	
+});
+</script>
+
+</body>
+</html>
