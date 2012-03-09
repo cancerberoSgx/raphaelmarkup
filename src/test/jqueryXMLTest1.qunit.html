@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+	<script src="../deps/jquery-1.7.1.js"></script>
+	<script src="../deps/raphael-min.js"></script>
+  	<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" />
+	<script type="text/javascript" src="qunit.js"></script>
+	<script type="text/javascript" src="../rm.js"></script>
+<title>jquery and xml dom tests</title>
+</head>
+<body>
+
+ <h1 id="qunit-header">QUnit raphael markup tests</h1>
+ <h2 id="qunit-banner"></h2>
+ <div id="qunit-testrunner-toolbar"></div>
+ <h2 id="qunit-userAgent"></h2>
+ <ol id="qunit-tests"></ol>
+ <div id="qunit-fixture">test markup, will be hidden</div>
+ 
+
+<script type="text/javascript">
+
+//some qunit testing
+$(document).ready(function(){
+	
+module("xml code loading and jquery dom access");
+
+test("xml code from string and jquery dom", function() {
+	
+var xmlStr = '<p><o><b></b></o><b></b></p>'
+var dom = $($.parseXML(xmlStr));
+
+ok(dom.find("b").size()==2, "jquery xml dom 1"); //OK
+
+//set attribute and check - 
+dom.find("p").attr("attr1", "val1");
+ok(dom.find("p").attr("attr1")=="val1", "jquery xml dom 12");
+ok($("p", dom).size()==1, "13");//OK		
+
+/*  a bug, using dom.find("p").append(string) won't work. it seems the new element 
+specified in string will be created in document and not in our xml doc 
+and so it won¡t be attached... */
+dom.find("p").append('<d>hello</d>'); //this doesn't work	
+ok(dom.find("d").size()==1, "jquery xml dom 2"); //FAIL!
+
+/* but this way I'm able to append a element. I only has to make sure 
+that the new element is created on my xml document not in html document. So my
+conclusion is that append(string) isw incorrect for the case of internal parsed XML Documents */ 
+var c1 = $(dom.get(0).createElement("c")); //make sure new el is created in our xml doc
+dom.find("p").append(c1);
+ok($("c", dom).size()==1, "14"); //OK
+
+});
+
+});
+</script>
+</body>
+</html>
