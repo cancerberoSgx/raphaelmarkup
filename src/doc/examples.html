@@ -1,6 +1,7 @@
 <!DOCTYPE HTML>
-<html>
+<html >
 <head>
+<meta charset="UTF-8"/>
 <title>raphael markup usage</title>
 </head>
 <body>
@@ -11,11 +12,14 @@
 <p>@author: Sebastián Gurin</p>
 <p>This document contains a set of examples that shows how to use certain features of raphael markup framework.</p>
 
-<h2><a href="../test/rm_modifydomtest.html">
+
+
+
+<h2><a href="../test/examples/rm_modifydomtest.html">
 Manipulating the XML DOM and the updating the drawings</a></h2>
 
 <p>In 
-<a href="../test/rm_modifydomtest.html">this</a>
+<a href="../test/examples/rm_modifydomtest.html">this</a>
 example we render a XML drawing with ajax, then perform a serie 
 of modification using the XML DOM object with jquery API like changing 
 some elements attributes and creating some other new elements, and finally calling the framework to update the changes in the drawing itself.
@@ -23,19 +27,42 @@ some elements attributes and creating some other new elements, and finally calli
 
 <p>If using jquery API form manipulating the DOM, it is important to notive that, 
 because the XML DOM is not valid HTML, jquery functions accepting markup as strings
-won't work because jquery validates these strings to be valid html markup before adding them to the DOM. So for example, the following code won't work for appending new elements to the drawing DOM:</p>
+won't work because jquery validates these strings to be valid html markup before adding 
+them to the DOM. So for example, the following code <b>won't work</b> for appending new elements to the drawing DOM:</p>
 
 <pre>
 rdoc.find(".set1").append('&lt;rect id="r1"' x="12" y="20" width="80" height="80">&lt;/rect>');
-var rect1 = rdoc.find("#r1");
+var rect1 = rdoc.find("#r1"); //DONT WORK!
 </pre> 
 
-<p>Fortunately, we have the helper tool rm.createElement to do the same as above in a single call:</p>
+<p>Fortunately, we have the helper tool rm.createElement to do the same as 
+above in a single call:</p>
 
 <pre>
 var rect1 = rm.createElement(rdoc.find(".set1"), "rect", 
 	{x: 12, y: 20, width: 80, height: 80, id: "r1"});
 </pre>
+
+
+
+
+
+
+<h2><a href="../test/examples/exportingToXML.html">
+Exporting a raphaël paper instance to XML</a></h2>
+
+<a href="../test/examples/exportingToXML.html">
+In this example</a> we will read a raphael paper instance in a XML DOM object.
+This XML DOM object follows the syntax of raphaelmarkup and can be used for 
+serialization purposes but also for manipulating the paper using XML API. Then
+the modified DOM can be (re)rendered in the html document.</p>
+
+<p>In concrete, we will create a raphaël paper and draw some things in it, using common raphaël javascript API.
+then we will export the paper to XML syntax using the framework. Then we will 
+remove the created raphael paper from the doucment, and try to render 
+the exported xml document and see if its equals to raphael original paper.</p>
+
+<p>Take time to read the sources </p>
 
 </body>
 </html>

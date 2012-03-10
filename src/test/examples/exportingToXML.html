@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="../../deps/jquery-1.7.1.js"></script>
+	<script src="../../deps/raphael-min.js"></script>
+	<script type="text/javascript" src="../../rm.js"></script>
+<title>Raphael markup - exporting any raphaël paper instance to XML</title>
+</head>
+<body>
+
+<p>In this text we will create a raphaël paper and draw some things in it, using common raphaël javascript API.
+then we will export the paper to XML syntax using the framework. Then we will 
+remove the created raphael paper from the doucment, and try to render 
+the exported xml document and see if its equals to raphael original paper. </p>
+
+<script type="text/javascript">
+//debugger;
+
+//create a raphael paper and fill with some shapes, with raphaël javascript API
+var paper = Raphael(12,23,500,500);
+paper.rect(12,23,44,55).attr("fill", "red");
+paper.circle(44,55,32).attr("stroke-width", "6");;
+paper.set([paper.rect(112,123,44,55), paper.ellipse(144,255,32, 66)]);
+
+var xml = rm.xmlWritePaper(paper, 12,23,500,500);
+
+alert("hello: "+xml.find("rect").size());
+
+alert("raphael paper rendered and exported to the following XML:\n"+rm.toXML(xml, true));
+
+// ok(xml.find("circle").attr("cx")==44, "xml write 1");
+
+/* now delete the raphael paper and try to render the xml document
+the drawing should be the same. */
+paper.remove();
+
+rm.renderDom(xml);
+
+//now retrieve a shape for previous rendering from id, using the ids  from xml dom, and fill with color:
+var ellipse1 = rm.getShapeById(xml.find("ellipse").attr("id"));
+ellipse1.attr("fill", "yellow");
+
+alert("the end");
+
+</script>
+
+</body>
+</html>
