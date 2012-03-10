@@ -18,20 +18,92 @@
 
 
 var rm = {
+		
+		
+		//simple log tools
+		
 _doLog: true, 
 _log : function(s) {
 	if(rm._doLog) {
 		if($("#rmlogger").size()==0) {
-//			debugger;
 			$(document.body).append(
 				"<textarea id=\"rmlogger\" style=\"width: 100%; height: 100px\">hello</textarea>");
 		}
 		$("#rmlogger").text($("#rmlogger").text()+"\n"+s);
 	}
 },
+
+
+
+//XML DOM TOOLS
+
+/**
+ * export a XML DOM jquery object to XML valid source. 
+ * notice that sets won't be respected in resulting markup. 
+ * We iterate using paper.forEach that do not respect sets, only concrete shapes.
+ */
+toXML: function(dom, level, tab) {
+	if(rm.isDocument(dom)) {
+		dom=$(dom.prop("documentElement"));
+	}
+//	if(dom.prop("nodeType")!=1)
+//		return null;
+	var tname = rm._getTagName(dom);
+//	if(!tname)
+//		return false;
+	var s = "<"+tname;
+	for(var i in dom.attr()) {
+		s+=" "+i+"=\""+	dom.attr()[i]+"\"";
+	}
+	s+=">";
+	var childs = dom.children();
+	for ( var i = 0; i < childs.length; i++) {
+		var childXml = rm.toXML($(childs[i]), level+1, tab);
+//		if(childXml && childXml+""!="undefined")
+		s+="\n"+rm._repeatStr(tab, level)+childXml;
+	}
+	s+="\n</"+tname+">";
+	return s;
+},
+_repeatStr: function(str, times) {
+	if(str&&times) {		
+		var s = "";
+		for ( var i = 0; i < times; i++) {
+			s+=str;
+		}
+		return s;
+	}
+	return "";
+} ,
+/**
+ * create a new element in raphael XML dom
+ * @param parent an html dom or jquery selector or object 
+ * where to append the created child.
+ * @return the created jquery dom element 
+ */
+createElement: function(parent, tagName, attrs) {
+	parent=$(parent);
+	var xmldoc = null;
+	//if they send us a document, we append it on the documentElement
+	
+	if(rm.isDocument(parent)) {
+		parent=$(parent.prop("documentElement"));
+	}	
+	xmldoc=parent.prop("ownerDocument");
+	
+	var e = $(xmldoc.createElement(tagName));
+	if(attrs)
+		e.attr(attrs);
+	
+	parent.append(e);
+	
+	return e;
+},		
+isDocument: function(dom) {
+	return dom.get(0).createElement;
+},
 		
-		
-		
+
 		/* * * * raphael markup renderer * * * */	
 
 ///**
@@ -53,7 +125,7 @@ _log : function(s) {
 //},
 
 /**
- * render all <raphael elements in current document
+ * render all <raphael elements in current html document
  * @return an array of <raphael doms (jquery objects)
  */
 render: function() {
@@ -64,6 +136,9 @@ render: function() {
 		rm._render(document, rdoc);
 	});	
 	return docs;
+},
+renderDom: function(rdoc) {
+	rm._render(document, rdoc);
 },
 /**
  * get an xml document with a request (must be local server uri). renders it in
@@ -224,28 +299,6 @@ applyCSS: function(doc, cssStr) {
 	}
 },
 /**
- * create a new element in raphael XML dom
- * @param parent an html dom or jquery selector or object where to append the created child. if parent reffers to a XMLDocument then the created element won't be appended top anything.
- * @return the created jquery dom element 
- */
-createElement: function(parent, tagName, attrs) {
-//	var rdoc = null;
-	var xmldoc = null, isdoc = false;
-	
-	if($(parent).get(0).createElement) {
-		xmldoc=$(parent).get(0);
-		isdoc = true;
-	}	
-	else
-		xmldoc=$(parent).prop("ownerDocument");
-	var e = $(xmldoc.createElement(tagName));
-	if(attrs)
-		e.attr(attrs);
-	if(!isdoc)
-		$(parent).append(e);
-	return e;
-},
-/**
  * @param el jquery object with paper xml dom
  * @param paper - the raphael paper object
  */
@@ -383,6 +436,9 @@ _renderCircle: function(dom, paper) {
 	this._renderAttrs(dom, shape, paper);
 	return shape;
 },	
+
+
+
 //_mutationHandlers: {},
 /*
 DOMSubtreeModified 	(none) 	Fires when the subtree is modified 	Yes 	No
@@ -442,8 +498,14 @@ _registerMutationEvents: function(rdoc, dom, shape) {
 
 
 
-	/* * * * xml builder: build xml documents from raphael paper instances * * * */
 
+
+	/* * * * xml builder: build xml documents from 
+	 * raphael paper instances * * * */
+
+parseXML: function(xmlStr) {
+	return $($.parseXML(xmlStr));
+},
 /**
  * @param papers an array of raphael paper objects to be writen in the 
  * raphael xml document.
@@ -454,15 +516,31 @@ _registerMutationEvents: function(rdoc, dom, shape) {
 xmlWritePaper: function(paper, x, y, width, height, doc) {
 	if(!doc)
 		doc=$($.parseXML("<raphael></raphael>"));
+	
+	//append the new empty raphael XML doc to global HTML doc and hide
+//	var containerId = rm._xmlGetId();
+//	$(document.body).append('<div id="'+containerId+'"></div>');
+//	var container = $("#containerId");
+//	container.hide();
+	
+	
+//	$(document.body).append(doc);
+//	doc.hide();
+	
 	var id = rm._xmlGetId(paper);
-	doc.append("<paper id=\""+id+"\" ></paper>");
-	var paperDom = doc.find("#"+id);
+	var paperDom = rm.createElement(doc, "paper", {"id": id});
+//	doc.append("<paper id=\""+id+"\" ></paper>");
+//	var paperDom = doc.find("#"+id);
 	paper.forEach(function (el) {
-		xmlWriteShape(el, paperDom)
+		rm.xmlWriteShape(el, paperDom)
 	});
+	return doc;
 },
 xmlWriteShape: function(el, parentDom) {
 	var shapeDom = null;
+	
+	rm._log("xmlWriteShape "+parentDom.size()+", type: "+el.type+
+		" - in parent dom tagname: "+rm._getTagName(parentDom));
 	
 	if(el.type=="rect")
 		shapeDom=rm._xmlWriteRect(el, parentDom);
@@ -481,9 +559,10 @@ xmlWriteShape: function(el, parentDom) {
 },
 _xmlWriteRect: function(el, dom) {
 	var id = rm._xmlGetId(el);
-	dom.append("<rect id=\""+id+"\"></rect>");
-	var rectDom = $("#"+id);	
-	return rectDom;
+	return rm.createElement(dom, "rect", {"id": id});
+//	dom.append("<rect id=\""+id+"\"></rect>");
+//	var rectDom = $("#"+id);	
+//	return rectDom;
 },
 _xmlWriteAttrs: function(el, dom) {
 	var attr = el.attr();
@@ -494,32 +573,38 @@ _xmlWriteAttrs: function(el, dom) {
 },
 _xmlWriteCircle: function(el, dom) {
 	var id = rm._xmlGetId(el);
-	dom.append("<circle id=\""+id+"\"></rect>");
-	var circleDom = $("#"+id);
-	return circleDom;
+	return rm.createElement(dom, "circle", {"id": id});
+//	dom.append("<circle id=\""+id+"\"></rect>");
+//	var circleDom = $("#"+id);
+//	return circleDom;
 },
 _xmlWritePath: function(el, dom) {
 	var id = rm._xmlGetId(el);
-	dom.append("<path id=\""+id+"\"></rect>");
-	var pDom = $("#"+id);
-	return pDom;
+	return rm.createElement(dom, "path", {"id": id});
+//	dom.append("<path id=\""+id+"\"></rect>");
+//	var pDom = $("#"+id);
+//	return pDom;
 },
 _xmlWriteSet: function(el, dom) {
 	var id = rm._xmlGetId(el);
-	dom.append("<set id=\""+id+"\"></set>");
-	var sDom = $("#"+id);
+	var sDom = rm.createElement(dom, "set", {"id": id});
+//	dom.append("<set id=\""+id+"\"></set>");
+//	var sDom = $("#"+id);
 	for ( var i = 0; i < el.length; i++) {
 		var childDom = rm.xmlWriteShape(el[i], sDom);
 	}
 	return sDom;	
 },
 _xmlWriteEllipse: function(el, dom) {
-	
+	var id = rm._xmlGetId(el);
+	return rm.createElement(dom, "ellipse", {"id": id});
 },
 _xmlId: 0,
 _xmlGetId: function(el) {
+//	if(!el)
+//		el={type: "_raphaelPaperContainer"};
 	rm._xmlId++;
-	return el.type?el.type:"paper"+rm._xmlId;
+	return (el.type?el.type:"paper")+rm._xmlId;
 },
 //xmlWrite: function(papers, doc) {
 //if(!doc)
