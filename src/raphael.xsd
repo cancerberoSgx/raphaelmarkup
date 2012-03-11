@@ -82,42 +82,132 @@
 	
 		<xs:complexContent>
 			<xs:extension base="BaseType">
-				<xs:attribute name="x" type="xs:int">
-					<xs:annotation><xs:documentation>x coordinate of the top left corner</xs:documentation></xs:annotation>
+				<xs:attribute name="arrow-end" type="xs:string">
+					<xs:annotation><xs:documentation>
+					arrowhead on the end of the path. The format for string is &lt;type>[-&lt;width>[-&lt;length>]]. Possible types: 
+					classic, block, open, oval, diamond, none, width: wide, narrow, midium, length: long, short, midium
+					.</xs:documentation></xs:annotation>
 				</xs:attribute>
-				<xs:attribute name="y" type="xs:int">
-					<xs:annotation><xs:documentation>y coordinate of the top left corner</xs:documentation></xs:annotation>
+				<xs:attribute name="clip-rect" type="xs:string">
+					<xs:annotation><xs:documentation>comma or space separated values: x, y, width and height
+					.</xs:documentation></xs:annotation>
 				</xs:attribute>
-				<xs:attribute name="width" type="xs:int">
-					<xs:annotation><xs:documentation>rectangle width</xs:documentation></xs:annotation>
+				<xs:attribute name="cursor" type="xs:string">
+					<xs:annotation><xs:documentation>CSS type of the cursor
+					.</xs:documentation></xs:annotation>
 				</xs:attribute>
+				<xs:attribute name="cx" type="xs:int">
+					<xs:annotation><xs:documentation>the x-axis coordinate of the center of the circle, or ellipse</xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="cy" type="xs:int">
+					<xs:annotation><xs:documentation>the y-axis coordinate of the center of the circle, or ellipse</xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="fill" type="xs:string">
+					<xs:annotation><xs:documentation>colour, gradient or image
+					.</xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="fill-opacity" type="xs:float">
+					<xs:annotation><xs:documentation></xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="font" type="xs:string">
+					<xs:annotation><xs:documentation>
+					.</xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="font-family" type="xs:string">
+					<xs:annotation><xs:documentation>
+					.</xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="font-size" type="xs:int">
+					<xs:annotation><xs:documentation>font size in pixels</xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="font-weight" type="xs:string">
+					<xs:annotation><xs:documentation>
+					.</xs:documentation></xs:annotation>
+				</xs:attribute>				
 				<xs:attribute name="height" type="xs:int">
 					<xs:annotation><xs:documentation>rectangle height</xs:documentation></xs:annotation>
 				</xs:attribute>
-				<xs:attribute name="src" type="xs:string">
-					<xs:annotation><xs:documentation>radius for rounded corners, default is 0</xs:documentation></xs:annotation>
+				<xs:attribute name="href" type="xs:string">
+					<xs:annotation><xs:documentation>URL, if specified element behaves as hyperlink
+					.</xs:documentation></xs:annotation>
+				</xs:attribute>	
+				<xs:attribute name="opacity" type="xs:float">
+					<xs:annotation><xs:documentation></xs:documentation></xs:annotation>
 				</xs:attribute>
-				<xs:attribute name="cx" type="xs:int">
-					<xs:annotation><xs:documentation>x coordinate of the top left corner</xs:documentation></xs:annotation>
+				<xs:attribute name="path" type="xs:string">
+					<xs:annotation><xs:documentation>path string in SVG format.</xs:documentation></xs:annotation>
 				</xs:attribute>
-				<xs:attribute name="cy" type="xs:int">
-					<xs:annotation><xs:documentation>y coordinate of the top left corner</xs:documentation></xs:annotation>
-				</xs:attribute>
-				<xs:attribute name="radius" type="xs:int">
-					<xs:annotation><xs:documentation>y coordinate of the top left corner</xs:documentation></xs:annotation>
-				</xs:attribute>
+				<xs:attribute name="r" type="xs:int">
+					<xs:annotation><xs:documentation>radius of the circle</xs:documentation></xs:annotation>
+				</xs:attribute>				
 				<xs:attribute name="rx" type="xs:int">
 					<xs:annotation><xs:documentation>horizontal radius</xs:documentation></xs:annotation>
 				</xs:attribute>
 				<xs:attribute name="ry" type="xs:int">
 					<xs:annotation><xs:documentation>vertical radius</xs:documentation></xs:annotation>
 				</xs:attribute>
-				<xs:attribute name="path" type="xs:string">
-					<xs:annotation><xs:documentation>path string in SVG format.</xs:documentation></xs:annotation>
-				</xs:attribute>
+				<xs:attribute name="src" type="xs:string">
+					<xs:annotation><xs:documentation>radius for rounded corners, default is 0</xs:documentation></xs:annotation>
+				</xs:attribute>				
 				<xs:attribute name="stroke" type="xs:string">
 					<xs:annotation><xs:documentation>stroke color</xs:documentation></xs:annotation>
 				</xs:attribute>
+				<xs:attribute name="stroke-dasharray" type="xs:string">
+					<xs:annotation><xs:documentation>[“”, “-”, “.”, “-.”, “-..”, “. ”, “- ”, “$#45;$#45;”, “- .”, “$#45;$#45;.”, “$#45;$#45;..”]</xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="stroke-linecap" type="xs:string">
+					<xs:annotation><xs:documentation>[“butt”, “square”, “round”]</xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="stroke-linejoin" type="xs:string">
+					<xs:annotation><xs:documentation>[“bevel”, “round”, “miter”]</xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="stroke-miterlimit" type="xs:int">
+					<xs:annotation><xs:documentation></xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="strke-opacity" type="xs:float">
+					<xs:annotation><xs:documentation></xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="stroke-width" type="xs:int">
+					<xs:annotation><xs:documentation>stroke width in pixels, default is 1</xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="target" type="xs:string">
+					<xs:annotation><xs:documentation>used with href</xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="text" type="xs:string">
+					<xs:annotation><xs:documentation>contents of the text element. Use \n for multiline text</xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="text-anchor" type="xs:string">
+					<xs:annotation><xs:documentation>[“start”, “middle”, “end”], default is “middle”</xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="text-title" type="xs:string">
+					<xs:annotation><xs:documentation>will create tooltip with a given text</xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="transform" type="xs:string">
+					<xs:annotation><xs:documentation>
+Adds transformation to the element which is separate to other attributes, i.e. translation doesn’t change x or y of the rectange. The format of transformation string is similar to the path string syntax:
+
+"t100,100r30,100,100s2,2,100,100r45s1.5"
+
+Each letter is a command. There are four commands: t is for translate, r is for rotate, s is for scale and m is for matrix.
+
+There are also alternative “absolute” translation, rotation and scale: T, R and S. They will not take previous transformation into account. For example, ...T100,0 will always move element 100 px horisontally, while ...t100,0 could move it vertically if there is r90 before. Just compare results of r90t100,0 and r90T100,0.
+
+So, the example line above could be read like “translate by 100, 100; rotate 30° around 100, 100; scale twice around 100, 100; rotate 45° around centre; scale 1.5 times relative to centre”. As you can see rotate and scale commands have origin coordinates as optional parameters, the default is the centre point of the element. Matrix accepts six parameters. 
+</xs:documentation></xs:annotation>
+				</xs:attribute>				
+				<xs:attribute name="width" type="xs:int">
+					<xs:annotation><xs:documentation>rectangle width</xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="x" type="xs:int">
+					<xs:annotation><xs:documentation>x coordinate of the top left corner</xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="y" type="xs:int">
+					<xs:annotation><xs:documentation>y coordinate of the top left corner</xs:documentation></xs:annotation>
+				</xs:attribute>
+				
+				
+				
+				
 			</xs:extension>
 		</xs:complexContent>		
 		
@@ -141,7 +231,7 @@
 				<xs:attribute name="height" type="xs:int"  use="required">
 					<xs:annotation><xs:documentation>rectangle height</xs:documentation></xs:annotation>
 				</xs:attribute>
-				<xs:attribute name="radius" type="xs:int">
+				<xs:attribute name="r" type="xs:int">
 					<xs:annotation><xs:documentation>radius for rounded corners, default is 0</xs:documentation></xs:annotation>
 				</xs:attribute>
 			</xs:restriction>
@@ -162,8 +252,8 @@
 				<xs:attribute name="cy" type="xs:int"  use="required">
 					<xs:annotation><xs:documentation>y coordinate of the centre</xs:documentation></xs:annotation>
 				</xs:attribute>
-				<xs:attribute name="radius" type="xs:int" use="required">
-					<xs:annotation><xs:documentation>radius</xs:documentation></xs:annotation>
+				<xs:attribute name="r" type="xs:int" use="required">
+					<xs:annotation><xs:documentation>radius of the rounded corners</xs:documentation></xs:annotation>
 				</xs:attribute>
 			</xs:restriction>
 			
