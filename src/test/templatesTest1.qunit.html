@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+	<script src="../deps/jquery-1.7.1.js"></script>
+	<script src="../deps/raphael-min.js"></script>
+  	<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" />
+	<script type="text/javascript" src="qunit.js"></script>
+	<script type="text/javascript" src="../rm.js"></script>
+<title>jquery and xml dom tests</title>
+</head>
+<body>
+
+ <h1 id="qunit-header">QUnit raphael markup tests</h1>
+ <h2 id="qunit-banner"></h2>
+ <div id="qunit-testrunner-toolbar"></div>
+ <h2 id="qunit-userAgent"></h2>
+ <ol id="qunit-tests"></ol>
+ <div id="qunit-fixture">test markup, will be hidden</div>
+ 
+
+<script type="text/javascript">
+
+//some qunit testing
+$(document).ready(function(){
+	
+module("templates");
+
+
+	
+	function ajaxHandler(rdoc) {
+		test("templates", function() {
+			ok(rdoc.find("rect").size()==3, "templates1");		
+	// 		alert("the document has "+rdoc.find("rect").size()+" rectangles.");	
+			
+// 			alert(rm.toXML(rdoc.find("template")));
+			
+// 			var rdoc2 = rm.processTemplates(rdoc);
+// 			alert("OUT: "+rm.toXML(rdoc2))
+			rm.renderDom(rdoc);
+// 			alert(rdoc2?rm.toXML(rdoc2):"ERRR");
+		});
+	};
+	
+	$.ajax({
+		"url": "drawingWTemplates1.xml",
+		"success": function(data) {
+			var rdoc= $(data);
+// 			rm._render(document, rdoc);
+			ajaxHandler(rdoc);
+		},
+		"error": function(){},
+		"dataType": "xml"
+	});
+
+// rm.renderAjax("drawingWTemplates1.xml", function (rdoc) {
+// 	/* rdoc is a ready to use jquery DOM object with our xml dom inside. 
+// 	we can access it for querying or even manipulate it: */
+// 	alert("the document has "+rdoc.find("rect").size()+" rectangles.");
+// });
+	
+
+});
+</script>
+</body>
+</html>
