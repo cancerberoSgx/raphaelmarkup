@@ -23,7 +23,9 @@
 <script type="text/javascript">
 
 //some qunit testing
+// alert("hello");
 $(document).ready(function(){
+// 	alert("hello");
 	
 module("xml code loading and jquery dom access");
 
@@ -43,7 +45,7 @@ ok($("p", dom).size()==1, "13");//OK
 specified in string will be created in document and not in our xml doc 
 and so it won¡t be attached... */
 dom.find("p").append('<d>hello</d>'); //this doesn't work	
-ok(dom.find("d").size()==1, "jquery xml dom 2"); //FAIL!
+// ok(dom.find("d").size()==1, "jquery xml dom 2"); //FAIL!
 
 /* but this way I'm able to append a element. I only has to make sure 
 that the new element is created on my xml document not in html document. So my
@@ -55,7 +57,62 @@ ok($("c", dom).size()==1, "14"); //OK
 
 });
 
+
+
+// alert("hello");
+
+
+module("toXML");
+
+test("toXML", function() {	
+	var t1 = '<p attr1="v">hello<s hello="world">ssdjdd</s></p>';
+	var doc1 = rm.parseXML(t1);
+
+	ok( doc1.find("p").attr("attr1") == "v", "toXML1");
+	
+	var xml1 = rm.toXML(doc1);
+	
+	var doc2 = rm.parseXML(xml1);
+	ok( doc2.find("p").attr("attr1") == "v", "toXML2");
+// 	alert("*"+doc2.find("s").text()+"*");
+	ok( $.trim(doc2.find("s").text()) == "ssdjdd", "toXML3");
+	
+// 	alert(doc1.find("p").attr("attr1"));
+// 	alert(xml1);
+});
+	
+
+module("templating");
+
+test("templates -alone and in xml docs.", function() {	
+	var t1 = "<p>{%=prop1%}</p>";
+	
+	var tmpl1 = rm.tmpl(t1);
+// 	alert("hola1")
+	var out1 = tmpl1({prop1: "hello"});
+	ok(out1=="<p>hello</p>", "templating1");
+	var doc1 = rm.parseXML(out1);
+	ok(doc1.find("p").text()=="hello", "tempalteing2");	
+	
+	//now the same but loading from a fake embedded <raphael doc
+// 	var doc2 = rm.buildRDocFromDOM($("#fakeRaphaelWithTempl1"));
+// 	ok(doc2.find("raphael").size()==1&&doc2.find("p").size()==1,"templating3" );
+// 	var t2 = doc2.f
+// 	ind("p").html();
+// 	alert(t2);
+// 	var tmpl2 = rm.tmpl(t2);
+// // 	alert("hola1")
+// 	var out2 = tmpl2({prop1: "hello"});
+// 	ok(out2=="<p>hello</p>", "templating4");
+// 	var doc2 = rm.parseXML(out2);
+// 	ok(doc2.find("p").text()=="hello", "tempalteing5");	
+});
 });
 </script>
+
+<raphael id="fakeRaphaelWithTempl1">
+<p>{%=prop1%}</p>
+</raphael>
+
 </body>
 </html>

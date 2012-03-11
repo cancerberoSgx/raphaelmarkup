@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<raphael xmlns="http://raphaeljs.com">
+	
+<template name="strange1">
+
+	<!-- 	define our template first. this tempalte 
+	is a strange set with random circles inside  -->	
+
+	<!-- parameter definitions, are optional, 
+	here we put it for informative porpuses and for default values -->
+	
+	<template-arg name="cx" value="100"></template-arg>
+	<template-arg name="cy" value="100"></template-arg>
+	<template-arg name="size" value="100"></template-arg>
+	<template-arg name="circleCount" value="10"></template-arg>	
+	<template-arg name="circleMaxRadius" value="10"></template-arg>	
+		
+	<template-body>
+		<set class="strange1">
+			{%
+			circleCount=parseInt(circleCount);
+			size=parseInt(size);
+			circleMaxRadius=parseInt(circleMaxRadius);
+			cx=parseInt(cx);
+			cy=parseInt(cy);
+			for(var i=0; i&lt;circleCount; i++) { %}
+				&lt;circle cx="{%= cx+rm.randomBetween(-size/2, size/2)%}"
+					cy="{%= cy+rm.randomBetween(-size/2, size/2)%}"
+					fill="{%=rm.randomColor()%}"
+					r="{%=rm.randomBetween(2, circleMaxRadius)%}"
+					stroke-width="2" stroke="{%=rm.randomColor()%}">&lt;/circle>
+			{%}%}	
+		</set>
+	</template-body>
+</template>
+
+<!-- now deifne the paper with some shapes and then use our template: -->
+
+<paper x="10" y="10" width="400" height="400">
+
+	<rect x="20" y="30" width="100" height="200"></rect>
+	<rect x="200" y="30" width="100" height="200"></rect>
+	<circle cx="20" cy="300" radius="20" stroke="red"></circle>
+	
+	<set class="set1">
+		<circle cx="220" cy="300" radius="40" stroke="red"></circle>
+		<rect x="333" y="130" width="20" height="40"></rect>
+		<ellipse x="333" y="330" rx="20" ry="40"></ellipse>
+	</set>
+	
+	<!-- now call our template -->
+	<template-use id="strangeShape1" name="strange1">
+		<template-arg name="cx" value="100"></template-arg>
+		<template-arg name="cy" value="200"></template-arg>
+		<template-arg name="size" value="140"></template-arg>
+		<template-arg name="circleCount" value="150"></template-arg>
+		<template-arg name="circleMaxRadius" value="8"></template-arg>		
+	</template-use>
+	
+	<template-use id="strangeShape1" name="strange1">
+		<template-arg name="cx" value="300"></template-arg>
+		<template-arg name="cy" value="200"></template-arg>
+		<template-arg name="size" value="100"></template-arg>
+		<template-arg name="circleCount" value="80"></template-arg>
+		<template-arg name="circleMaxRadius" value="8"></template-arg>		
+	</template-use>
+	
+<!-- 	<use also support a short syntax using attributes. But be carefull using this,  -->
+<!-- 	because you cannot name your parameters "id", "class" or "name" -->
+<!-- 	<use name="strange1" cx="150" cy="320" radius="60" circleCount="10" circleMaxRadius="5"></use> -->
+</paper>
+
+<style>
+
+paper rect { 
+		fill: blue;  
+		stroke-width: 10;
+	} 
+.set1 {
+	fill: yellow;
+}
+	.set1 circle { 
+		fill: black; 
+		stroke: red; 
+		stroke-width: 4; 
+} 
+</style>
+
+</raphael>
+
+
+
+
+
+
+
+
+

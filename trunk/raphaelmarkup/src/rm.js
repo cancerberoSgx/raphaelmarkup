@@ -20,89 +20,9 @@
 var rm = {
 		
 		
-		//simple log tools
 		
-_doLog: true, 
-_log : function(s) {
-	if(rm._doLog) {
-		if($("#rmlogger").size()==0) {
-			$(document.body).append(
-				"<textarea id=\"rmlogger\" style=\"width: 100%; height: 100px\">hello</textarea>");
-		}
-		$("#rmlogger").text($("#rmlogger").text()+"\n"+s);
-	}
-},
 
 
-
-//XML DOM TOOLS
-
-/**
- * export a XML DOM jquery object to XML valid source. 
- * notice that sets won't be respected in resulting markup. 
- * We iterate using paper.forEach that do not respect sets, only concrete shapes.
- */
-toXML: function(dom, level, tab) {
-	if(rm.isDocument(dom)) {
-		dom=$(dom.prop("documentElement"));
-	}
-//	if(dom.prop("nodeType")!=1)
-//		return null;
-	var tname = rm._getTagName(dom);
-//	if(!tname)
-//		return false;
-	var s = "<"+tname;
-	for(var i in dom.attr()) {
-		s+=" "+i+"=\""+	dom.attr()[i]+"\"";
-	}
-	s+=">";
-	var childs = dom.children();
-	for ( var i = 0; i < childs.length; i++) {
-		var childXml = rm.toXML($(childs[i]), level+1, tab);
-//		if(childXml && childXml+""!="undefined")
-		s+="\n"+rm._repeatStr(tab, level)+childXml;
-	}
-	s+="\n</"+tname+">";
-	return s;
-},
-_repeatStr: function(str, times) {
-	if(str&&times) {		
-		var s = "";
-		for ( var i = 0; i < times; i++) {
-			s+=str;
-		}
-		return s;
-	}
-	return "";
-} ,
-/**
- * create a new element in raphael XML dom
- * @param parent an html dom or jquery selector or object 
- * where to append the created child.
- * @return the created jquery dom element 
- */
-createElement: function(parent, tagName, attrs) {
-	parent=$(parent);
-	var xmldoc = null;
-	//if they send us a document, we append it on the documentElement
-	
-	if(rm.isDocument(parent)) {
-		parent=$(parent.prop("documentElement"));
-	}	
-	xmldoc=parent.prop("ownerDocument");
-	
-	var e = $(xmldoc.createElement(tagName));
-	if(attrs)
-		e.attr(attrs);
-	
-	parent.append(e);
-	
-	return e;
-},		
-isDocument: function(dom) {
-	return dom.get(0).createElement;
-},
-		
 
 		/* * * * raphael markup renderer * * * */	
 
@@ -154,9 +74,7 @@ renderAjax: function(url, successHandler, errorHandler) {
 	$.ajax({
 		"url": url,
 		"success": function(data) {
-			var rdoc= $(data); 
-//			var fragment = $(document.createDocumentFragment())
-//			$(document.body).append(fragment);
+			var rdoc= $(data);
 			rm._render(document, rdoc);
 			successHandler(rdoc);
 		},
@@ -170,13 +88,11 @@ renderAjax: function(url, successHandler, errorHandler) {
  */
 buildRDocFromDOM : function(dom) {
 	
-//	if(!$.browser.msie) {
-//		dom.removeAttr("xmlns");
-//		dom=$(dom.get(0));
+//	/* TODO: verify that the trick for iE is neccesary. I suspect that the 
+//	<xml heaer appears because we are using a DOCUMENT and we should use documentElement in that case */
+//	if(rm.isDocument(dom)) {
+//		dom=$(dom.prop("documentElement"))
 //	}
-	
-//	alert(dom.attr("xmlns"))
-
 	var html = dom.html();
 	
 	if(html.indexOf("<?")==0) {
@@ -207,7 +123,7 @@ buildRDocFromDOM : function(dom) {
 	try { 
 		rdoc= $($.parseXML("<raphael>"+html+"</raphael>")); 
 	} catch(ex) {
-		alert("exception parsing document: "+ex);
+		alert("Exception parsing Main document: "+ex);
 	}
 	return rdoc;
 },
@@ -219,9 +135,18 @@ buildRDocFromDOM : function(dom) {
  */
 _render : function(targetHtmlDoc, rdoc)	{
 	
-	/* first of all try to hide the <raphael> element from html document */
+	/* first of all perorm preprosessing operations. TODO: we are discarding original document... */
 //	rdoc.hide();
 	
+	var origDoc = rdoc, err = false;
+//	try {
+		rdoc = rm.processTemplates(rdoc);//$(rdoc.prop("documentElement")));
+//	}catch(ex) {
+//		err=true;		_render
+//	}
+	if(!rdoc||err||rdoc.size()==0) {		
+		alert("error when preprocessing. ");
+	}
 	/* first parse each <style> element against document. 
 	 * the DOM will be affected before rendering.*/
 	rdoc.find("style").each(function(i){
@@ -421,10 +346,6 @@ _renderSet: function(rdoc, dom, paper) {
 	dom.children().each(function(index){	
 		var shape = set[index];
 
-//		if(!shape)
-//			debugger;
-//		//first stylyze according to parent set
-//		rm._renderAttrs(dom, shape, paper);
 		//and then apply specific style
 		rm._renderAttrs($(this), shape, paper);
 	});	
@@ -661,6 +582,9 @@ _elId: 0,
 getShapeById: function(id) {
 	return rm._shapes[id];
 },
+getShape: function(el) {
+	return rm.getShapeById($(el).attr("id"));
+},
 //_ids : {},		
 _getId: function(type, el, domEl) {
 	if(domEl.attr("id")&&domEl.attr("id")!="")
@@ -672,52 +596,364 @@ _getId: function(type, el, domEl) {
 		return id;
 	}
 },
-_dump: function(o) {
+_raphaelAttrs: {"arrow-end": "none","arrow-start": "none",blur: 0,"clip-rect": "0 0 1e9 1e9",
+	cursor: "default",cx: 0,cy: 0,fill: "#fff","fill-opacity": 1,font: '10px "Arial"',
+	"font-family": '"Arial"',"font-size": "10","font-style": "normal","font-weight": 400,
+	gradient: 0,height: 0,href: "http://raphaeljs.com/","letter-spacing": 0,opacity: 1,
+	path: "M0,0",r: 0,rx: 0,ry: 0,src: "",stroke: "#000","stroke-dasharray": "",
+	"stroke-linecap": "butt","stroke-linejoin": "butt","stroke-miterlimit": 0,
+	"stroke-opacity": 1,"stroke-width": 1,target: "_blank","text-anchor": "middle",
+	title: "Raphael",transform: "",width: 0,x: 0,y: 0
+},
+
+
+
+
+
+
+/* * * * PREPROCESSING - <template tags * * * */
+
+_rdocTemplates : {},
+/**
+ * main function for preprocessing templates. 
+ * This function receives the DOM with templates elements
+ * and perform 1) apply all templates callings with <use
+ */
+processTemplates: function(rdoc) {
+	
+	rm._rdocTemplates[rdoc]={};
+
+	
+	//first read each template
+	rdoc.find("template").each(function(index){
+		
+		//do nothing for templates withtout name of body
+		if(!$(this).attr("name") || $(this).find("template-body").size()==0)
+			return;
+		
+		var data = {}, paramDefaultValues = {};
+		
+		//load variables
+		$(this).find("var").each(function(i){
+			data[$(this).attr("name")] = $(this).attr("value");
+		});
+		
+		//load param default values
+		$(this).find("template-arg").each(function(i){
+			paramDefaultValues[$(this).attr("name")] = $(this).attr("value");
+		});
+		
+		//load template
+		var tmplCode = null;
+		
+//		try {
+//			window.alert( $(this).find("template-body").get(0).innerHTML);
+			var tmplCode = "";
+			$(this).find("template-body").children().each(function(){
+				tmplCode += rm.toXML($(this));
+			});
+//		}catch(ex) {
+//			rm._error("cannot ghet template body html - "+e);
+//		}
+		var tmpl = rm.tmpl(tmplCode);
+		
+		rm._rdocTemplates[rdoc][$(this).attr("name")] = {
+			"tmpl": tmpl,
+			"data": data, 
+			"paramDefaultValues": paramDefaultValues
+		};
+		
+		//last remove the template element from DOM
+		$(this).remove();
+	});
+	
+//	alert(rdoc.find("use").size()+" - "+rdoc.find("use").attr("name"))
+
+	//now apply all templates in all <use tags
+	rdoc.find("template-use").each(function(){
+		var name = $(this).attr("name");
+		if(!name) {
+			return;
+		}
+		var tmplData = {}, 
+			templateObj = rm._rdocTemplates[rdoc][name];
+		
+		if(!rm._rdocTemplates[rdoc][name]) {
+			rm._error("<use>_ "+"with non existent template: "+name);
+			return; //template not found.
+		}
+				
+		//first copy default params values defined by template
+		for(var i in templateObj.paramDefaultValues) {
+			tmplData[i] = templateObj.paramDefaultValues[i];
+		}
+		
+		//then copy template variable values
+		for(var i in templateObj.data) {
+			tmplData[i]=templateObj.data[i];
+		}
+//		alert(rm._dump(tmplData, true));
+		// template-use's other attributes than id, class and name
+		//will be taken as teplate args
+		var attrs = rm._getAttributeNames($(this))
+		for ( var i = 0; i < attrs.length; i++) {
+			if(attrs[i]!="name"&&attrs[i]!="id"&&attrs[i]!="class") {
+//				var attrName = "";
+				//_getAttributeNames() is buggy, so the next hack:
+				for(var j in tmplData) {
+					if(j.toLowerCase()==attrs[i].toLowerCase())
+						tmplData[j]=$(this).attr(attrs[i]);
+				}
+				
+			}
+		}
+//		alert(rm._dump(tmplData, true));
+		//then copy template-arg
+//		var iasds=$(this).find("template-arg").size();
+//		alert($(this).find("template-arg").size());
+		$(this).find("template-arg").each(function(){
+			var an=$(this).attr("name"), av = $(this).attr("value");
+
+//			try {
+			tmplData[an]=av;
+//			}catch(ex) {
+//				debugger;
+//			}
+		});
+		
+//		alert(rm._dump(tmplData, true));
+		
+		//render template
+		var out = null;
+		try {
+
+			out = templateObj.tmpl(tmplData);
+		}catch(ex) {
+			rm._error("<use>: Error when applying template "+
+				name+". use id: "+$(this).attr("id")+" - "+ex);
+			return;
+		}
+		
+		var outDom = null;
+		/* now we have out sources that should be valid xml source. We must include its DOM
+		 * in the place (replace) of this use element.
+		 */
+		try {
+			outDom = rm.parseXML(out);
+			if(rm.isDocument(outDom))
+				outDom=$(outDom.prop("documentElement"));
+		}catch(e) {
+//			alert("Error parsin out xml code : " +out);
+			rm._error("<use>: Error parsing resulting output of template "+
+				name+". use id: "+$(this).attr("id"));
+			return;
+		}
+		
+		//TODO: the ideal thing here is to use replaceWith, but won't work with xml docs. 
+		$(this).parent().append(outDom);
+//		$(this).remove();
+		
+		if($(this).attr("id")) {
+			outDom.attr("id", $(this).attr("id"));
+		}
+		if($(this).attr("class")) {
+			var oldClass= $(this).attr("class")?$(this).attr("class"):"";
+			outDom.attr("class", oldClass+" "+$(this).attr("class"));
+		}
+		
+		//TODO: replace the id of generated docuemtnElement with the <use id
+		//TODO: add the class <use> to generated documentelement 
+	});
+	//also remove all template and template-use elements 
+	rdoc.remove("template");
+	rdoc.remove("template-use");
+	return rdoc;
+},
+
+
+
+
+
+/* * * * microtemplating JSP like language engine  * * * */
+
+//this is a fixed verson for using {% and {%= for not invalidate xml
+tmpl: function tmpl(str, data){
+	
+    // Figure out if we're getting a template, or if we need to
+    // load the template - and be sure to cache the result.
+    var fn = !/\W/.test(str) ?
+      rm._tmplCache[str] = rm._tmplCache[str] ||
+        tmpl(document.getElementById(str).innerHTML) :
+     
+      rm._tmplCreateFunc(str, data);
+   
+    // Provide some basic currying to the user
+    return data ? fn( data ) : fn;
+}, 
+_tmplCreateFunc: function(str, data) {
+	// Generate a reusable function that will serve as a template
+    // generator (and which will be cached).
+	var fstr =  
+		"var p=[],print=function(){p.push.apply(p,arguments);};" +
+    
+	    // Introduce the data as local variables using with(){}
+	    "with(obj){p.push('" +
+	   
+	    // Convert the template into pure JavaScript
+	    
+	    str.replace(/[\r\t\n]/g, " ") .
+	    replace(/'(?=[^%]*%})/g,"\t") .
+	    split("'").join("\\'") .
+	    split("\t").join("'") .
+	    replace(/{%=(.+?)%}/g, "',$1,'") .
+	    split("{%").join("');") .split("%}").
+	    join("p.push('") + 
+	    "');}return p.join('');";
+//	window.alert(fstr);
+	var f =  new Function("obj",fstr);
+	return f;
+},
+
+//var p=[],print=function(){p.push.apply(p,arguments);};with(obj){p.push('<p>',prop1,'</p>');}return p.join('');
+
+_tmplCache: {},
+
+//_xmlTmplPrintTag="js"
+//xmlTmpl
+
+
+
+/* * * * loggin tools * * * */	
+		
+_doLog: true, 
+_log : function(s) {
+	if(rm._doLog) {
+		if($("#rmlogger").size()==0) {
+			$(document.body).append(
+				"<textarea id=\"rmlogger\" style=\"width: 100%; height: 100px\">hello</textarea>");
+		}
+		$("#rmlogger").text($("#rmlogger").text()+"\n"+s);
+	}
+},
+_errors: [],
+_error: function(s) {
+	rm._errors.push(s);
+	rm._log("**ERROR**: "+s);
+},
+getErrors: function(){
+	return rm._errors;
+},
+
+
+
+
+
+/* * * * XML Tools * * * */	
+
+/**
+ * export a XML DOM jquery object to XML valid source. 
+ * notice that sets won't be respected in resulting markup. 
+ * We iterate using paper.forEach that do not respect sets, only concrete shapes.
+ */
+toXML: function(dom, level, tab) {
+	if(rm.isDocument(dom)) {		
+		dom=$(dom.prop("documentElement"));
+	}
+//	if(dom.prop("nodeType")!=1)
+//		return null;
+	var tname = rm._getTagName(dom);
+	
+	var s = "<"+tname;
+	
+	var attrNames = rm._getAttributeNames(dom);
+	for ( var i = 0; i < attrNames.length; i++) {
+		s+=" "+attrNames[i]+"=\""+	dom.attr(attrNames[i]) +"\"";
+	}
+	s+=">";
+	s+=rm._getInmediateText(dom);
+	var childs = dom.children();
+	for ( var i = 0; i < childs.length; i++) {
+		var childXml = rm.toXML($(childs[i]), level+1, tab);
+		
+//		if(childXml && childXml+""!="undefined")
+		s+="\n"+rm._repeatStr(tab, level)+childXml;
+	}
+	s+="\n</"+tname+">";
+	return s;
+},
+_getInmediateText: function(dom) {
+	return dom.contents().filter(function(){ return(this.nodeType == 3); }).text();
+},
+_getAttributeNames: function(dom) {
+	var el = dom.get(0);
+	var arr = [];
+	for (var i=0, attrs=el.attributes, l=attrs.length; i<l; i++){
+	    arr.push(attrs.item(i).nodeName);
+	}
+	return arr;
+},
+_repeatStr: function(str, times) {
+	if(str&&times) {		
+		var s = "";
+		for ( var i = 0; i < times; i++) {
+			s+=str;
+		}
+		return s;
+	}
+	return "";
+} ,
+/**
+ * create a new element in raphael XML dom
+ * @param parent an html dom or jquery selector or object 
+ * where to append the created child.
+ * @return the created jquery dom element 
+ */
+createElement: function(parent, tagName, attrs) {
+	parent=$(parent);
+	var xmldoc = null;
+	//if they send us a document, we append it on the documentElement
+	
+	if(rm.isDocument(parent)) {
+		parent=$(parent.prop("documentElement"));
+	}	
+	xmldoc=parent.prop("ownerDocument");
+	
+	var e = $(xmldoc.createElement(tagName));
+	if(attrs)
+		e.attr(attrs);
+	
+	parent.append(e);
+	
+	return e;
+},
+isDocument: function(dom) {
+	if(!dom||dom.size()==0) {
+		return false;
+	}
+	return dom.get(0).createElement;
+},
+
+
+
+
+/* * * * MISC utils * * * */
+_dump: function(o, val) {
 	var s = "{";
 	for(var i in o) {
-		s+=i+", ";
+		s+=i+"";
+		if(val)
+			s+=": "+o[i];
+		s+=", ";
 	}
 	return s;
 },
-_raphaelAttrs: {
-    "arrow-end": "none",
-    "arrow-start": "none",
-    blur: 0,
-    "clip-rect": "0 0 1e9 1e9",
-    cursor: "default",
-    cx: 0,
-    cy: 0,
-    fill: "#fff",
-    "fill-opacity": 1,
-    font: '10px "Arial"',
-    "font-family": '"Arial"',
-    "font-size": "10",
-    "font-style": "normal",
-    "font-weight": 400,
-    gradient: 0,
-    height: 0,
-    href: "http://raphaeljs.com/",
-    "letter-spacing": 0,
-    opacity: 1,
-    path: "M0,0",
-    r: 0,
-    rx: 0,
-    ry: 0,
-    src: "",
-    stroke: "#000",
-    "stroke-dasharray": "",
-    "stroke-linecap": "butt",
-    "stroke-linejoin": "butt",
-    "stroke-miterlimit": 0,
-    "stroke-opacity": 1,
-    "stroke-width": 1,
-    target: "_blank",
-    "text-anchor": "middle",
-    title: "Raphael",
-    transform: "",
-    width: 0,
-    x: 0,
-    y: 0
+randomBetween: function (minVal,maxVal,floatVal){
+  var randVal = minVal+(Math.random()*(maxVal-minVal));
+  return typeof floatVal=='undefined'?Math.round(randVal):randVal.toFixed(floatVal);
+},
+randomColor: function () {
+	return "rgb("+rm.randomBetween(0,255)+","+
+		rm.randomBetween(0,255)+","+rm.randomBetween(0,255)+")";
 },
 
 
@@ -762,4 +998,8 @@ _removeComments: function(css) {
 }
 
 
+
+
 }
+
+

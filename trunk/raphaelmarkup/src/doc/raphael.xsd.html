@@ -1,0 +1,1910 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Raphaël XML Schema</title>
+    <meta http-equiv="Content-Type" content="text/xml; charset=iso-8859-1" />
+    <style type="text/css">
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+/* More-configurable styles */
+
+/******** General ********/
+
+/* Document body */
+body {
+   color: Black;
+   background-color: White;
+   font-family: Arial, sans-serif;
+   font-size: 10pt;
+}
+/* Horizontal rules */
+hr {
+   color: black;
+}
+/* Document title */
+h1 {
+   font-size: 18pt;
+   letter-spacing: 2px;
+   border-bottom: 1px #ccc solid;
+   padding-top: 5px;
+   padding-bottom: 5px;
+}
+/* Main section headers */
+h2 {
+   font-size: 14pt;
+   letter-spacing: 1px;
+}
+/* Sub-section headers */
+h3, h3 a, h3 span {
+   font-size: 12pt;
+   font-weight: bold;
+   color: black;
+}
+/* Table displaying the properties of the schema components or the
+   schema document itself */
+table.properties th, table.properties th a {
+   color: black;
+   background-color: #F99; /* Pink */
+}
+table.properties td {
+   background-color: #eee; /* Gray */
+}
+
+
+/******** Table of Contents Section ********/
+
+/* Controls for switching between printing and viewing modes */
+div#printerControls {
+   color: #963; /* Orange-brown */
+}
+/* Controls that can collapse or expand all XML Instance
+   Representation and Schema Component Representation boxes */
+div#globalControls {
+   border: 2px solid #999;
+}
+
+
+/******** Schema Document Properties Section ********/
+
+/* Table displaying the namespaces declared in the schema */
+table.namespaces th {
+   background-color: #ccc;
+}
+table.namespaces td {
+   background-color: #eee;
+}
+/* Target namespace of the schema */
+span.targetNS {
+   color: #06C;
+   font-weight: bold;
+}
+
+
+/******** Schema Components' Sections ********/
+
+/* Name of schema component */
+.name {
+   color: #F93; /* Orange */
+}
+
+/* Hierarchy table */
+table.hierarchy {
+   border: 2px solid #999; /* Gray */
+}
+
+/* XML Instance Representation table */
+div.sample div.contents {
+   border: 2px dashed black;
+}
+
+/* Schema Component Representation table */
+div.schemaComponent div.contents {
+   border: 2px black solid;
+}
+
+
+/******** Glossary Section ********/
+
+/* Glossary Terms */
+.glossaryTerm {
+   color: #036; /* Blue */
+}
+
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+/* Printer-version styles */
+
+@media print {
+
+/* Ensures that controls are hidden when printing */
+div#printerControls {
+   visibility: hidden;
+}
+div#globalControls {
+   visibility: hidden;
+}
+#legend {
+   display: none;
+}
+#legendTOC {
+   display: none;
+}
+#glossary {
+   display: none;
+}
+#glossaryTOC {
+   display: none;
+}
+
+}
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+/* Base styles */
+
+/******** General ********/
+
+/* Unordered lists */
+ul {
+   margin-left: 1.5em;
+   margin-bottom: 0em;
+}
+/* Tables */
+table {
+   margin-top: 10px;
+   margin-bottom: 10px;
+   margin-left: 2px;
+   margin-right: 2px;
+}
+table th, table td {
+   font-size: 10pt;
+   vertical-align: top;
+   padding-top: 3px;
+   padding-bottom: 3px;
+   padding-left: 10px;
+   padding-right: 10px;
+}
+table th {
+   font-weight: bold;
+   text-align: left;
+}
+/* Table displaying the properties of the schema components or the
+   schema document itself */
+table.properties {
+   width: 90%;
+}
+table.properties th {
+   width: 30%;
+}
+/* Boxes that can make its content appear and disappear*/
+div.box {
+   margin: 1em;
+}
+   /* Box caption */
+div.box span.caption {
+   font-weight: bold;
+}
+   /* Button to open and close the box */
+div.box input.control {
+   width: 1.4em;
+   height: 1.4em;
+   text-align: center;
+   vertical-align: middle;
+   font-size: 11pt;
+}
+   /* Box contents */
+div.box div.contents {
+   margin-top: 3px;
+}
+
+
+/******** Table of Contents Section ********/
+
+/* Controls for switching between printing and viewing modes */
+div#printerControls {
+   white-space: nowrap;
+   font-weight: bold;
+   padding: 5px;
+   margin: 5px;
+}
+/* Controls that can collapse or expand all XML Instance
+   Representation and Schema Component Representation boxes */
+div#globalControls {
+   padding: 10px;
+   margin: 5px;
+}
+
+
+/******** Schema Document Properties Section ********/
+
+/* Table displaying the namespaces declared in the schema */
+table.namespaces th {
+}
+table.namespaces td {
+}
+/* Target namespace of the schema */
+span.targetNS {
+}
+
+
+/******** Schema Components' Sections ********/
+
+/* Name of schema component */
+.name {
+}
+
+/* Hierarchy table */
+table.hierarchy {
+   width: 90%;
+}
+table.hierarchy th {
+   font-weight: normal;
+   font-style: italic;
+   width: 20%;
+}
+table.hierarchy th, table.hierarchy td {
+   padding: 5px;
+}
+
+/* XML Instance Representation table */
+div.sample {
+   width: 90%;
+}
+div.sample div.contents {
+   padding: 5px;
+   font-family: Courier New, sans-serif;
+   font-size: 10pt;
+}
+   /* Normal elements and attributes */
+div.sample div.contents, div.sample div.contents a {
+   color: black;
+}
+   /* Group Headers */
+div.sample div.contents .group, div.sample div.contents .group a {
+   color: #999; /* Light gray */
+}
+   /* Type Information */
+div.sample div.contents .type, div.sample div.contents .type a {
+   color: #999; /* Light gray */
+}
+   /* Occurrence Information */
+div.sample div.contents .occurs, div.sample div.contents .occurs a {
+   color: #999; /* Light gray */
+}
+   /* Fixed values */
+div.sample div.contents .fixed {
+   color: #063; /* Green */
+   font-weight: bold;
+}
+   /* Simple type constraints */
+div.sample div.contents .constraint, div.sample div.contents .constraint a {
+   color: #999; /* Light gray */
+}
+   /* Elements and attributes inherited from base type */
+div.sample div.contents .inherited, div.sample div.contents .inherited a {
+   color: #666; /* Dark gray */
+}
+   /* Elements and attributes added to or changed from base type */
+div.sample div.contents .newFields {
+   font-weight: bold;
+}
+   /* Other type of information */
+div.sample div.contents .other, div.sample div.contents .other a {
+   color: #369; /* Blue */
+   font-style: italic;
+}
+   /* Link to open up window displaying documentation */
+div.sample div.contents a.documentation {
+   text-decoration: none;
+   padding-left: 3px;
+   padding-right: 3px;
+   padding-top: 0px;
+   padding-bottom: 0px;
+   font-weight: bold;
+   font-size: 11pt;
+   background-color: #FFD;
+   color: #069;
+}
+   /* Invert colors when hovering over link to open up window 
+      displaying documentation */
+div.sample div.contents a.documentation:hover {
+   color: #FFD;
+   background-color: #069;
+}
+
+/* Schema Component Representation table */
+div.schemaComponent {
+   width: 90%;
+}
+div.schemaComponent div.contents {
+   font-family: Courier New, sans-serif;
+   font-size: 10pt;
+   padding: 5px;
+}
+   /* Syntax characters */
+div.schemaComponent div.contents {
+   color: #00f; /* blue */
+}
+   /* Element and attribute tags */
+div.schemaComponent div.contents .scTag {
+   color: #933; /* maroon */
+}
+   /* Element and attribute content */
+div.schemaComponent div.contents .scContent, div.schemaComponent div.contents .scContent a {
+   color: black;
+   font-weight: bold;
+}
+   /* Comments */
+div.schemaComponent div.contents .comment {
+   color: #999; /* Light gray */
+}
+
+/******** Legend Section ********/
+
+div#legend table, div#legend div {
+   margin-bottom: 3px;
+}
+div#legend div.hint {
+   color: #999; /* Light gray */
+   width: 90%;
+   margin-left: 1em;
+   margin-bottom: 2em;
+}
+
+
+/******** Glossary Section ********/
+
+/* Glossary Terms */
+.glossaryTerm {
+   font-weight: bold;
+}
+
+
+/******** Footer ********/
+
+.footer {
+   font-size: 8pt;
+}
+</style>
+    <script type="text/javascript">
+<!--
+/* IDs of XML Instance Representation boxes */
+var xiBoxes = new Array('element_raphael_xibox', 'type_BaseType_xibox', 'element_paper_xibox', 'type_AttrsType_xibox', 'type_RectType_xibox', 'type_CircleType_xibox', 'type_ImageType_xibox', 'type_EllipseType_xibox', 'type_PathType_xibox', 'type_SetType_xibox', 'element_rect_xibox', 'element_circle_xibox', 'element_image_xibox', 'element_ellipse_xibox', 'element_path_xibox', 'element_set_xibox', 'element_style_xibox');
+/* IDs of Schema Component Representation boxes */
+var scBoxes = new Array('schema_scbox', 'element_raphael_scbox', 'type_BaseType_scbox', 'element_paper_scbox', 'type_AttrsType_scbox', 'type_RectType_scbox', 'type_CircleType_scbox', 'type_ImageType_scbox', 'type_EllipseType_scbox', 'type_PathType_scbox', 'type_SetType_scbox', 'element_rect_scbox', 'element_circle_scbox', 'element_image_scbox', 'element_ellipse_scbox', 'element_path_scbox', 'element_set_scbox', 'element_style_scbox');
+
+/**
+ * Can get the ID of the button controlling
+ * a collapseable box by concatenating
+ * this string onto the ID of the box itself.
+ */
+var B_SFIX = "_button";
+
+/**
+ * Counter of documentation windows
+ * Used to give each window a unique name
+ */
+var windowCount = 0;
+
+/**
+ * Returns an element in the current HTML document.
+ * 
+ * @param elementID Identifier of HTML element
+ * @return               HTML element object
+ */
+function getElementObject(elementID) {
+    var elemObj = null;
+    if (document.getElementById) {
+        elemObj = document.getElementById(elementID);
+    }
+    return elemObj;
+}             
+
+/**
+ * Closes a collapseable box.
+ * 
+ * @param boxObj       Collapseable box
+ * @param buttonObj Button controlling box
+ */
+function closeBox(boxObj, buttonObj) {
+  if (boxObj == null || buttonObj == null) {
+     // Box or button not found
+  } else {
+     // Change 'display' CSS property of box
+     boxObj.style.display="none";
+
+     // Change text of button 
+     if (boxObj.style.display=="none") {
+        buttonObj.value=" + ";
+     }
+  }
+}
+
+/**
+ * Opens a collapseable box.
+ * 
+ * @param boxObj       Collapseable box
+ * @param buttonObj Button controlling box
+ */
+function openBox(boxObj, buttonObj) {
+  if (boxObj == null || buttonObj == null) {
+     // Box or button not found
+  } else {
+     // Change 'display' CSS property of box
+     boxObj.style.display="block";
+
+     // Change text of button
+     if (boxObj.style.display=="block") {
+        buttonObj.value=" - ";
+     }
+  }
+}
+
+/**
+ * Sets the state of a collapseable box.
+ * 
+ * @param boxID Identifier of box
+ * @param open If true, box is "opened",
+ *             Otherwise, box is "closed".
+ */
+function setState(boxID, open) {
+  var boxObj = getElementObject(boxID);
+  var buttonObj = getElementObject(boxID+B_SFIX);
+  if (boxObj == null || buttonObj == null) {
+     // Box or button not found
+  } else if (open) {
+     openBox(boxObj, buttonObj);
+     // Make button visible
+     buttonObj.style.display="inline";
+  } else {
+     closeBox(boxObj, buttonObj);
+     // Make button visible
+     buttonObj.style.display="inline";
+  }
+}
+
+/**
+ * Switches the state of a collapseable box, e.g.
+ * if it's opened, it'll be closed, and vice versa.
+ * 
+ * @param boxID Identifier of box
+ */
+function switchState(boxID) {
+  var boxObj = getElementObject(boxID);
+  var buttonObj = getElementObject(boxID+B_SFIX);
+  if (boxObj == null || buttonObj == null) {
+     // Box or button not found
+  } else if (boxObj.style.display=="none") {
+     // Box is closed, so open it
+     openBox(boxObj, buttonObj);
+  } else if (boxObj.style.display=="block") {
+     // Box is opened, so close it
+     closeBox(boxObj, buttonObj);
+  }
+}
+
+/**
+ * Closes all boxes in a given list.
+ * 
+ * @param boxList Array of box IDs
+ */
+function collapseAll(boxList) {
+  var idx;
+  for (idx = 0; idx < boxList.length; idx++) {
+     var boxObj = getElementObject(boxList[idx]);
+     var buttonObj = getElementObject(boxList[idx]+B_SFIX);
+     closeBox(boxObj, buttonObj);
+  }
+}
+
+/**
+ * Open all boxes in a given list.
+ * 
+ * @param boxList Array of box IDs
+ */
+function expandAll(boxList) {
+  var idx;
+  for (idx = 0; idx < boxList.length; idx++) {
+     var boxObj = getElementObject(boxList[idx]);
+     var buttonObj = getElementObject(boxList[idx]+B_SFIX);
+     openBox(boxObj, buttonObj);
+  }
+}
+
+/**
+ * Makes all the control buttons of boxes appear.
+ * 
+ * @param boxList Array of box IDs
+ */
+function viewControlButtons(boxList) {
+    var idx;
+    for (idx = 0; idx < boxList.length; idx++) {
+        buttonObj = getElementObject(boxList[idx]+B_SFIX);
+        if (buttonObj != null) {
+            buttonObj.style.display = "inline";
+        }
+    }
+}
+
+/**
+ * Makes all the control buttons of boxes disappear.
+ * 
+ * @param boxList Array of box IDs
+ */
+function hideControlButtons(boxList) {
+    var idx;
+    for (idx = 0; idx < boxList.length; idx++) {
+        buttonObj = getElementObject(boxList[idx]+B_SFIX);
+        if (buttonObj != null) {
+            buttonObj.style.display = "none";
+        }
+    }
+}
+
+/**
+ * Sets the page for either printing mode
+ * or viewing mode. In printing mode, the page
+ * is made to be more readable when printing it out.
+ * In viewing mode, the page is more browsable.
+ *
+ * @param isPrinterVersion If true, display in
+ *                                 printing mode; otherwise, 
+ *                                 in viewing mode
+ */
+function displayMode(isPrinterVersion) {
+    var obj;
+    if (isPrinterVersion) {
+        // Hide global control buttons
+        obj = getElementObject("globalControls");
+        if (obj != null) {
+            obj.style.visibility = "hidden";
+        }
+        // Hide Legend
+        obj = getElementObject("legend");
+        if (obj != null) {
+            obj.style.display = "none";
+        }
+        obj = getElementObject("legendTOC");
+        if (obj != null) {
+            obj.style.display = "none";
+        }
+        // Hide Glossary
+        obj = getElementObject("glossary");
+        if (obj != null) {
+            obj.style.display = "none";
+        }
+        obj = getElementObject("glossaryTOC");
+        if (obj != null) {
+            obj.style.display = "none";
+        }
+
+        // Expand all XML Instance Representation tables
+        expandAll(xiBoxes);
+        // Expand all Schema Component Representation tables
+        expandAll(scBoxes);
+
+        // Hide Control buttons
+        hideControlButtons(xiBoxes);
+        hideControlButtons(scBoxes);
+    } else {
+        // View global control buttons
+        obj = getElementObject("globalControls");
+        if (obj != null) {
+            obj.style.visibility = "visible";
+        }
+        // View Legend
+        obj = getElementObject("legend");
+        if (obj != null) {
+            obj.style.display = "block";
+        }
+        obj = getElementObject("legendTOC");
+        if (obj != null) {
+            obj.style.display = "block";
+        }
+        // View Glossary
+        obj = getElementObject("glossary");
+        if (obj != null) {
+            obj.style.display = "block";
+        }
+        obj = getElementObject("glossaryTOC");
+        if (obj != null) {
+            obj.style.display = "block";
+        }
+
+        // Expand all XML Instance Representation tables
+        expandAll(xiBoxes);
+        // Collapse all Schema Component Representation tables
+        collapseAll(scBoxes);
+
+        // View Control buttons
+        viewControlButtons(xiBoxes);
+        viewControlButtons(scBoxes);
+    }
+}
+
+/**
+ * Opens up a window displaying the documentation
+ * of a schema component in the XML Instance
+ * Representation table.
+ * 
+ * @param compDesc      Description of schema component 
+ * @param compName      Name of schema component 
+ * @param docTextArray Array containing the paragraphs 
+ *                           of the new document
+ */
+function viewDocumentation(compDesc, compName, docTextArray) {
+  var width = 400;
+  var height = 200;
+  var locX = 100;
+  var locY = 200;
+
+  /* Generate content */
+  var actualText = "<html>";
+  actualText += "<head><title>";
+  actualText += compDesc;
+  if (compName != '') {
+     actualText += ": " + compName;
+  }
+  actualText += "</title></head>";
+  actualText += "<body bgcolor=\"#FFFFEE\">";
+  // Title
+  actualText += "<p style=\"font-family: Arial, sans-serif; font-size: 12pt; font-weight: bold; letter-spacing:1px;\">";
+  actualText += compDesc;
+  if (compName != '') {
+     actualText += ": <span style=\"color:#006699\">" + compName + "</span>";
+  }
+  actualText += "</p>";
+  // Documentation
+  var idx;
+  for (idx = 0; idx < docTextArray.length; idx++) {
+     actualText += "<p style=\"font-family: Arial, sans-serif; font-size: 10pt;\">" + docTextArray[idx] + "</p>";
+  }
+  // Link to close window
+  actualText += "<a href=\"javascript:void(0)\" onclick=\"window.close();\" style=\"font-family: Arial, sans-serif; font-size: 8pt;\">Close</a>";
+  actualText += "</body></html>";
+
+  /* Display window */
+  windowCount++;
+  var docWindow = window.open("", "documentation"+windowCount, "toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable,alwaysRaised,dependent,titlebar=no,width="+width+",height="+height+",screenX="+locX+",left="+locX+",screenY="+locY+",top="+locY);
+  docWindow.document.write(actualText);
+}
+
+// -->
+</script>
+  </head>
+  <body>
+    <h1>
+      <a name="top" id="top">Raphaël XML Schema</a>
+    </h1>
+    <div style="float: right;">
+      <div id="printerControls" style="display:none;"><input type="checkbox" onclick="displayMode(this.checked)" />Printer-friendly Version</div>
+      <script type="text/javascript">
+<!--
+
+var pc = getElementObject("printerControls");
+if (pc != null) {
+   pc.style.display="block";
+}
+               
+// -->
+</script>
+      <div id="globalControls" style="display:none">
+        <strong>XML Instance Representation:</strong>
+        <br />
+        <span style="margin-left: 1em; white-space: nowrap">[ <a href="javascript:void(0)" onclick="expandAll(xiBoxes)">Expand All</a> | <a href="javascript:void(0)" onclick="collapseAll(xiBoxes)">Collapse All</a> ]</span>
+        <br />
+        <br />
+        <strong>Schema Component Representation:</strong>
+        <br />
+        <span style="margin-left: 1em; white-space: nowrap">[ <a href="javascript:void(0)" onclick="expandAll(scBoxes)">Expand All</a> | <a href="javascript:void(0)" onclick="collapseAll(scBoxes)">Collapse All</a> ]</span>
+      </div>
+      <script type="text/javascript">
+<!--
+
+var gc = getElementObject("globalControls");
+if (gc != null) {
+   gc.style.display="block";
+}
+               
+// -->
+</script>
+    </div>
+    <h2>Table of Contents</h2>
+    <ul>
+      <li>
+        <a href="#SchemaProperties">Schema Document Properties</a>
+      </li>
+      <li>
+        <a href="#SchemaDeclarations">Global Declarations</a>
+        <ul>
+          <li>
+            <a href="#element_circle">Element: <strong>circle</strong></a>
+          </li>
+          <li>
+            <a href="#element_ellipse">Element: <strong>ellipse</strong></a>
+          </li>
+          <li>
+            <a href="#element_image">Element: <strong>image</strong></a>
+          </li>
+          <li>
+            <a href="#element_paper">Element: <strong>paper</strong></a>
+          </li>
+          <li>
+            <a href="#element_path">Element: <strong>path</strong></a>
+          </li>
+          <li>
+            <a href="#element_raphael">Element: <strong>raphael</strong></a>
+          </li>
+          <li>
+            <a href="#element_rect">Element: <strong>rect</strong></a>
+          </li>
+          <li>
+            <a href="#element_set">Element: <strong>set</strong></a>
+          </li>
+          <li>
+            <a href="#element_style">Element: <strong>style</strong></a>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="#SchemaDefinitions">Global Definitions</a>
+        <ul>
+          <li>
+            <a href="#type_AttrsType">Complex Type: <strong>AttrsType</strong></a>
+          </li>
+          <li>
+            <a href="#type_BaseType">Complex Type: <strong>BaseType</strong></a>
+          </li>
+          <li>
+            <a href="#type_CircleType">Complex Type: <strong>CircleType</strong></a>
+          </li>
+          <li>
+            <a href="#type_EllipseType">Complex Type: <strong>EllipseType</strong></a>
+          </li>
+          <li>
+            <a href="#type_ImageType">Complex Type: <strong>ImageType</strong></a>
+          </li>
+          <li>
+            <a href="#type_PathType">Complex Type: <strong>PathType</strong></a>
+          </li>
+          <li>
+            <a href="#type_RectType">Complex Type: <strong>RectType</strong></a>
+          </li>
+          <li>
+            <a href="#type_SetType">Complex Type: <strong>SetType</strong></a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+    <ul id="legendTOC" style="margin-top: 0em">
+      <li>
+        <a href="#Legend">Legend</a>
+      </li>
+    </ul>
+    <ul id="glossaryTOC" style="margin-top: 0em">
+      <li>
+        <a href="#Glossary">Glossary</a>
+      </li>
+    </ul>
+    <div style="text-align: right; clear: both;">
+      <a href="#top">top</a>
+    </div>
+    <hr />
+    <h2>
+      <a name="SchemaProperties" id="SchemaProperties">Schema Document Properties</a>
+    </h2>
+    <table class="properties">
+      <tr>
+        <th>
+          <a title="Look up 'Target Namespace' in glossary" href="#term_TargetNS">Target Namespace</a>
+        </th>
+        <td>
+          <span class="targetNS">http://raphaeljs.com</span>
+        </td>
+      </tr>
+      <tr>
+        <th>Element and Attribute Namespaces</th>
+        <td>
+          <ul>
+            <li>Global element and attribute declarations belong to this schema's target namespace.</li>
+            <li>By default, local element declarations belong to this schema's target namespace.</li>
+            <li>By default, local attribute declarations have no namespace.</li>
+          </ul>
+        </td>
+      </tr>
+    </table>
+    <h3>Declared Namespaces</h3>
+    <table class="namespaces">
+      <tr>
+        <th>Prefix</th>
+        <th>Namespace</th>
+      </tr>
+      <tr>
+        <td>
+          <a name="ns_" id="ns_">Default namespace</a>
+        </td>
+        <td>
+          <span class="targetNS">http://raphaeljs.com</span>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <a name="ns_xml" id="ns_xml">xml</a>
+        </td>
+        <td>http://www.w3.org/XML/1998/namespace</td>
+      </tr>
+      <tr>
+        <td>
+          <a name="ns_xs" id="ns_xs">xs</a>
+        </td>
+        <td>http://www.w3.org/2001/XMLSchema</td>
+      </tr>
+    </table>
+    <div class="schemaComponent box">
+      <div><input type="button" id="schema_scbox_button" class="control" onclick="switchState('schema_scbox'); return false;" style="display: none" /> <span class="caption">Schema Component Representation</span></div>
+      <div id="schema_scbox" class="contents">
+        <div style="margin-left: 0em">&lt;<span class="scTag">xs:schema</span> <span class="scTag">targetNamespace</span>="<span class="scContent">http://raphaeljs.com</span>" <span class="scTag">elementFormDefault</span>="<span class="scContent">qualified</span>"&gt;<div class="scContent" style="margin-left: 1.5em">...</div>&lt;/<span class="scTag">xs:schema</span>&gt;</div>
+      </div>
+      <script type="text/javascript">
+<!--
+setState('schema_scbox', false);
+// -->
+</script>
+    </div>
+    <div style="text-align: right; clear: both;">
+      <a href="#top">top</a>
+    </div>
+    <hr />
+    <h2>
+      <a name="SchemaDeclarations" id="SchemaDeclarations">Global Declarations</a>
+    </h2>
+    <h3>Element: <a name="element_circle" class="name" id="element_circle">circle</a></h3>
+    <table class="properties">
+      <tr>
+        <th>Name</th>
+        <td>circle</td>
+      </tr>
+      <tr>
+        <th>Type</th>
+        <td>
+          <span class="type">
+            <a title="Jump to &quot;CircleType&quot; type definition." href="#type_CircleType">CircleType</a>
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <th>
+          <a title="Look up 'Nillable' in glossary" href="#term_Nillable">Nillable</a>
+        </th>
+        <td>no</td>
+      </tr>
+      <tr>
+        <th>
+          <a title="Look up 'Abstract' in glossary" href="#term_Abstract">Abstract</a>
+        </th>
+        <td>no</td>
+      </tr>
+    </table>
+    <div class="sample box">
+      <div><input type="button" id="element_circle_xibox_button" class="control" onclick="switchState('element_circle_xibox'); return false;" style="display: none" /> <span class="caption">XML Instance Representation</span></div>
+      <div id="element_circle_xibox" class="contents">
+        <div style="margin-left: 0em">&lt;circle<br /><span style="margin-left: 0.5em"> id="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:ID</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('id of the raphael shape for retrieving it from dictionary and for referencing it in css using #shape1.'); viewDocumentation('Attribute', 'id', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> class="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:NMTOKENS</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('class of the raphael shape for retrieving it from dictionary and for referencing it in css using .shapeClass1'); viewDocumentation('Attribute', 'class', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> x="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('x coordinate of the top left corner'); viewDocumentation('Attribute', 'x', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> y="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('y coordinate of the top left corner'); viewDocumentation('Attribute', 'y', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> width="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('rectangle width'); viewDocumentation('Attribute', 'width', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> height="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('rectangle height'); viewDocumentation('Attribute', 'height', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> src="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:string</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('radius for rounded corners, default is 0'); viewDocumentation('Attribute', 'src', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> rx="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('horizontal radius'); viewDocumentation('Attribute', 'rx', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> ry="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('vertical radius'); viewDocumentation('Attribute', 'ry', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> path="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:string</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('path string in SVG format.'); viewDocumentation('Attribute', 'path', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> stroke="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:string</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('stroke color'); viewDocumentation('Attribute', 'stroke', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> cx="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('x coordinate of the centre'); viewDocumentation('Attribute', 'cx', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> cy="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('y coordinate of the centre'); viewDocumentation('Attribute', 'cy', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> radius="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('radius'); viewDocumentation('Attribute', 'radius', docArray);">?</a>"</span>/&gt; </div>
+      </div>
+      <script type="text/javascript">
+<!--
+setState('element_circle_xibox', true);
+// -->
+</script>
+    </div>
+    <div class="schemaComponent box">
+      <div><input type="button" id="element_circle_scbox_button" class="control" onclick="switchState('element_circle_scbox'); return false;" style="display: none" /> <span class="caption">Schema Component Representation</span></div>
+      <div id="element_circle_scbox" class="contents">
+        <div style="margin-left: 0em">&lt;<span class="scTag">xs:element</span> <span class="scTag">name</span>="<span class="scContent">circle</span>" <span class="scTag">type</span>="<span class="scContent"><span class="type"><a title="Jump to &quot;CircleType&quot; type definition." href="#type_CircleType">CircleType</a></span></span>"/&gt;</div>
+      </div>
+      <script type="text/javascript">
+<!--
+setState('element_circle_scbox', false);
+// -->
+</script>
+    </div>
+    <div style="text-align: right; clear: both;">
+      <a href="#top">top</a>
+    </div>
+    <hr />
+    <h3>Element: <a name="element_ellipse" class="name" id="element_ellipse">ellipse</a></h3>
+    <table class="properties">
+      <tr>
+        <th>Name</th>
+        <td>ellipse</td>
+      </tr>
+      <tr>
+        <th>Type</th>
+        <td>
+          <span class="type">
+            <a title="Jump to &quot;EllipseType&quot; type definition." href="#type_EllipseType">EllipseType</a>
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <th>
+          <a title="Look up 'Nillable' in glossary" href="#term_Nillable">Nillable</a>
+        </th>
+        <td>no</td>
+      </tr>
+      <tr>
+        <th>
+          <a title="Look up 'Abstract' in glossary" href="#term_Abstract">Abstract</a>
+        </th>
+        <td>no</td>
+      </tr>
+    </table>
+    <div class="sample box">
+      <div><input type="button" id="element_ellipse_xibox_button" class="control" onclick="switchState('element_ellipse_xibox'); return false;" style="display: none" /> <span class="caption">XML Instance Representation</span></div>
+      <div id="element_ellipse_xibox" class="contents">
+        <div style="margin-left: 0em">&lt;ellipse<br /><span style="margin-left: 0.5em"> id="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:ID</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('id of the raphael shape for retrieving it from dictionary and for referencing it in css using #shape1.'); viewDocumentation('Attribute', 'id', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> class="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:NMTOKENS</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('class of the raphael shape for retrieving it from dictionary and for referencing it in css using .shapeClass1'); viewDocumentation('Attribute', 'class', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> width="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('rectangle width'); viewDocumentation('Attribute', 'width', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> height="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('rectangle height'); viewDocumentation('Attribute', 'height', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> src="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:string</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('radius for rounded corners, default is 0'); viewDocumentation('Attribute', 'src', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> cx="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('x coordinate of the top left corner'); viewDocumentation('Attribute', 'cx', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> cy="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('y coordinate of the top left corner'); viewDocumentation('Attribute', 'cy', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> radius="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('y coordinate of the top left corner'); viewDocumentation('Attribute', 'radius', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> path="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:string</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('path string in SVG format.'); viewDocumentation('Attribute', 'path', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> stroke="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:string</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('stroke color'); viewDocumentation('Attribute', 'stroke', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> x="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('x coordinate of the centre'); viewDocumentation('Attribute', 'x', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> y="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('y coordinate of the centre'); viewDocumentation('Attribute', 'y', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> rx="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('horizontal radius'); viewDocumentation('Attribute', 'rx', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> ry="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('vertical radius'); viewDocumentation('Attribute', 'ry', docArray);">?</a>"</span>/&gt; </div>
+      </div>
+      <script type="text/javascript">
+<!--
+setState('element_ellipse_xibox', true);
+// -->
+</script>
+    </div>
+    <div class="schemaComponent box">
+      <div><input type="button" id="element_ellipse_scbox_button" class="control" onclick="switchState('element_ellipse_scbox'); return false;" style="display: none" /> <span class="caption">Schema Component Representation</span></div>
+      <div id="element_ellipse_scbox" class="contents">
+        <div style="margin-left: 0em">&lt;<span class="scTag">xs:element</span> <span class="scTag">name</span>="<span class="scContent">ellipse</span>" <span class="scTag">type</span>="<span class="scContent"><span class="type"><a title="Jump to &quot;EllipseType&quot; type definition." href="#type_EllipseType">EllipseType</a></span></span>"/&gt;</div>
+      </div>
+      <script type="text/javascript">
+<!--
+setState('element_ellipse_scbox', false);
+// -->
+</script>
+    </div>
+    <div style="text-align: right; clear: both;">
+      <a href="#top">top</a>
+    </div>
+    <hr />
+    <h3>Element: <a name="element_image" class="name" id="element_image">image</a></h3>
+    <table class="properties">
+      <tr>
+        <th>Name</th>
+        <td>image</td>
+      </tr>
+      <tr>
+        <th>Type</th>
+        <td>
+          <span class="type">
+            <a title="Jump to &quot;ImageType&quot; type definition." href="#type_ImageType">ImageType</a>
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <th>
+          <a title="Look up 'Nillable' in glossary" href="#term_Nillable">Nillable</a>
+        </th>
+        <td>no</td>
+      </tr>
+      <tr>
+        <th>
+          <a title="Look up 'Abstract' in glossary" href="#term_Abstract">Abstract</a>
+        </th>
+        <td>no</td>
+      </tr>
+    </table>
+    <div class="sample box">
+      <div><input type="button" id="element_image_xibox_button" class="control" onclick="switchState('element_image_xibox'); return false;" style="display: none" /> <span class="caption">XML Instance Representation</span></div>
+      <div id="element_image_xibox" class="contents">
+        <div style="margin-left: 0em">&lt;image<br /><span style="margin-left: 0.5em"> id="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:ID</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('id of the raphael shape for retrieving it from dictionary and for referencing it in css using #shape1.'); viewDocumentation('Attribute', 'id', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> class="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:NMTOKENS</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('class of the raphael shape for retrieving it from dictionary and for referencing it in css using .shapeClass1'); viewDocumentation('Attribute', 'class', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> cx="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('x coordinate of the top left corner'); viewDocumentation('Attribute', 'cx', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> cy="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('y coordinate of the top left corner'); viewDocumentation('Attribute', 'cy', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> radius="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('y coordinate of the top left corner'); viewDocumentation('Attribute', 'radius', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> rx="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('horizontal radius'); viewDocumentation('Attribute', 'rx', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> ry="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('vertical radius'); viewDocumentation('Attribute', 'ry', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> path="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:string</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('path string in SVG format.'); viewDocumentation('Attribute', 'path', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> stroke="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:string</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('stroke color'); viewDocumentation('Attribute', 'stroke', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> x="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('x coordinate of the top left corner'); viewDocumentation('Attribute', 'x', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> y="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('y coordinate of the top left corner'); viewDocumentation('Attribute', 'y', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> width="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('rectangle width'); viewDocumentation('Attribute', 'width', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> height="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('rectangle height'); viewDocumentation('Attribute', 'height', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> src="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:string</span> <span class="occurs">[1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('radius for rounded corners, default is 0'); viewDocumentation('Attribute', 'src', docArray);">?</a>"</span>/&gt; </div>
+      </div>
+      <script type="text/javascript">
+<!--
+setState('element_image_xibox', true);
+// -->
+</script>
+    </div>
+    <div class="schemaComponent box">
+      <div><input type="button" id="element_image_scbox_button" class="control" onclick="switchState('element_image_scbox'); return false;" style="display: none" /> <span class="caption">Schema Component Representation</span></div>
+      <div id="element_image_scbox" class="contents">
+        <div style="margin-left: 0em">&lt;<span class="scTag">xs:element</span> <span class="scTag">name</span>="<span class="scContent">image</span>" <span class="scTag">type</span>="<span class="scContent"><span class="type"><a title="Jump to &quot;ImageType&quot; type definition." href="#type_ImageType">ImageType</a></span></span>"/&gt;</div>
+      </div>
+      <script type="text/javascript">
+<!--
+setState('element_image_scbox', false);
+// -->
+</script>
+    </div>
+    <div style="text-align: right; clear: both;">
+      <a href="#top">top</a>
+    </div>
+    <hr />
+    <h3>Element: <a name="element_paper" class="name" id="element_paper">paper</a></h3>
+    <table class="properties">
+      <tr>
+        <th>Name</th>
+        <td>paper</td>
+      </tr>
+      <tr>
+        <th>Type</th>
+        <td>Locally-defined complex type</td>
+      </tr>
+      <tr>
+        <th>
+          <a title="Look up 'Nillable' in glossary" href="#term_Nillable">Nillable</a>
+        </th>
+        <td>no</td>
+      </tr>
+      <tr>
+        <th>
+          <a title="Look up 'Abstract' in glossary" href="#term_Abstract">Abstract</a>
+        </th>
+        <td>no</td>
+      </tr>
+      <tr>
+        <th>Documentation</th>
+        <td>a paper contains shapes. it can be related to a html element using the elid attr</td>
+      </tr>
+    </table>
+    <div class="sample box">
+      <div><input type="button" id="element_paper_xibox_button" class="control" onclick="switchState('element_paper_xibox'); return false;" style="display: none" /> <span class="caption">XML Instance Representation</span></div>
+      <div id="element_paper_xibox" class="contents">
+        <div style="margin-left: 0em">&lt;paper<br /><span style="margin-left: 0.5em"> id="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:ID</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('id of the raphael shape for retrieving it from dictionary and for referencing it in css using #shape1.'); viewDocumentation('Attribute', 'id', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> class="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:NMTOKENS</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('class of the raphael shape for retrieving it from dictionary and for referencing it in css using .shapeClass1'); viewDocumentation('Attribute', 'class', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> containerId="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:string</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('ID of DOM element which is going to be a parent for drawing surface'); viewDocumentation('Attribute', 'containerId', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> x="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('x coord of the paper\'s top-left corner'); viewDocumentation('Attribute', 'x', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> y="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('y coord of the paper\'s top-left corner'); viewDocumentation('Attribute', 'y', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> width="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('width in pixels'); viewDocumentation('Attribute', 'width', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> height="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('height in pixels'); viewDocumentation('Attribute', 'height', docArray);">?</a>"</span>&gt; <br /><span class="group" style="margin-left: 1.5em">Start <a title="Look up 'Choice' in glossary" href="#term_Choice">Choice</a> <span class="occurs">[1..*]</span></span><br /><div style="margin-left: 3em">&lt;<a title="Jump to &quot;rect&quot; element declaration." href="#element_rect">rect</a>&gt; ... &lt;/<a title="Jump to &quot;rect&quot; element declaration." href="#element_rect">rect</a>&gt; <span class="occurs">[1]</span></div><div style="margin-left: 3em">&lt;<a title="Jump to &quot;circle&quot; element declaration." href="#element_circle">circle</a>&gt; ... &lt;/<a title="Jump to &quot;circle&quot; element declaration." href="#element_circle">circle</a>&gt; <span class="occurs">[1]</span></div><div style="margin-left: 3em">&lt;<a title="Jump to &quot;set&quot; element declaration." href="#element_set">set</a>&gt; ... &lt;/<a title="Jump to &quot;set&quot; element declaration." href="#element_set">set</a>&gt; <span class="occurs">[1]</span></div><div style="margin-left: 3em">&lt;<a title="Jump to &quot;image&quot; element declaration." href="#element_image">image</a>&gt; ... &lt;/<a title="Jump to &quot;image&quot; element declaration." href="#element_image">image</a>&gt; <span class="occurs">[1]</span></div><div style="margin-left: 3em">&lt;<a title="Jump to &quot;ellipse&quot; element declaration." href="#element_ellipse">ellipse</a>&gt; ... &lt;/<a title="Jump to &quot;ellipse&quot; element declaration." href="#element_ellipse">ellipse</a>&gt; <span class="occurs">[1]</span></div><div style="margin-left: 3em">&lt;<a title="Jump to &quot;path&quot; element declaration." href="#element_path">path</a>&gt; ... &lt;/<a title="Jump to &quot;path&quot; element declaration." href="#element_path">path</a>&gt; <span class="occurs">[1]</span></div><span class="group" style="margin-left: 1.5em">End Choice</span><br />&lt;/paper&gt;</div>
+      </div>
+      <script type="text/javascript">
+<!--
+setState('element_paper_xibox', true);
+// -->
+</script>
+    </div>
+    <div class="schemaComponent box">
+      <div><input type="button" id="element_paper_scbox_button" class="control" onclick="switchState('element_paper_scbox'); return false;" style="display: none" /> <span class="caption">Schema Component Representation</span></div>
+      <div id="element_paper_scbox" class="contents">
+        <div style="margin-left: 0em">&lt;<span class="scTag">xs:element</span> <span class="scTag">name</span>="<span class="scContent">paper</span>"&gt;<div style="margin-left: 1.5em">&lt;<span class="scTag">xs:complexType</span>&gt;<div style="margin-left: 1.5em">&lt;<span class="scTag">xs:complexContent</span>&gt;<div style="margin-left: 1.5em">&lt;<span class="scTag">xs:extension</span> <span class="scTag">base</span>="<span class="scContent"><span class="type"><a title="Jump to &quot;BaseType&quot; type definition." href="#type_BaseType">BaseType</a></span></span>"&gt;<div style="margin-left: 1.5em">&lt;<span class="scTag">xs:choice</span> <span class="scTag">maxOccurs</span>="<span class="scContent">unbounded</span>"&gt;<div style="margin-left: 1.5em">&lt;<span class="scTag">xs:element</span> <span class="scTag">ref</span>="<span class="scContent"><a title="Jump to &quot;rect&quot; element declaration." href="#element_rect">rect</a></span>"/&gt;</div><div style="margin-left: 1.5em">&lt;<span class="scTag">xs:element</span> <span class="scTag">ref</span>="<span class="scContent"><a title="Jump to &quot;circle&quot; element declaration." href="#element_circle">circle</a></span>"/&gt;</div><div style="margin-left: 1.5em">&lt;<span class="scTag">xs:element</span> <span class="scTag">ref</span>="<span class="scContent"><a title="Jump to &quot;set&quot; element declaration." href="#element_set">set</a></span>"/&gt;</div><div style="margin-left: 1.5em">&lt;<span class="scTag">xs:element</span> <span class="scTag">ref</span>="<span class="scContent"><a title="Jump to &quot;image&quot; element declaration." href="#element_image">image</a></span>"/&gt;</div><div style="margin-left: 1.5em">&lt;<span class="scTag">xs:element</span> <span class="scTag">ref</span>="<span class="scContent"><a title="Jump to &quot;ellipse&quot; element declaration." href="#element_ellipse">ellipse</a></span>"/&gt;</div><div style="margin-left: 1.5em">&lt;<span class="scTag">xs:element</span> <span class="scTag">ref</span>="<span class="scContent"><a title="Jump to &quot;path&quot; element declaration." href="#element_path">path</a></span>"/&gt;</div>&lt;/<span class="scTag">xs:choice</span>&gt;</div><div style="margin-left: 1.5em">&lt;<span class="scTag">xs:attribute</span> <span class="scTag">name</span>="<span class="scContent">containerId</span>" <span class="scTag">type</span>="<span class="scContent"><span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:string</span></span>"/&gt;</div><div style="margin-left: 1.5em">&lt;<span class="scTag">xs:attribute</span> <span class="scTag">name</span>="<span class="scContent">x</span>" <span class="scTag">type</span>="<span class="scContent"><span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span></span>"/&gt;</div><div style="margin-left: 1.5em">&lt;<span class="scTag">xs:attribute</span> <span class="scTag">name</span>="<span class="scContent">y</span>" <span class="scTag">type</span>="<span class="scContent"><span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span></span>"/&gt;</div><div style="margin-left: 1.5em">&lt;<span class="scTag">xs:attribute</span> <span class="scTag">name</span>="<span class="scContent">width</span>" <span class="scTag">type</span>="<span class="scContent"><span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span></span>" <span class="scTag">use</span>="<span class="scContent">required</span>"/&gt;</div><div style="margin-left: 1.5em">&lt;<span class="scTag">xs:attribute</span> <span class="scTag">name</span>="<span class="scContent">height</span>" <span class="scTag">type</span>="<span class="scContent"><span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span></span>" <span class="scTag">use</span>="<span class="scContent">required</span>"/&gt;</div>&lt;/<span class="scTag">xs:extension</span>&gt;</div>&lt;/<span class="scTag">xs:complexContent</span>&gt;</div>&lt;/<span class="scTag">xs:complexType</span>&gt;</div>&lt;/<span class="scTag">xs:element</span>&gt;</div>
+      </div>
+      <script type="text/javascript">
+<!--
+setState('element_paper_scbox', false);
+// -->
+</script>
+    </div>
+    <div style="text-align: right; clear: both;">
+      <a href="#top">top</a>
+    </div>
+    <hr />
+    <h3>Element: <a name="element_path" class="name" id="element_path">path</a></h3>
+    <table class="properties">
+      <tr>
+        <th>Name</th>
+        <td>path</td>
+      </tr>
+      <tr>
+        <th>Type</th>
+        <td>
+          <span class="type">
+            <a title="Jump to &quot;PathType&quot; type definition." href="#type_PathType">PathType</a>
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <th>
+          <a title="Look up 'Nillable' in glossary" href="#term_Nillable">Nillable</a>
+        </th>
+        <td>no</td>
+      </tr>
+      <tr>
+        <th>
+          <a title="Look up 'Abstract' in glossary" href="#term_Abstract">Abstract</a>
+        </th>
+        <td>no</td>
+      </tr>
+    </table>
+    <div class="sample box">
+      <div><input type="button" id="element_path_xibox_button" class="control" onclick="switchState('element_path_xibox'); return false;" style="display: none" /> <span class="caption">XML Instance Representation</span></div>
+      <div id="element_path_xibox" class="contents">
+        <div style="margin-left: 0em">&lt;path<br /><span style="margin-left: 0.5em"> id="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:ID</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('id of the raphael shape for retrieving it from dictionary and for referencing it in css using #shape1.'); viewDocumentation('Attribute', 'id', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> class="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:NMTOKENS</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('class of the raphael shape for retrieving it from dictionary and for referencing it in css using .shapeClass1'); viewDocumentation('Attribute', 'class', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> x="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('x coordinate of the top left corner'); viewDocumentation('Attribute', 'x', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> y="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('y coordinate of the top left corner'); viewDocumentation('Attribute', 'y', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> width="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('rectangle width'); viewDocumentation('Attribute', 'width', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> height="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('rectangle height'); viewDocumentation('Attribute', 'height', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> src="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:string</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('radius for rounded corners, default is 0'); viewDocumentation('Attribute', 'src', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> cx="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('x coordinate of the top left corner'); viewDocumentation('Attribute', 'cx', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> cy="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('y coordinate of the top left corner'); viewDocumentation('Attribute', 'cy', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> radius="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('y coordinate of the top left corner'); viewDocumentation('Attribute', 'radius', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> rx="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('horizontal radius'); viewDocumentation('Attribute', 'rx', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> ry="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('vertical radius'); viewDocumentation('Attribute', 'ry', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> stroke="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:string</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('stroke color'); viewDocumentation('Attribute', 'stroke', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> path="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:string</span> <span class="occurs">[1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('path string in SVG format.'); viewDocumentation('Attribute', 'path', docArray);">?</a>"</span>/&gt; </div>
+      </div>
+      <script type="text/javascript">
+<!--
+setState('element_path_xibox', true);
+// -->
+</script>
+    </div>
+    <div class="schemaComponent box">
+      <div><input type="button" id="element_path_scbox_button" class="control" onclick="switchState('element_path_scbox'); return false;" style="display: none" /> <span class="caption">Schema Component Representation</span></div>
+      <div id="element_path_scbox" class="contents">
+        <div style="margin-left: 0em">&lt;<span class="scTag">xs:element</span> <span class="scTag">name</span>="<span class="scContent">path</span>" <span class="scTag">type</span>="<span class="scContent"><span class="type"><a title="Jump to &quot;PathType&quot; type definition." href="#type_PathType">PathType</a></span></span>"/&gt;</div>
+      </div>
+      <script type="text/javascript">
+<!--
+setState('element_path_scbox', false);
+// -->
+</script>
+    </div>
+    <div style="text-align: right; clear: both;">
+      <a href="#top">top</a>
+    </div>
+    <hr />
+    <h3>Element: <a name="element_raphael" class="name" id="element_raphael">raphael</a></h3>
+    <table class="properties">
+      <tr>
+        <th>Name</th>
+        <td>raphael</td>
+      </tr>
+      <tr>
+        <th>Type</th>
+        <td>Locally-defined complex type</td>
+      </tr>
+      <tr>
+        <th>
+          <a title="Look up 'Nillable' in glossary" href="#term_Nillable">Nillable</a>
+        </th>
+        <td>no</td>
+      </tr>
+      <tr>
+        <th>
+          <a title="Look up 'Abstract' in glossary" href="#term_Abstract">Abstract</a>
+        </th>
+        <td>no</td>
+      </tr>
+      <tr>
+        <th>Documentation</th>
+        <td>raphael is the main element. it contains one or more papers.</td>
+      </tr>
+    </table>
+    <div class="sample box">
+      <div><input type="button" id="element_raphael_xibox_button" class="control" onclick="switchState('element_raphael_xibox'); return false;" style="display: none" /> <span class="caption">XML Instance Representation</span></div>
+      <div id="element_raphael_xibox" class="contents">
+        <div style="margin-left: 0em">&lt;raphael<br /><span style="margin-left: 0.5em"> id="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:ID</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('id of the raphael shape for retrieving it from dictionary and for referencing it in css using #shape1.'); viewDocumentation('Attribute', 'id', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> class="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:NMTOKENS</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('class of the raphael shape for retrieving it from dictionary and for referencing it in css using .shapeClass1'); viewDocumentation('Attribute', 'class', docArray);">?</a>"</span>&gt; <br /><span class="group" style="margin-left: 1.5em">Start <a title="Look up 'Choice' in glossary" href="#term_Choice">Choice</a> <span class="occurs">[1..*]</span></span><br /><div style="margin-left: 3em">&lt;<a title="Jump to &quot;paper&quot; element declaration." href="#element_paper">paper</a>&gt; ... &lt;/<a title="Jump to &quot;paper&quot; element declaration." href="#element_paper">paper</a>&gt; <span class="occurs">[1]</span></div><div style="margin-left: 3em">&lt;<a title="Jump to &quot;style&quot; element declaration." href="#element_style">style</a>&gt; ... &lt;/<a title="Jump to &quot;style&quot; element declaration." href="#element_style">style</a>&gt; <span class="occurs">[1]</span></div><span class="group" style="margin-left: 1.5em">End Choice</span><br />&lt;/raphael&gt;</div>
+      </div>
+      <script type="text/javascript">
+<!--
+setState('element_raphael_xibox', true);
+// -->
+</script>
+    </div>
+    <div class="schemaComponent box">
+      <div><input type="button" id="element_raphael_scbox_button" class="control" onclick="switchState('element_raphael_scbox'); return false;" style="display: none" /> <span class="caption">Schema Component Representation</span></div>
+      <div id="element_raphael_scbox" class="contents">
+        <div style="margin-left: 0em">&lt;<span class="scTag">xs:element</span> <span class="scTag">name</span>="<span class="scContent">raphael</span>"&gt;<div style="margin-left: 1.5em">&lt;<span class="scTag">xs:complexType</span>&gt;<div style="margin-left: 1.5em">&lt;<span class="scTag">xs:complexContent</span>&gt;<div style="margin-left: 1.5em">&lt;<span class="scTag">xs:extension</span> <span class="scTag">base</span>="<span class="scContent"><span class="type"><a title="Jump to &quot;BaseType&quot; type definition." href="#type_BaseType">BaseType</a></span></span>"&gt;<div style="margin-left: 1.5em">&lt;<span class="scTag">xs:choice</span> <span class="scTag">maxOccurs</span>="<span class="scContent">unbounded</span>"&gt;<div style="margin-left: 1.5em">&lt;<span class="scTag">xs:element</span> <span class="scTag">ref</span>="<span class="scContent"><a title="Jump to &quot;paper&quot; element declaration." href="#element_paper">paper</a></span>"/&gt;</div><div style="margin-left: 1.5em">&lt;<span class="scTag">xs:element</span> <span class="scTag">ref</span>="<span class="scContent"><a title="Jump to &quot;style&quot; element declaration." href="#element_style">style</a></span>"/&gt;</div>&lt;/<span class="scTag">xs:choice</span>&gt;</div>&lt;/<span class="scTag">xs:extension</span>&gt;</div>&lt;/<span class="scTag">xs:complexContent</span>&gt;</div>&lt;/<span class="scTag">xs:complexType</span>&gt;</div>&lt;/<span class="scTag">xs:element</span>&gt;</div>
+      </div>
+      <script type="text/javascript">
+<!--
+setState('element_raphael_scbox', false);
+// -->
+</script>
+    </div>
+    <div style="text-align: right; clear: both;">
+      <a href="#top">top</a>
+    </div>
+    <hr />
+    <h3>Element: <a name="element_rect" class="name" id="element_rect">rect</a></h3>
+    <table class="properties">
+      <tr>
+        <th>Name</th>
+        <td>rect</td>
+      </tr>
+      <tr>
+        <th>Type</th>
+        <td>
+          <span class="type">
+            <a title="Jump to &quot;RectType&quot; type definition." href="#type_RectType">RectType</a>
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <th>
+          <a title="Look up 'Nillable' in glossary" href="#term_Nillable">Nillable</a>
+        </th>
+        <td>no</td>
+      </tr>
+      <tr>
+        <th>
+          <a title="Look up 'Abstract' in glossary" href="#term_Abstract">Abstract</a>
+        </th>
+        <td>no</td>
+      </tr>
+    </table>
+    <div class="sample box">
+      <div><input type="button" id="element_rect_xibox_button" class="control" onclick="switchState('element_rect_xibox'); return false;" style="display: none" /> <span class="caption">XML Instance Representation</span></div>
+      <div id="element_rect_xibox" class="contents">
+        <div style="margin-left: 0em">&lt;rect<br /><span style="margin-left: 0.5em"> id="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:ID</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('id of the raphael shape for retrieving it from dictionary and for referencing it in css using #shape1.'); viewDocumentation('Attribute', 'id', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> class="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:NMTOKENS</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('class of the raphael shape for retrieving it from dictionary and for referencing it in css using .shapeClass1'); viewDocumentation('Attribute', 'class', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> src="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:string</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('radius for rounded corners, default is 0'); viewDocumentation('Attribute', 'src', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> cx="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('x coordinate of the top left corner'); viewDocumentation('Attribute', 'cx', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> cy="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('y coordinate of the top left corner'); viewDocumentation('Attribute', 'cy', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> rx="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('horizontal radius'); viewDocumentation('Attribute', 'rx', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> ry="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('vertical radius'); viewDocumentation('Attribute', 'ry', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> path="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:string</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('path string in SVG format.'); viewDocumentation('Attribute', 'path', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> stroke="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:string</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('stroke color'); viewDocumentation('Attribute', 'stroke', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> x="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('x coordinate of the top left corner'); viewDocumentation('Attribute', 'x', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> y="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('y coordinate of the top left corner'); viewDocumentation('Attribute', 'y', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> width="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('rectangle width'); viewDocumentation('Attribute', 'width', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> height="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('rectangle height'); viewDocumentation('Attribute', 'height', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> radius="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('radius for rounded corners, default is 0'); viewDocumentation('Attribute', 'radius', docArray);">?</a>"</span>/&gt; </div>
+      </div>
+      <script type="text/javascript">
+<!--
+setState('element_rect_xibox', true);
+// -->
+</script>
+    </div>
+    <div class="schemaComponent box">
+      <div><input type="button" id="element_rect_scbox_button" class="control" onclick="switchState('element_rect_scbox'); return false;" style="display: none" /> <span class="caption">Schema Component Representation</span></div>
+      <div id="element_rect_scbox" class="contents">
+        <div style="margin-left: 0em">&lt;<span class="scTag">xs:element</span> <span class="scTag">name</span>="<span class="scContent">rect</span>" <span class="scTag">type</span>="<span class="scContent"><span class="type"><a title="Jump to &quot;RectType&quot; type definition." href="#type_RectType">RectType</a></span></span>"/&gt;</div>
+      </div>
+      <script type="text/javascript">
+<!--
+setState('element_rect_scbox', false);
+// -->
+</script>
+    </div>
+    <div style="text-align: right; clear: both;">
+      <a href="#top">top</a>
+    </div>
+    <hr />
+    <h3>Element: <a name="element_set" class="name" id="element_set">set</a></h3>
+    <table class="properties">
+      <tr>
+        <th>Name</th>
+        <td>set</td>
+      </tr>
+      <tr>
+        <th>Type</th>
+        <td>
+          <span class="type">
+            <a title="Jump to &quot;SetType&quot; type definition." href="#type_SetType">SetType</a>
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <th>
+          <a title="Look up 'Nillable' in glossary" href="#term_Nillable">Nillable</a>
+        </th>
+        <td>no</td>
+      </tr>
+      <tr>
+        <th>
+          <a title="Look up 'Abstract' in glossary" href="#term_Abstract">Abstract</a>
+        </th>
+        <td>no</td>
+      </tr>
+    </table>
+    <div class="sample box">
+      <div><input type="button" id="element_set_xibox_button" class="control" onclick="switchState('element_set_xibox'); return false;" style="display: none" /> <span class="caption">XML Instance Representation</span></div>
+      <div id="element_set_xibox" class="contents">
+        <div style="margin-left: 0em">&lt;set<br /><span style="margin-left: 0.5em"> id="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:ID</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('id of the raphael shape for retrieving it from dictionary and for referencing it in css using #shape1.'); viewDocumentation('Attribute', 'id', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> class="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:NMTOKENS</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('class of the raphael shape for retrieving it from dictionary and for referencing it in css using .shapeClass1'); viewDocumentation('Attribute', 'class', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> x="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('x coordinate of the top left corner'); viewDocumentation('Attribute', 'x', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> y="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('y coordinate of the top left corner'); viewDocumentation('Attribute', 'y', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> width="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('rectangle width'); viewDocumentation('Attribute', 'width', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> height="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('rectangle height'); viewDocumentation('Attribute', 'height', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> src="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:string</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('radius for rounded corners, default is 0'); viewDocumentation('Attribute', 'src', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> cx="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('x coordinate of the top left corner'); viewDocumentation('Attribute', 'cx', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> cy="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('y coordinate of the top left corner'); viewDocumentation('Attribute', 'cy', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> radius="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('y coordinate of the top left corner'); viewDocumentation('Attribute', 'radius', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> rx="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('horizontal radius'); viewDocumentation('Attribute', 'rx', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> ry="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('vertical radius'); viewDocumentation('Attribute', 'ry', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> path="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:string</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('path string in SVG format.'); viewDocumentation('Attribute', 'path', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> stroke="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:string</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('stroke color'); viewDocumentation('Attribute', 'stroke', docArray);">?</a>"</span>&gt; <br /><span class="group" style="margin-left: 1.5em">Start <a title="Look up 'Choice' in glossary" href="#term_Choice">Choice</a> <span class="occurs">[1..*]</span></span><br /><div style="margin-left: 3em">&lt;<a title="Jump to &quot;rect&quot; element declaration." href="#element_rect">rect</a>&gt; ... &lt;/<a title="Jump to &quot;rect&quot; element declaration." href="#element_rect">rect</a>&gt; <span class="occurs">[1]</span></div><div style="margin-left: 3em">&lt;<a title="Jump to &quot;circle&quot; element declaration." href="#element_circle">circle</a>&gt; ... &lt;/<a title="Jump to &quot;circle&quot; element declaration." href="#element_circle">circle</a>&gt; <span class="occurs">[1]</span></div><div style="margin-left: 3em">&lt;<a title="Jump to &quot;set&quot; element declaration." href="#element_set">set</a>&gt; ... &lt;/<a title="Jump to &quot;set&quot; element declaration." href="#element_set">set</a>&gt; <span class="occurs">[1]</span></div><div style="margin-left: 3em">&lt;<a title="Jump to &quot;image&quot; element declaration." href="#element_image">image</a>&gt; ... &lt;/<a title="Jump to &quot;image&quot; element declaration." href="#element_image">image</a>&gt; <span class="occurs">[1]</span></div><div style="margin-left: 3em">&lt;<a title="Jump to &quot;ellipse&quot; element declaration." href="#element_ellipse">ellipse</a>&gt; ... &lt;/<a title="Jump to &quot;ellipse&quot; element declaration." href="#element_ellipse">ellipse</a>&gt; <span class="occurs">[1]</span></div><div style="margin-left: 3em">&lt;<a title="Jump to &quot;path&quot; element declaration." href="#element_path">path</a>&gt; ... &lt;/<a title="Jump to &quot;path&quot; element declaration." href="#element_path">path</a>&gt; <span class="occurs">[1]</span></div><span class="group" style="margin-left: 1.5em">End Choice</span><br />&lt;/set&gt;</div>
+      </div>
+      <script type="text/javascript">
+<!--
+setState('element_set_xibox', true);
+// -->
+</script>
+    </div>
+    <div class="schemaComponent box">
+      <div><input type="button" id="element_set_scbox_button" class="control" onclick="switchState('element_set_scbox'); return false;" style="display: none" /> <span class="caption">Schema Component Representation</span></div>
+      <div id="element_set_scbox" class="contents">
+        <div style="margin-left: 0em">&lt;<span class="scTag">xs:element</span> <span class="scTag">name</span>="<span class="scContent">set</span>" <span class="scTag">type</span>="<span class="scContent"><span class="type"><a title="Jump to &quot;SetType&quot; type definition." href="#type_SetType">SetType</a></span></span>"/&gt;</div>
+      </div>
+      <script type="text/javascript">
+<!--
+setState('element_set_scbox', false);
+// -->
+</script>
+    </div>
+    <div style="text-align: right; clear: both;">
+      <a href="#top">top</a>
+    </div>
+    <hr />
+    <h3>Element: <a name="element_style" class="name" id="element_style">style</a></h3>
+    <table class="properties">
+      <tr>
+        <th>Name</th>
+        <td>style</td>
+      </tr>
+      <tr>
+        <th>Type</th>
+        <td>anyType</td>
+      </tr>
+      <tr>
+        <th>
+          <a title="Look up 'Nillable' in glossary" href="#term_Nillable">Nillable</a>
+        </th>
+        <td>no</td>
+      </tr>
+      <tr>
+        <th>
+          <a title="Look up 'Abstract' in glossary" href="#term_Abstract">Abstract</a>
+        </th>
+        <td>no</td>
+      </tr>
+      <tr>
+        <th>Documentation</th>
+        <td>css style like tag for rapahël attributes.	
+	Style element is only valid as &lt;raphael&gt; tag children
+	use jquery supported selectors and valid raphaël attribute names as propery names like: 
+	
+	&lt;raphael&gt;
+	
+		&lt;paper id="paper1" ...&gt;
+			&lt;set class="face1" ...&gt;
+				....
+			&lt;/set&gt;
+		&lt;/paper&gt;
+	
+		&lt;style&gt;
+		#paper1 .face1 .eye {
+			stroke-width: 4;
+		}
+		&lt;/style&gt;
+	
+	&lt;/raphael&gt;
+	</td>
+      </tr>
+    </table>
+    <div class="sample box">
+      <div><input type="button" id="element_style_xibox_button" class="control" onclick="switchState('element_style_xibox'); return false;" style="display: none" /> <span class="caption">XML Instance Representation</span></div>
+      <div id="element_style_xibox" class="contents">
+        <div style="margin-left: 0em">&lt;style&gt; ... &lt;/style&gt;</div>
+      </div>
+      <script type="text/javascript">
+<!--
+setState('element_style_xibox', true);
+// -->
+</script>
+    </div>
+    <div class="schemaComponent box">
+      <div><input type="button" id="element_style_scbox_button" class="control" onclick="switchState('element_style_scbox'); return false;" style="display: none" /> <span class="caption">Schema Component Representation</span></div>
+      <div id="element_style_scbox" class="contents">
+        <div style="margin-left: 0em">&lt;<span class="scTag">xs:element</span> <span class="scTag">name</span>="<span class="scContent">style</span>"/&gt;</div>
+      </div>
+      <script type="text/javascript">
+<!--
+setState('element_style_scbox', false);
+// -->
+</script>
+    </div>
+    <div style="text-align: right; clear: both;">
+      <a href="#top">top</a>
+    </div>
+    <hr />
+    <h2>
+      <a name="SchemaDefinitions" id="SchemaDefinitions">Global Definitions</a>
+    </h2>
+    <h3>Complex Type: <a name="type_AttrsType" class="name" id="type_AttrsType">AttrsType</a></h3>
+    <table class="hierarchy">
+      <tr>
+        <th>Super-types:</th>
+        <td><span class="type"><a title="Jump to &quot;BaseType&quot; type definition." href="#type_BaseType">BaseType</a></span> &lt; <strong>AttrsType</strong> (by extension)</td>
+      </tr>
+      <tr>
+        <th>Sub-types:</th>
+        <td>
+          <ul>
+            <li><span class="type"><a title="Jump to &quot;RectType&quot; type definition." href="#type_RectType">RectType</a></span> (by restriction)</li>
+            <li><span class="type"><a title="Jump to &quot;CircleType&quot; type definition." href="#type_CircleType">CircleType</a></span> (by restriction)</li>
+            <li><span class="type"><a title="Jump to &quot;ImageType&quot; type definition." href="#type_ImageType">ImageType</a></span> (by restriction)</li>
+            <li><span class="type"><a title="Jump to &quot;EllipseType&quot; type definition." href="#type_EllipseType">EllipseType</a></span> (by restriction)</li>
+            <li><span class="type"><a title="Jump to &quot;PathType&quot; type definition." href="#type_PathType">PathType</a></span> (by restriction)</li>
+            <li><span class="type"><a title="Jump to &quot;SetType&quot; type definition." href="#type_SetType">SetType</a></span> (by extension)</li>
+          </ul>
+        </td>
+      </tr>
+    </table>
+    <table class="properties">
+      <tr>
+        <th>Name</th>
+        <td>AttrsType</td>
+      </tr>
+      <tr>
+        <th>
+          <a title="Look up 'Abstract' in glossary" href="#term_Abstract">Abstract</a>
+        </th>
+        <td>no</td>
+      </tr>
+    </table>
+    <div class="sample box">
+      <div><input type="button" id="type_AttrsType_xibox_button" class="control" onclick="switchState('type_AttrsType_xibox'); return false;" style="display: none" /> <span class="caption">XML Instance Representation</span></div>
+      <div id="type_AttrsType_xibox" class="contents">
+        <div style="margin-left: 0em">&lt;...<br /><span style="margin-left: 0.5em" class="inherited"> id="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:ID</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('id of the raphael shape for retrieving it from dictionary and for referencing it in css using #shape1.'); viewDocumentation('Attribute', 'id', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> class="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:NMTOKENS</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('class of the raphael shape for retrieving it from dictionary and for referencing it in css using .shapeClass1'); viewDocumentation('Attribute', 'class', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="newFields"> x="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('x coordinate of the top left corner'); viewDocumentation('Attribute', 'x', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="newFields"> y="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('y coordinate of the top left corner'); viewDocumentation('Attribute', 'y', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="newFields"> width="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('rectangle width'); viewDocumentation('Attribute', 'width', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="newFields"> height="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('rectangle height'); viewDocumentation('Attribute', 'height', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="newFields"> src="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:string</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('radius for rounded corners, default is 0'); viewDocumentation('Attribute', 'src', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="newFields"> cx="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('x coordinate of the top left corner'); viewDocumentation('Attribute', 'cx', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="newFields"> cy="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('y coordinate of the top left corner'); viewDocumentation('Attribute', 'cy', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="newFields"> radius="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('y coordinate of the top left corner'); viewDocumentation('Attribute', 'radius', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="newFields"> rx="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('horizontal radius'); viewDocumentation('Attribute', 'rx', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="newFields"> ry="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('vertical radius'); viewDocumentation('Attribute', 'ry', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="newFields"> path="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:string</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('path string in SVG format.'); viewDocumentation('Attribute', 'path', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="newFields"> stroke="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:string</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('stroke color'); viewDocumentation('Attribute', 'stroke', docArray);">?</a>"</span>/&gt; </div>
+      </div>
+      <script type="text/javascript">
+<!--
+setState('type_AttrsType_xibox', true);
+// -->
+</script>
+    </div>
+    <div class="schemaComponent box">
+      <div><input type="button" id="type_AttrsType_scbox_button" class="control" onclick="switchState('type_AttrsType_scbox'); return false;" style="display: none" /> <span class="caption">Schema Component Representation</span></div>
+      <div id="type_AttrsType_scbox" class="contents">
+        <div style="margin-left: 0em">&lt;<span class="scTag">xs:complexType</span> <span class="scTag">name</span>="<span class="scContent">AttrsType</span>"&gt;<div style="margin-left: 1.5em">&lt;<span class="scTag">xs:complexContent</span>&gt;<div style="margin-left: 1.5em">&lt;<span class="scTag">xs:extension</span> <span class="scTag">base</span>="<span class="scContent"><span class="type"><a title="Jump to &quot;BaseType&quot; type definition." href="#type_BaseType">BaseType</a></span></span>"&gt;<div style="margin-left: 1.5em">&lt;<span class="scTag">xs:attribute</span> <span class="scTag">name</span>="<span class="scContent">x</span>" <span class="scTag">type</span>="<span class="scContent"><span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span></span>"/&gt;</div><div style="margin-left: 1.5em">&lt;<span class="scTag">xs:attribute</span> <span class="scTag">name</span>="<span class="scContent">y</span>" <span class="scTag">type</span>="<span class="scContent"><span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span></span>"/&gt;</div><div style="margin-left: 1.5em">&lt;<span class="scTag">xs:attribute</span> <span class="scTag">name</span>="<span class="scContent">width</span>" <span class="scTag">type</span>="<span class="scContent"><span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span></span>"/&gt;</div><div style="margin-left: 1.5em">&lt;<span class="scTag">xs:attribute</span> <span class="scTag">name</span>="<span class="scContent">height</span>" <span class="scTag">type</span>="<span class="scContent"><span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span></span>"/&gt;</div><div style="margin-left: 1.5em">&lt;<span class="scTag">xs:attribute</span> <span class="scTag">name</span>="<span class="scContent">src</span>" <span class="scTag">type</span>="<span class="scContent"><span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:string</span></span>"/&gt;</div><div style="margin-left: 1.5em">&lt;<span class="scTag">xs:attribute</span> <span class="scTag">name</span>="<span class="scContent">cx</span>" <span class="scTag">type</span>="<span class="scContent"><span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span></span>"/&gt;</div><div style="margin-left: 1.5em">&lt;<span class="scTag">xs:attribute</span> <span class="scTag">name</span>="<span class="scContent">cy</span>" <span class="scTag">type</span>="<span class="scContent"><span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span></span>"/&gt;</div><div style="margin-left: 1.5em">&lt;<span class="scTag">xs:attribute</span> <span class="scTag">name</span>="<span class="scContent">radius</span>" <span class="scTag">type</span>="<span class="scContent"><span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span></span>"/&gt;</div><div style="margin-left: 1.5em">&lt;<span class="scTag">xs:attribute</span> <span class="scTag">name</span>="<span class="scContent">rx</span>" <span class="scTag">type</span>="<span class="scContent"><span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span></span>"/&gt;</div><div style="margin-left: 1.5em">&lt;<span class="scTag">xs:attribute</span> <span class="scTag">name</span>="<span class="scContent">ry</span>" <span class="scTag">type</span>="<span class="scContent"><span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span></span>"/&gt;</div><div style="margin-left: 1.5em">&lt;<span class="scTag">xs:attribute</span> <span class="scTag">name</span>="<span class="scContent">path</span>" <span class="scTag">type</span>="<span class="scContent"><span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:string</span></span>"/&gt;</div><div style="margin-left: 1.5em">&lt;<span class="scTag">xs:attribute</span> <span class="scTag">name</span>="<span class="scContent">stroke</span>" <span class="scTag">type</span>="<span class="scContent"><span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:string</span></span>"/&gt;</div>&lt;/<span class="scTag">xs:extension</span>&gt;</div>&lt;/<span class="scTag">xs:complexContent</span>&gt;</div>&lt;/<span class="scTag">xs:complexType</span>&gt;</div>
+      </div>
+      <script type="text/javascript">
+<!--
+setState('type_AttrsType_scbox', false);
+// -->
+</script>
+    </div>
+    <div style="text-align: right; clear: both;">
+      <a href="#top">top</a>
+    </div>
+    <hr />
+    <h3>Complex Type: <a name="type_BaseType" class="name" id="type_BaseType">BaseType</a></h3>
+    <table class="hierarchy">
+      <tr>
+        <th>Super-types:</th>
+        <td>None</td>
+      </tr>
+      <tr>
+        <th>Sub-types:</th>
+        <td>
+          <ul>
+            <li><span class="type"><a title="Jump to &quot;AttrsType&quot; type definition." href="#type_AttrsType">AttrsType</a></span> (by extension)<ul><li><span class="type"><a title="Jump to &quot;RectType&quot; type definition." href="#type_RectType">RectType</a></span> (by restriction)</li><li><span class="type"><a title="Jump to &quot;CircleType&quot; type definition." href="#type_CircleType">CircleType</a></span> (by restriction)</li><li><span class="type"><a title="Jump to &quot;ImageType&quot; type definition." href="#type_ImageType">ImageType</a></span> (by restriction)</li><li><span class="type"><a title="Jump to &quot;EllipseType&quot; type definition." href="#type_EllipseType">EllipseType</a></span> (by restriction)</li><li><span class="type"><a title="Jump to &quot;PathType&quot; type definition." href="#type_PathType">PathType</a></span> (by restriction)</li><li><span class="type"><a title="Jump to &quot;SetType&quot; type definition." href="#type_SetType">SetType</a></span> (by extension)</li></ul></li>
+          </ul>
+        </td>
+      </tr>
+    </table>
+    <table class="properties">
+      <tr>
+        <th>Name</th>
+        <td>BaseType</td>
+      </tr>
+      <tr>
+        <th>
+          <a title="Look up 'Abstract' in glossary" href="#term_Abstract">Abstract</a>
+        </th>
+        <td>no</td>
+      </tr>
+      <tr>
+        <th>Documentation</th>
+        <td>All raphael objects are suceptible o fhaving and id and class attributes, even sets and papers. </td>
+      </tr>
+    </table>
+    <div class="sample box">
+      <div><input type="button" id="type_BaseType_xibox_button" class="control" onclick="switchState('type_BaseType_xibox'); return false;" style="display: none" /> <span class="caption">XML Instance Representation</span></div>
+      <div id="type_BaseType_xibox" class="contents">
+        <div style="margin-left: 0em">&lt;...<br /><span style="margin-left: 0.5em"> id="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:ID</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('id of the raphael shape for retrieving it from dictionary and for referencing it in css using #shape1.'); viewDocumentation('Attribute', 'id', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em"> class="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:NMTOKENS</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('class of the raphael shape for retrieving it from dictionary and for referencing it in css using .shapeClass1'); viewDocumentation('Attribute', 'class', docArray);">?</a>"</span>/&gt; </div>
+      </div>
+      <script type="text/javascript">
+<!--
+setState('type_BaseType_xibox', true);
+// -->
+</script>
+    </div>
+    <div class="schemaComponent box">
+      <div><input type="button" id="type_BaseType_scbox_button" class="control" onclick="switchState('type_BaseType_scbox'); return false;" style="display: none" /> <span class="caption">Schema Component Representation</span></div>
+      <div id="type_BaseType_scbox" class="contents">
+        <div style="margin-left: 0em">&lt;<span class="scTag">xs:complexType</span> <span class="scTag">name</span>="<span class="scContent">BaseType</span>"&gt;<div style="margin-left: 1.5em">&lt;<span class="scTag">xs:attribute</span> <span class="scTag">name</span>="<span class="scContent">id</span>" <span class="scTag">type</span>="<span class="scContent"><span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:ID</span></span>"/&gt;</div><div class="comment" style="margin-left: 1.5em">&lt;-- type like class attr in xhtml schema at http://www.w3.org/TR/xhtml1-schema/ --&gt;</div><div style="margin-left: 1.5em">&lt;<span class="scTag">xs:attribute</span> <span class="scTag">name</span>="<span class="scContent">class</span>" <span class="scTag">type</span>="<span class="scContent"><span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:NMTOKENS</span></span>"/&gt;</div>&lt;/<span class="scTag">xs:complexType</span>&gt;</div>
+      </div>
+      <script type="text/javascript">
+<!--
+setState('type_BaseType_scbox', false);
+// -->
+</script>
+    </div>
+    <div style="text-align: right; clear: both;">
+      <a href="#top">top</a>
+    </div>
+    <hr />
+    <h3>Complex Type: <a name="type_CircleType" class="name" id="type_CircleType">CircleType</a></h3>
+    <table class="hierarchy">
+      <tr>
+        <th>Super-types:</th>
+        <td><span class="type"><a title="Jump to &quot;BaseType&quot; type definition." href="#type_BaseType">BaseType</a></span> &lt; <span class="type"><a title="Jump to &quot;AttrsType&quot; type definition." href="#type_AttrsType">AttrsType</a></span> (by extension) &lt; <strong>CircleType</strong> (by restriction)</td>
+      </tr>
+      <tr>
+        <th>Sub-types:</th>
+        <td>None</td>
+      </tr>
+    </table>
+    <table class="properties">
+      <tr>
+        <th>Name</th>
+        <td>CircleType</td>
+      </tr>
+      <tr>
+        <th>
+          <a title="Look up 'Abstract' in glossary" href="#term_Abstract">Abstract</a>
+        </th>
+        <td>no</td>
+      </tr>
+    </table>
+    <div class="sample box">
+      <div><input type="button" id="type_CircleType_xibox_button" class="control" onclick="switchState('type_CircleType_xibox'); return false;" style="display: none" /> <span class="caption">XML Instance Representation</span></div>
+      <div id="type_CircleType_xibox" class="contents">
+        <div style="margin-left: 0em">&lt;...<br /><span style="margin-left: 0.5em" class="inherited"> id="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:ID</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('id of the raphael shape for retrieving it from dictionary and for referencing it in css using #shape1.'); viewDocumentation('Attribute', 'id', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> class="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:NMTOKENS</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('class of the raphael shape for retrieving it from dictionary and for referencing it in css using .shapeClass1'); viewDocumentation('Attribute', 'class', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> x="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('x coordinate of the top left corner'); viewDocumentation('Attribute', 'x', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> y="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('y coordinate of the top left corner'); viewDocumentation('Attribute', 'y', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> width="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('rectangle width'); viewDocumentation('Attribute', 'width', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> height="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('rectangle height'); viewDocumentation('Attribute', 'height', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> src="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:string</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('radius for rounded corners, default is 0'); viewDocumentation('Attribute', 'src', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> rx="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('horizontal radius'); viewDocumentation('Attribute', 'rx', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> ry="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('vertical radius'); viewDocumentation('Attribute', 'ry', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> path="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:string</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('path string in SVG format.'); viewDocumentation('Attribute', 'path', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> stroke="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:string</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('stroke color'); viewDocumentation('Attribute', 'stroke', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="newFields"> cx="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('x coordinate of the centre'); viewDocumentation('Attribute', 'cx', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="newFields"> cy="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('y coordinate of the centre'); viewDocumentation('Attribute', 'cy', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="newFields"> radius="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('radius'); viewDocumentation('Attribute', 'radius', docArray);">?</a>"</span>/&gt; </div>
+      </div>
+      <script type="text/javascript">
+<!--
+setState('type_CircleType_xibox', true);
+// -->
+</script>
+    </div>
+    <div class="schemaComponent box">
+      <div><input type="button" id="type_CircleType_scbox_button" class="control" onclick="switchState('type_CircleType_scbox'); return false;" style="display: none" /> <span class="caption">Schema Component Representation</span></div>
+      <div id="type_CircleType_scbox" class="contents">
+        <div style="margin-left: 0em">&lt;<span class="scTag">xs:complexType</span> <span class="scTag">name</span>="<span class="scContent">CircleType</span>"&gt;<div style="margin-left: 1.5em">&lt;<span class="scTag">xs:complexContent</span>&gt;<div style="margin-left: 1.5em">&lt;<span class="scTag">xs:restriction</span> <span class="scTag">base</span>="<span class="scContent"><span class="type"><a title="Jump to &quot;AttrsType&quot; type definition." href="#type_AttrsType">AttrsType</a></span></span>"&gt;<div style="margin-left: 1.5em">&lt;<span class="scTag">xs:attribute</span> <span class="scTag">name</span>="<span class="scContent">cx</span>" <span class="scTag">type</span>="<span class="scContent"><span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span></span>" <span class="scTag">use</span>="<span class="scContent">required</span>"/&gt;</div><div style="margin-left: 1.5em">&lt;<span class="scTag">xs:attribute</span> <span class="scTag">name</span>="<span class="scContent">cy</span>" <span class="scTag">type</span>="<span class="scContent"><span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span></span>" <span class="scTag">use</span>="<span class="scContent">required</span>"/&gt;</div><div style="margin-left: 1.5em">&lt;<span class="scTag">xs:attribute</span> <span class="scTag">name</span>="<span class="scContent">radius</span>" <span class="scTag">type</span>="<span class="scContent"><span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span></span>" <span class="scTag">use</span>="<span class="scContent">required</span>"/&gt;</div>&lt;/<span class="scTag">xs:restriction</span>&gt;</div>&lt;/<span class="scTag">xs:complexContent</span>&gt;</div>&lt;/<span class="scTag">xs:complexType</span>&gt;</div>
+      </div>
+      <script type="text/javascript">
+<!--
+setState('type_CircleType_scbox', false);
+// -->
+</script>
+    </div>
+    <div style="text-align: right; clear: both;">
+      <a href="#top">top</a>
+    </div>
+    <hr />
+    <h3>Complex Type: <a name="type_EllipseType" class="name" id="type_EllipseType">EllipseType</a></h3>
+    <table class="hierarchy">
+      <tr>
+        <th>Super-types:</th>
+        <td><span class="type"><a title="Jump to &quot;BaseType&quot; type definition." href="#type_BaseType">BaseType</a></span> &lt; <span class="type"><a title="Jump to &quot;AttrsType&quot; type definition." href="#type_AttrsType">AttrsType</a></span> (by extension) &lt; <strong>EllipseType</strong> (by restriction)</td>
+      </tr>
+      <tr>
+        <th>Sub-types:</th>
+        <td>None</td>
+      </tr>
+    </table>
+    <table class="properties">
+      <tr>
+        <th>Name</th>
+        <td>EllipseType</td>
+      </tr>
+      <tr>
+        <th>
+          <a title="Look up 'Abstract' in glossary" href="#term_Abstract">Abstract</a>
+        </th>
+        <td>no</td>
+      </tr>
+    </table>
+    <div class="sample box">
+      <div><input type="button" id="type_EllipseType_xibox_button" class="control" onclick="switchState('type_EllipseType_xibox'); return false;" style="display: none" /> <span class="caption">XML Instance Representation</span></div>
+      <div id="type_EllipseType_xibox" class="contents">
+        <div style="margin-left: 0em">&lt;...<br /><span style="margin-left: 0.5em" class="inherited"> id="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:ID</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('id of the raphael shape for retrieving it from dictionary and for referencing it in css using #shape1.'); viewDocumentation('Attribute', 'id', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> class="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:NMTOKENS</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('class of the raphael shape for retrieving it from dictionary and for referencing it in css using .shapeClass1'); viewDocumentation('Attribute', 'class', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> width="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('rectangle width'); viewDocumentation('Attribute', 'width', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> height="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('rectangle height'); viewDocumentation('Attribute', 'height', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> src="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:string</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('radius for rounded corners, default is 0'); viewDocumentation('Attribute', 'src', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> cx="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('x coordinate of the top left corner'); viewDocumentation('Attribute', 'cx', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> cy="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('y coordinate of the top left corner'); viewDocumentation('Attribute', 'cy', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> radius="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('y coordinate of the top left corner'); viewDocumentation('Attribute', 'radius', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> path="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:string</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('path string in SVG format.'); viewDocumentation('Attribute', 'path', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> stroke="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:string</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('stroke color'); viewDocumentation('Attribute', 'stroke', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="newFields"> x="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('x coordinate of the centre'); viewDocumentation('Attribute', 'x', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="newFields"> y="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('y coordinate of the centre'); viewDocumentation('Attribute', 'y', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="newFields"> rx="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('horizontal radius'); viewDocumentation('Attribute', 'rx', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="newFields"> ry="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('vertical radius'); viewDocumentation('Attribute', 'ry', docArray);">?</a>"</span>/&gt; </div>
+      </div>
+      <script type="text/javascript">
+<!--
+setState('type_EllipseType_xibox', true);
+// -->
+</script>
+    </div>
+    <div class="schemaComponent box">
+      <div><input type="button" id="type_EllipseType_scbox_button" class="control" onclick="switchState('type_EllipseType_scbox'); return false;" style="display: none" /> <span class="caption">Schema Component Representation</span></div>
+      <div id="type_EllipseType_scbox" class="contents">
+        <div style="margin-left: 0em">&lt;<span class="scTag">xs:complexType</span> <span class="scTag">name</span>="<span class="scContent">EllipseType</span>"&gt;<div style="margin-left: 1.5em">&lt;<span class="scTag">xs:complexContent</span>&gt;<div style="margin-left: 1.5em">&lt;<span class="scTag">xs:restriction</span> <span class="scTag">base</span>="<span class="scContent"><span class="type"><a title="Jump to &quot;AttrsType&quot; type definition." href="#type_AttrsType">AttrsType</a></span></span>"&gt;<div style="margin-left: 1.5em">&lt;<span class="scTag">xs:attribute</span> <span class="scTag">name</span>="<span class="scContent">x</span>" <span class="scTag">type</span>="<span class="scContent"><span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span></span>" <span class="scTag">use</span>="<span class="scContent">required</span>"/&gt;</div><div style="margin-left: 1.5em">&lt;<span class="scTag">xs:attribute</span> <span class="scTag">name</span>="<span class="scContent">y</span>" <span class="scTag">type</span>="<span class="scContent"><span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span></span>" <span class="scTag">use</span>="<span class="scContent">required</span>"/&gt;</div><div style="margin-left: 1.5em">&lt;<span class="scTag">xs:attribute</span> <span class="scTag">name</span>="<span class="scContent">rx</span>" <span class="scTag">type</span>="<span class="scContent"><span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span></span>" <span class="scTag">use</span>="<span class="scContent">required</span>"/&gt;</div><div style="margin-left: 1.5em">&lt;<span class="scTag">xs:attribute</span> <span class="scTag">name</span>="<span class="scContent">ry</span>" <span class="scTag">type</span>="<span class="scContent"><span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span></span>" <span class="scTag">use</span>="<span class="scContent">required</span>"/&gt;</div>&lt;/<span class="scTag">xs:restriction</span>&gt;</div>&lt;/<span class="scTag">xs:complexContent</span>&gt;</div>&lt;/<span class="scTag">xs:complexType</span>&gt;</div>
+      </div>
+      <script type="text/javascript">
+<!--
+setState('type_EllipseType_scbox', false);
+// -->
+</script>
+    </div>
+    <div style="text-align: right; clear: both;">
+      <a href="#top">top</a>
+    </div>
+    <hr />
+    <h3>Complex Type: <a name="type_ImageType" class="name" id="type_ImageType">ImageType</a></h3>
+    <table class="hierarchy">
+      <tr>
+        <th>Super-types:</th>
+        <td><span class="type"><a title="Jump to &quot;BaseType&quot; type definition." href="#type_BaseType">BaseType</a></span> &lt; <span class="type"><a title="Jump to &quot;AttrsType&quot; type definition." href="#type_AttrsType">AttrsType</a></span> (by extension) &lt; <strong>ImageType</strong> (by restriction)</td>
+      </tr>
+      <tr>
+        <th>Sub-types:</th>
+        <td>None</td>
+      </tr>
+    </table>
+    <table class="properties">
+      <tr>
+        <th>Name</th>
+        <td>ImageType</td>
+      </tr>
+      <tr>
+        <th>
+          <a title="Look up 'Abstract' in glossary" href="#term_Abstract">Abstract</a>
+        </th>
+        <td>no</td>
+      </tr>
+    </table>
+    <div class="sample box">
+      <div><input type="button" id="type_ImageType_xibox_button" class="control" onclick="switchState('type_ImageType_xibox'); return false;" style="display: none" /> <span class="caption">XML Instance Representation</span></div>
+      <div id="type_ImageType_xibox" class="contents">
+        <div style="margin-left: 0em">&lt;...<br /><span style="margin-left: 0.5em" class="inherited"> id="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:ID</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('id of the raphael shape for retrieving it from dictionary and for referencing it in css using #shape1.'); viewDocumentation('Attribute', 'id', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> class="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:NMTOKENS</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('class of the raphael shape for retrieving it from dictionary and for referencing it in css using .shapeClass1'); viewDocumentation('Attribute', 'class', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> cx="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('x coordinate of the top left corner'); viewDocumentation('Attribute', 'cx', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> cy="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('y coordinate of the top left corner'); viewDocumentation('Attribute', 'cy', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> radius="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('y coordinate of the top left corner'); viewDocumentation('Attribute', 'radius', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> rx="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('horizontal radius'); viewDocumentation('Attribute', 'rx', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> ry="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('vertical radius'); viewDocumentation('Attribute', 'ry', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> path="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:string</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('path string in SVG format.'); viewDocumentation('Attribute', 'path', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> stroke="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:string</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('stroke color'); viewDocumentation('Attribute', 'stroke', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="newFields"> x="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('x coordinate of the top left corner'); viewDocumentation('Attribute', 'x', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="newFields"> y="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('y coordinate of the top left corner'); viewDocumentation('Attribute', 'y', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="newFields"> width="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('rectangle width'); viewDocumentation('Attribute', 'width', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="newFields"> height="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('rectangle height'); viewDocumentation('Attribute', 'height', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="newFields"> src="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:string</span> <span class="occurs">[1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('radius for rounded corners, default is 0'); viewDocumentation('Attribute', 'src', docArray);">?</a>"</span>/&gt; </div>
+      </div>
+      <script type="text/javascript">
+<!--
+setState('type_ImageType_xibox', true);
+// -->
+</script>
+    </div>
+    <div class="schemaComponent box">
+      <div><input type="button" id="type_ImageType_scbox_button" class="control" onclick="switchState('type_ImageType_scbox'); return false;" style="display: none" /> <span class="caption">Schema Component Representation</span></div>
+      <div id="type_ImageType_scbox" class="contents">
+        <div style="margin-left: 0em">&lt;<span class="scTag">xs:complexType</span> <span class="scTag">name</span>="<span class="scContent">ImageType</span>"&gt;<div style="margin-left: 1.5em">&lt;<span class="scTag">xs:complexContent</span>&gt;<div style="margin-left: 1.5em">&lt;<span class="scTag">xs:restriction</span> <span class="scTag">base</span>="<span class="scContent"><span class="type"><a title="Jump to &quot;AttrsType&quot; type definition." href="#type_AttrsType">AttrsType</a></span></span>"&gt;<div style="margin-left: 1.5em">&lt;<span class="scTag">xs:attribute</span> <span class="scTag">name</span>="<span class="scContent">x</span>" <span class="scTag">type</span>="<span class="scContent"><span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span></span>" <span class="scTag">use</span>="<span class="scContent">required</span>"/&gt;</div><div style="margin-left: 1.5em">&lt;<span class="scTag">xs:attribute</span> <span class="scTag">name</span>="<span class="scContent">y</span>" <span class="scTag">type</span>="<span class="scContent"><span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span></span>" <span class="scTag">use</span>="<span class="scContent">required</span>"/&gt;</div><div style="margin-left: 1.5em">&lt;<span class="scTag">xs:attribute</span> <span class="scTag">name</span>="<span class="scContent">width</span>" <span class="scTag">type</span>="<span class="scContent"><span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span></span>" <span class="scTag">use</span>="<span class="scContent">required</span>"/&gt;</div><div style="margin-left: 1.5em">&lt;<span class="scTag">xs:attribute</span> <span class="scTag">name</span>="<span class="scContent">height</span>" <span class="scTag">type</span>="<span class="scContent"><span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span></span>" <span class="scTag">use</span>="<span class="scContent">required</span>"/&gt;</div><div style="margin-left: 1.5em">&lt;<span class="scTag">xs:attribute</span> <span class="scTag">name</span>="<span class="scContent">src</span>" <span class="scTag">type</span>="<span class="scContent"><span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:string</span></span>" <span class="scTag">use</span>="<span class="scContent">required</span>"/&gt;</div>&lt;/<span class="scTag">xs:restriction</span>&gt;</div>&lt;/<span class="scTag">xs:complexContent</span>&gt;</div>&lt;/<span class="scTag">xs:complexType</span>&gt;</div>
+      </div>
+      <script type="text/javascript">
+<!--
+setState('type_ImageType_scbox', false);
+// -->
+</script>
+    </div>
+    <div style="text-align: right; clear: both;">
+      <a href="#top">top</a>
+    </div>
+    <hr />
+    <h3>Complex Type: <a name="type_PathType" class="name" id="type_PathType">PathType</a></h3>
+    <table class="hierarchy">
+      <tr>
+        <th>Super-types:</th>
+        <td><span class="type"><a title="Jump to &quot;BaseType&quot; type definition." href="#type_BaseType">BaseType</a></span> &lt; <span class="type"><a title="Jump to &quot;AttrsType&quot; type definition." href="#type_AttrsType">AttrsType</a></span> (by extension) &lt; <strong>PathType</strong> (by restriction)</td>
+      </tr>
+      <tr>
+        <th>Sub-types:</th>
+        <td>None</td>
+      </tr>
+    </table>
+    <table class="properties">
+      <tr>
+        <th>Name</th>
+        <td>PathType</td>
+      </tr>
+      <tr>
+        <th>
+          <a title="Look up 'Abstract' in glossary" href="#term_Abstract">Abstract</a>
+        </th>
+        <td>no</td>
+      </tr>
+    </table>
+    <div class="sample box">
+      <div><input type="button" id="type_PathType_xibox_button" class="control" onclick="switchState('type_PathType_xibox'); return false;" style="display: none" /> <span class="caption">XML Instance Representation</span></div>
+      <div id="type_PathType_xibox" class="contents">
+        <div style="margin-left: 0em">&lt;...<br /><span style="margin-left: 0.5em" class="inherited"> id="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:ID</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('id of the raphael shape for retrieving it from dictionary and for referencing it in css using #shape1.'); viewDocumentation('Attribute', 'id', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> class="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:NMTOKENS</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('class of the raphael shape for retrieving it from dictionary and for referencing it in css using .shapeClass1'); viewDocumentation('Attribute', 'class', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> x="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('x coordinate of the top left corner'); viewDocumentation('Attribute', 'x', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> y="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('y coordinate of the top left corner'); viewDocumentation('Attribute', 'y', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> width="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('rectangle width'); viewDocumentation('Attribute', 'width', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> height="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('rectangle height'); viewDocumentation('Attribute', 'height', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> src="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:string</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('radius for rounded corners, default is 0'); viewDocumentation('Attribute', 'src', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> cx="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('x coordinate of the top left corner'); viewDocumentation('Attribute', 'cx', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> cy="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('y coordinate of the top left corner'); viewDocumentation('Attribute', 'cy', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> radius="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('y coordinate of the top left corner'); viewDocumentation('Attribute', 'radius', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> rx="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('horizontal radius'); viewDocumentation('Attribute', 'rx', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> ry="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('vertical radius'); viewDocumentation('Attribute', 'ry', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> stroke="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:string</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('stroke color'); viewDocumentation('Attribute', 'stroke', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="newFields"> path="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:string</span> <span class="occurs">[1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('path string in SVG format.'); viewDocumentation('Attribute', 'path', docArray);">?</a>"</span>/&gt; </div>
+      </div>
+      <script type="text/javascript">
+<!--
+setState('type_PathType_xibox', true);
+// -->
+</script>
+    </div>
+    <div class="schemaComponent box">
+      <div><input type="button" id="type_PathType_scbox_button" class="control" onclick="switchState('type_PathType_scbox'); return false;" style="display: none" /> <span class="caption">Schema Component Representation</span></div>
+      <div id="type_PathType_scbox" class="contents">
+        <div style="margin-left: 0em">&lt;<span class="scTag">xs:complexType</span> <span class="scTag">name</span>="<span class="scContent">PathType</span>"&gt;<div style="margin-left: 1.5em">&lt;<span class="scTag">xs:complexContent</span>&gt;<div style="margin-left: 1.5em">&lt;<span class="scTag">xs:restriction</span> <span class="scTag">base</span>="<span class="scContent"><span class="type"><a title="Jump to &quot;AttrsType&quot; type definition." href="#type_AttrsType">AttrsType</a></span></span>"&gt;<div style="margin-left: 1.5em">&lt;<span class="scTag">xs:attribute</span> <span class="scTag">name</span>="<span class="scContent">path</span>" <span class="scTag">type</span>="<span class="scContent"><span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:string</span></span>" <span class="scTag">use</span>="<span class="scContent">required</span>"/&gt;</div>&lt;/<span class="scTag">xs:restriction</span>&gt;</div>&lt;/<span class="scTag">xs:complexContent</span>&gt;</div>&lt;/<span class="scTag">xs:complexType</span>&gt;</div>
+      </div>
+      <script type="text/javascript">
+<!--
+setState('type_PathType_scbox', false);
+// -->
+</script>
+    </div>
+    <div style="text-align: right; clear: both;">
+      <a href="#top">top</a>
+    </div>
+    <hr />
+    <h3>Complex Type: <a name="type_RectType" class="name" id="type_RectType">RectType</a></h3>
+    <table class="hierarchy">
+      <tr>
+        <th>Super-types:</th>
+        <td><span class="type"><a title="Jump to &quot;BaseType&quot; type definition." href="#type_BaseType">BaseType</a></span> &lt; <span class="type"><a title="Jump to &quot;AttrsType&quot; type definition." href="#type_AttrsType">AttrsType</a></span> (by extension) &lt; <strong>RectType</strong> (by restriction)</td>
+      </tr>
+      <tr>
+        <th>Sub-types:</th>
+        <td>None</td>
+      </tr>
+    </table>
+    <table class="properties">
+      <tr>
+        <th>Name</th>
+        <td>RectType</td>
+      </tr>
+      <tr>
+        <th>
+          <a title="Look up 'Abstract' in glossary" href="#term_Abstract">Abstract</a>
+        </th>
+        <td>no</td>
+      </tr>
+    </table>
+    <div class="sample box">
+      <div><input type="button" id="type_RectType_xibox_button" class="control" onclick="switchState('type_RectType_xibox'); return false;" style="display: none" /> <span class="caption">XML Instance Representation</span></div>
+      <div id="type_RectType_xibox" class="contents">
+        <div style="margin-left: 0em">&lt;...<br /><span style="margin-left: 0.5em" class="inherited"> id="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:ID</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('id of the raphael shape for retrieving it from dictionary and for referencing it in css using #shape1.'); viewDocumentation('Attribute', 'id', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> class="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:NMTOKENS</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('class of the raphael shape for retrieving it from dictionary and for referencing it in css using .shapeClass1'); viewDocumentation('Attribute', 'class', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> src="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:string</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('radius for rounded corners, default is 0'); viewDocumentation('Attribute', 'src', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> cx="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('x coordinate of the top left corner'); viewDocumentation('Attribute', 'cx', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> cy="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('y coordinate of the top left corner'); viewDocumentation('Attribute', 'cy', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> rx="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('horizontal radius'); viewDocumentation('Attribute', 'rx', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> ry="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('vertical radius'); viewDocumentation('Attribute', 'ry', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> path="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:string</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('path string in SVG format.'); viewDocumentation('Attribute', 'path', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> stroke="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:string</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('stroke color'); viewDocumentation('Attribute', 'stroke', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="newFields"> x="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('x coordinate of the top left corner'); viewDocumentation('Attribute', 'x', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="newFields"> y="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('y coordinate of the top left corner'); viewDocumentation('Attribute', 'y', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="newFields"> width="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('rectangle width'); viewDocumentation('Attribute', 'width', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="newFields"> height="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('rectangle height'); viewDocumentation('Attribute', 'height', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="newFields"> radius="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('radius for rounded corners, default is 0'); viewDocumentation('Attribute', 'radius', docArray);">?</a>"</span>/&gt; </div>
+      </div>
+      <script type="text/javascript">
+<!--
+setState('type_RectType_xibox', true);
+// -->
+</script>
+    </div>
+    <div class="schemaComponent box">
+      <div><input type="button" id="type_RectType_scbox_button" class="control" onclick="switchState('type_RectType_scbox'); return false;" style="display: none" /> <span class="caption">Schema Component Representation</span></div>
+      <div id="type_RectType_scbox" class="contents">
+        <div style="margin-left: 0em">&lt;<span class="scTag">xs:complexType</span> <span class="scTag">name</span>="<span class="scContent">RectType</span>"&gt;<div style="margin-left: 1.5em">&lt;<span class="scTag">xs:complexContent</span>&gt;<div style="margin-left: 1.5em">&lt;<span class="scTag">xs:restriction</span> <span class="scTag">base</span>="<span class="scContent"><span class="type"><a title="Jump to &quot;AttrsType&quot; type definition." href="#type_AttrsType">AttrsType</a></span></span>"&gt;<div style="margin-left: 1.5em">&lt;<span class="scTag">xs:attribute</span> <span class="scTag">name</span>="<span class="scContent">x</span>" <span class="scTag">type</span>="<span class="scContent"><span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span></span>" <span class="scTag">use</span>="<span class="scContent">required</span>"/&gt;</div><div style="margin-left: 1.5em">&lt;<span class="scTag">xs:attribute</span> <span class="scTag">name</span>="<span class="scContent">y</span>" <span class="scTag">type</span>="<span class="scContent"><span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span></span>" <span class="scTag">use</span>="<span class="scContent">required</span>"/&gt;</div><div style="margin-left: 1.5em">&lt;<span class="scTag">xs:attribute</span> <span class="scTag">name</span>="<span class="scContent">width</span>" <span class="scTag">type</span>="<span class="scContent"><span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span></span>" <span class="scTag">use</span>="<span class="scContent">required</span>"/&gt;</div><div style="margin-left: 1.5em">&lt;<span class="scTag">xs:attribute</span> <span class="scTag">name</span>="<span class="scContent">height</span>" <span class="scTag">type</span>="<span class="scContent"><span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span></span>" <span class="scTag">use</span>="<span class="scContent">required</span>"/&gt;</div><div style="margin-left: 1.5em">&lt;<span class="scTag">xs:attribute</span> <span class="scTag">name</span>="<span class="scContent">radius</span>" <span class="scTag">type</span>="<span class="scContent"><span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span></span>"/&gt;</div>&lt;/<span class="scTag">xs:restriction</span>&gt;</div>&lt;/<span class="scTag">xs:complexContent</span>&gt;</div>&lt;/<span class="scTag">xs:complexType</span>&gt;</div>
+      </div>
+      <script type="text/javascript">
+<!--
+setState('type_RectType_scbox', false);
+// -->
+</script>
+    </div>
+    <div style="text-align: right; clear: both;">
+      <a href="#top">top</a>
+    </div>
+    <hr />
+    <h3>Complex Type: <a name="type_SetType" class="name" id="type_SetType">SetType</a></h3>
+    <table class="hierarchy">
+      <tr>
+        <th>Super-types:</th>
+        <td><span class="type"><a title="Jump to &quot;BaseType&quot; type definition." href="#type_BaseType">BaseType</a></span> &lt; <span class="type"><a title="Jump to &quot;AttrsType&quot; type definition." href="#type_AttrsType">AttrsType</a></span> (by extension) &lt; <strong>SetType</strong> (by extension)</td>
+      </tr>
+      <tr>
+        <th>Sub-types:</th>
+        <td>None</td>
+      </tr>
+    </table>
+    <table class="properties">
+      <tr>
+        <th>Name</th>
+        <td>SetType</td>
+      </tr>
+      <tr>
+        <th>
+          <a title="Look up 'Abstract' in glossary" href="#term_Abstract">Abstract</a>
+        </th>
+        <td>no</td>
+      </tr>
+    </table>
+    <div class="sample box">
+      <div><input type="button" id="type_SetType_xibox_button" class="control" onclick="switchState('type_SetType_xibox'); return false;" style="display: none" /> <span class="caption">XML Instance Representation</span></div>
+      <div id="type_SetType_xibox" class="contents">
+        <div style="margin-left: 0em">&lt;...<br /><span style="margin-left: 0.5em" class="inherited"> id="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:ID</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('id of the raphael shape for retrieving it from dictionary and for referencing it in css using #shape1.'); viewDocumentation('Attribute', 'id', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> class="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:NMTOKENS</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('class of the raphael shape for retrieving it from dictionary and for referencing it in css using .shapeClass1'); viewDocumentation('Attribute', 'class', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> x="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('x coordinate of the top left corner'); viewDocumentation('Attribute', 'x', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> y="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('y coordinate of the top left corner'); viewDocumentation('Attribute', 'y', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> width="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('rectangle width'); viewDocumentation('Attribute', 'width', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> height="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('rectangle height'); viewDocumentation('Attribute', 'height', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> src="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:string</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('radius for rounded corners, default is 0'); viewDocumentation('Attribute', 'src', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> cx="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('x coordinate of the top left corner'); viewDocumentation('Attribute', 'cx', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> cy="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('y coordinate of the top left corner'); viewDocumentation('Attribute', 'cy', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> radius="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('y coordinate of the top left corner'); viewDocumentation('Attribute', 'radius', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> rx="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('horizontal radius'); viewDocumentation('Attribute', 'rx', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> ry="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:int</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('vertical radius'); viewDocumentation('Attribute', 'ry', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> path="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:string</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('path string in SVG format.'); viewDocumentation('Attribute', 'path', docArray);">?</a>"</span><br /><span style="margin-left: 0.5em" class="inherited"> stroke="<span class="type"><a href="#ns_xs" title="Find out namespace of 'xs' prefix">xs</a>:string</span> <span class="occurs">[0..1]</span> <a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('stroke color'); viewDocumentation('Attribute', 'stroke', docArray);">?</a>"</span>&gt; <br /><span class="group" style="margin-left: 1.5em">Start <a title="Look up 'Choice' in glossary" href="#term_Choice">Choice</a> <span class="occurs">[1..*]</span></span><br /><div style="margin-left: 3em" class="newFields">&lt;<a title="Jump to &quot;rect&quot; element declaration." href="#element_rect">rect</a>&gt; ... &lt;/<a title="Jump to &quot;rect&quot; element declaration." href="#element_rect">rect</a>&gt; <span class="occurs">[1]</span></div><div style="margin-left: 3em" class="newFields">&lt;<a title="Jump to &quot;circle&quot; element declaration." href="#element_circle">circle</a>&gt; ... &lt;/<a title="Jump to &quot;circle&quot; element declaration." href="#element_circle">circle</a>&gt; <span class="occurs">[1]</span></div><div style="margin-left: 3em" class="newFields">&lt;<a title="Jump to &quot;set&quot; element declaration." href="#element_set">set</a>&gt; ... &lt;/<a title="Jump to &quot;set&quot; element declaration." href="#element_set">set</a>&gt; <span class="occurs">[1]</span></div><div style="margin-left: 3em" class="newFields">&lt;<a title="Jump to &quot;image&quot; element declaration." href="#element_image">image</a>&gt; ... &lt;/<a title="Jump to &quot;image&quot; element declaration." href="#element_image">image</a>&gt; <span class="occurs">[1]</span></div><div style="margin-left: 3em" class="newFields">&lt;<a title="Jump to &quot;ellipse&quot; element declaration." href="#element_ellipse">ellipse</a>&gt; ... &lt;/<a title="Jump to &quot;ellipse&quot; element declaration." href="#element_ellipse">ellipse</a>&gt; <span class="occurs">[1]</span></div><div style="margin-left: 3em" class="newFields">&lt;<a title="Jump to &quot;path&quot; element declaration." href="#element_path">path</a>&gt; ... &lt;/<a title="Jump to &quot;path&quot; element declaration." href="#element_path">path</a>&gt; <span class="occurs">[1]</span></div><span class="group" style="margin-left: 1.5em">End Choice</span><br />&lt;/...&gt;</div>
+      </div>
+      <script type="text/javascript">
+<!--
+setState('type_SetType_xibox', true);
+// -->
+</script>
+    </div>
+    <div class="schemaComponent box">
+      <div><input type="button" id="type_SetType_scbox_button" class="control" onclick="switchState('type_SetType_scbox'); return false;" style="display: none" /> <span class="caption">Schema Component Representation</span></div>
+      <div id="type_SetType_scbox" class="contents">
+        <div style="margin-left: 0em">&lt;<span class="scTag">xs:complexType</span> <span class="scTag">name</span>="<span class="scContent">SetType</span>"&gt;<div style="margin-left: 1.5em">&lt;<span class="scTag">xs:complexContent</span>&gt;<div style="margin-left: 1.5em">&lt;<span class="scTag">xs:extension</span> <span class="scTag">base</span>="<span class="scContent"><span class="type"><a title="Jump to &quot;AttrsType&quot; type definition." href="#type_AttrsType">AttrsType</a></span></span>"&gt;<div style="margin-left: 1.5em">&lt;<span class="scTag">xs:choice</span> <span class="scTag">maxOccurs</span>="<span class="scContent">unbounded</span>"&gt;<div style="margin-left: 1.5em">&lt;<span class="scTag">xs:element</span> <span class="scTag">ref</span>="<span class="scContent"><a title="Jump to &quot;rect&quot; element declaration." href="#element_rect">rect</a></span>"/&gt;</div><div style="margin-left: 1.5em">&lt;<span class="scTag">xs:element</span> <span class="scTag">ref</span>="<span class="scContent"><a title="Jump to &quot;circle&quot; element declaration." href="#element_circle">circle</a></span>"/&gt;</div><div style="margin-left: 1.5em">&lt;<span class="scTag">xs:element</span> <span class="scTag">ref</span>="<span class="scContent"><a title="Jump to &quot;set&quot; element declaration." href="#element_set">set</a></span>"/&gt;</div><div style="margin-left: 1.5em">&lt;<span class="scTag">xs:element</span> <span class="scTag">ref</span>="<span class="scContent"><a title="Jump to &quot;image&quot; element declaration." href="#element_image">image</a></span>"/&gt;</div><div style="margin-left: 1.5em">&lt;<span class="scTag">xs:element</span> <span class="scTag">ref</span>="<span class="scContent"><a title="Jump to &quot;ellipse&quot; element declaration." href="#element_ellipse">ellipse</a></span>"/&gt;</div><div style="margin-left: 1.5em">&lt;<span class="scTag">xs:element</span> <span class="scTag">ref</span>="<span class="scContent"><a title="Jump to &quot;path&quot; element declaration." href="#element_path">path</a></span>"/&gt;</div>&lt;/<span class="scTag">xs:choice</span>&gt;</div>&lt;/<span class="scTag">xs:extension</span>&gt;</div>&lt;/<span class="scTag">xs:complexContent</span>&gt;</div>&lt;/<span class="scTag">xs:complexType</span>&gt;</div>
+      </div>
+      <script type="text/javascript">
+<!--
+setState('type_SetType_scbox', false);
+// -->
+</script>
+    </div>
+    <div style="text-align: right; clear: both;">
+      <a href="#top">top</a>
+    </div>
+    <hr />
+    <div id="legend">
+      <h2>
+        <a name="Legend" id="Legend">Legend</a>
+      </h2>
+      <div style="float: left; width: 15em;">
+        <h3 style="margin-bottom: 0px;">Complex Type:</h3>
+        <div class="hint" style="margin-left: 0em;">Schema Component Type</div>
+      </div>
+      <div style="float: left; width: 15em;">
+        <h3 style="margin-bottom: 0px;">
+          <span class="name">AusAddress</span>
+        </h3>
+        <div class="hint" style="margin-left: 0em;">Schema Component Name</div>
+      </div>
+      <table class="hierarchy" style="clear : both">
+        <tr>
+          <th>Super-types:</th>
+          <td><span class="type" style="color: #0000FF; text-decoration:underline;">Address</span> &lt; <span class="current">AusAddress</span> (by extension)</td>
+        </tr>
+        <tr>
+          <th>Sub-types:</th>
+          <td>
+            <ul>
+              <li><span class="type" style="color: #0000FF; text-decoration:underline;">QLDAddress</span> (by restriction)</li>
+            </ul>
+          </td>
+        </tr>
+      </table>
+      <div class="hint">If this schema component is a type definition, its type hierarchy is shown in a gray-bordered box.</div>
+      <table class="properties">
+        <tr>
+          <th>Name</th>
+          <td>AusAddress</td>
+        </tr>
+        <tr>
+          <th>
+            <a title="Look up 'Abstract' in glossary" href="#term_Abstract">Abstract</a>
+          </th>
+          <td>no</td>
+        </tr>
+      </table>
+      <div class="hint">The table above displays the properties of this schema component.</div>
+      <div class="sample box">
+        <div>
+          <span class="caption">XML Instance Representation</span>
+        </div>
+        <div class="contents"><span style="margin-left: 0em">&lt;...</span><span class="newFields"><span> country="<span class="fixed">Australia</span>"</span></span>&gt; <br /><span style="margin-left: 1.5em" class="inherited">&lt;unitNo&gt; <span class="type">string</span> &lt;/unitNo&gt; <span class="occurs">[0..1]</span></span><br /><span style="margin-left: 1.5em" class="inherited">&lt;houseNo&gt; <span class="type">string</span> &lt;/houseNo&gt; <span class="occurs">[1]</span></span><br /><span style="margin-left: 1.5em" class="inherited">&lt;street&gt; <span class="type">string</span> &lt;/street&gt; <span class="occurs">[1]</span></span><br /><span class="group" style="margin-left: 1.5em">Start <a title="Look up 'Choice' in glossary" href="#term_Choice">Choice</a><span class="occurs">[1]</span></span><br /><span style="margin-left: 3em" class="inherited">&lt;city&gt; <span class="type">string</span> &lt;/city&gt; <span class="occurs">[1]</span></span><br /><span style="margin-left: 3em" class="inherited">&lt;town&gt; <span class="type">string</span> &lt;/town&gt; <span class="occurs">[1]</span></span><br /><span class="group" style="margin-left: 1.5em">End Choice</span><br /><span class="newFields"><span style="margin-left: 1.5em">&lt;state&gt; <span class="type" style="text-decoration:underline;">AusStates</span> &lt;/state&gt; <span class="occurs">[1]</span></span><br /><span style="margin-left: 1.5em">&lt;postcode&gt; <span class="constraint">string &lt;&lt;<em>pattern</em> = [1-9][0-9]{3}&gt;&gt;</span> &lt;/postcode&gt; <span class="occurs">[1]</span><a href="javascript:void(0)" title="View Documentation" class="documentation" onclick="docArray = new Array('Post code must be a four-digit number.'); viewDocumentation('Element', 'postcode', docArray);">?</a></span><br /></span><span style="margin-left: 0em">&lt;/...&gt;</span><br /></div>
+      </div>
+      <div class="hint">
+        <p>The XML Instance Representation table above shows the schema component's content as an XML instance.</p>
+        <ul>
+          <li>The minimum and maximum occurrence of elements and attributes are provided in square brackets, e.g. [0..1].</li>
+          <li>Model group information are shown in gray, e.g. Start Choice ... End Choice.</li>
+          <li>For type derivations, the elements and attributes that have been added to or changed from the base type's content are shown in <span style="font-weight: bold">bold</span>.</li>
+          <li>If an element/attribute has a fixed value, the fixed value is shown in green, e.g. country="Australia".</li>
+          <li>Otherwise, the type of the element/attribute is displayed.
+               <ul><li>If the element/attribute's type is in the schema, a link is provided to it.</li><li>For local simple type definitions, the constraints are displayed in angle brackets, e.g. &lt;&lt;<em>pattern</em> = [1-9][0-9]{3}&gt;&gt;.</li></ul></li>
+          <li>If a local element/attribute has documentation, it will be displayed in a window that pops up when the question mark inside the attribute or next to the element is clicked, e.g. &lt;postcode&gt;.</li>
+        </ul>
+      </div>
+      <div class="schemaComponent box">
+        <div>
+          <span class="caption">Schema Component Representation</span>
+        </div>
+        <div class="contents">
+          <span style="margin-left: 0em">&lt;<span class="scTag">complexType</span><span class="scTag">name</span>="<span class="scContent">AusAddress</span>"&gt;</span>
+          <br />
+          <span style="margin-left: 1.5em">&lt;<span class="scTag">complexContent</span>&gt;</span>
+          <br />
+          <span style="margin-left: 3em">&lt;<span class="scTag">extension</span><span class="scTag">base</span>="<span class="scContent"><span class="type" style="text-decoration:underline;">Address</span></span>"&gt;</span>
+          <br />
+          <span style="margin-left: 4.5em">&lt;<span class="scTag">sequence</span>&gt;</span>
+          <br />
+          <span style="margin-left: 6em">&lt;<span class="scTag">element</span><span class="scTag">name</span>="<span class="scContent">state</span>" <span class="scTag">type</span>="<span class="scContent"><span class="type" style="text-decoration:underline;">AusStates</span></span>"/&gt;</span>
+          <br />
+          <span style="margin-left: 6em">&lt;<span class="scTag">element</span><span class="scTag">name</span>="<span class="scContent">postcode</span>"&gt;</span>
+          <br />
+          <span style="margin-left: 7.5em">&lt;<span class="scTag">simpleType</span>&gt;</span>
+          <br />
+          <span style="margin-left: 9em">&lt;<span class="scTag">restriction</span><span class="scTag">base</span>="<span class="scContent"><span class="type">string</span></span>"&gt;</span>
+          <br />
+          <span style="margin-left: 10.5em">&lt;<span class="scTag">pattern</span><span class="scTag">value</span>="<span class="scContent">[1-9][0-9]{3}</span>"/&gt;</span>
+          <br />
+          <span style="margin-left: 9em">&lt;/<span class="scTag">restriction</span>&gt;</span>
+          <br />
+          <span style="margin-left: 7.5em">&lt;/<span class="scTag">simpleType</span>&gt;</span>
+          <br />
+          <span style="margin-left: 6em">&lt;/<span class="scTag">element</span>&gt;</span>
+          <br />
+          <span style="margin-left: 4.5em">&lt;/<span class="scTag">sequence</span>&gt;</span>
+          <br />
+          <span style="margin-left: 4.5em">&lt;<span class="scTag">attribute</span><span class="scTag">name</span>="<span class="scContent">country</span>" <span class="scTag">type</span>="<span class="scContent"><span class="type">string</span></span>" <span class="scTag">fixed</span>="<span class="scContent">Australia</span>"/&gt;</span>
+          <br />
+          <span style="margin-left: 3em">&lt;/<span class="scTag">extension</span>&gt;</span>
+          <br />
+          <span style="margin-left: 1.5em">&lt;/<span class="scTag">complexContent</span>&gt;</span>
+          <br />
+          <span style="margin-left: 0em">&lt;/<span class="scTag">complexType</span>&gt;</span>
+          <br />
+        </div>
+      </div>
+      <div class="hint">The Schema Component Representation table above displays the underlying XML representation of the schema component. (Annotations are not shown.)</div>
+      <div style="text-align: right; clear: both;">
+        <a href="#top">top</a>
+      </div>
+      <hr />
+    </div>
+    <div id="glossary">
+      <h2>
+        <a name="Glossary" id="Glossary">Glossary</a>
+      </h2>
+      <p><span class="glossaryTerm"><a name="term_Abstract" id="term_Abstract">Abstract</a> </span>(Applies to complex type definitions and element declarations). An abstract element or complex type cannot used to validate an element instance. If there is a reference to an abstract element, only element declarations that can substitute the abstract element can be used to validate the instance. For references to abstract type definitions, only derived types can be used.</p>
+      <p><span class="glossaryTerm"><a name="term_All" id="term_All">All Model Group</a> </span>Child elements can be provided <em>in any order</em> in instances. See: <a title="http://www.w3.org/TR/xmlschema-1/#element-all" href="http://www.w3.org/TR/xmlschema-1/#element-all">http://www.w3.org/TR/xmlschema-1/#element-all</a>.</p>
+      <p><span class="glossaryTerm"><a name="term_Choice" id="term_Choice">Choice Model Group</a> </span><em>Only one</em> from the list of child elements and model groups can be provided in instances. See: <a title="http://www.w3.org/TR/xmlschema-1/#element-choice" href="http://www.w3.org/TR/xmlschema-1/#element-choice">http://www.w3.org/TR/xmlschema-1/#element-choice</a>.</p>
+      <p><span class="glossaryTerm"><a name="term_CollapseWS" id="term_CollapseWS">Collapse Whitespace Policy</a> </span>Replace tab, line feed, and carriage return characters with space character (Unicode character 32). Then, collapse contiguous sequences of space characters into single space character, and remove leading and trailing space characters.</p>
+      <p><span class="glossaryTerm"><a name="term_ElemBlock" id="term_ElemBlock">Disallowed Substitutions</a> </span>(Applies to element declarations). If <em>substitution</em> is specified, then <a title="Look up 'substitution group' in glossary" href="#term_SubGroup">substitution group</a> members cannot be used in place of the given element declaration to validate element instances. If <em>derivation methods</em>, e.g. extension, restriction, are specified, then the given element declaration will not validate element instances that have types derived from the element declaration's type using the specified derivation methods. Normally, element instances can override their declaration's type by specifying an <code>xsi:type</code> attribute.</p>
+      <p><span class="glossaryTerm"><a name="term_Key" id="term_Key">Key Constraint</a> </span>Like <a title="Look up 'Uniqueness Constraint' in glossary" href="#term_Unique">Uniqueness Constraint</a>, but additionally requires that the specified value(s) must be provided. See: <a title="http://www.w3.org/TR/xmlschema-1/#cIdentity-constraint_Definitions" href="http://www.w3.org/TR/xmlschema-1/#cIdentity-constraint_Definitions">http://www.w3.org/TR/xmlschema-1/#cIdentity-constraint_Definitions</a>.</p>
+      <p><span class="glossaryTerm"><a name="term_KeyRef" id="term_KeyRef">Key Reference Constraint</a> </span>Ensures that the specified value(s) must match value(s) from a <a title="Look up 'Key Constraint' in glossary" href="#term_Key">Key Constraint</a> or <a title="Look up 'Uniqueness Constraint' in glossary" href="#term_Unique">Uniqueness Constraint</a>. See: <a title="http://www.w3.org/TR/xmlschema-1/#cIdentity-constraint_Definitions" href="http://www.w3.org/TR/xmlschema-1/#cIdentity-constraint_Definitions">http://www.w3.org/TR/xmlschema-1/#cIdentity-constraint_Definitions</a>.</p>
+      <p><span class="glossaryTerm"><a name="term_ModelGroup" id="term_ModelGroup">Model Group</a> </span>Groups together element content, specifying the order in which the element content can occur and the number of times the group of element content may be repeated. See: <a title="http://www.w3.org/TR/xmlschema-1/#Model_Groups" href="http://www.w3.org/TR/xmlschema-1/#Model_Groups">http://www.w3.org/TR/xmlschema-1/#Model_Groups</a>.</p>
+      <p><span class="glossaryTerm"><a name="term_Nillable" id="term_Nillable">Nillable</a> </span>(Applies to element declarations). If an element declaration is nillable, instances can use the <code>xsi:nil</code> attribute. The <code>xsi:nil</code> attribute is the boolean attribute, <em>nil</em>, from the <em>http://www.w3.org/2001/XMLSchema-instance</em> namespace. If an element instance has an <code>xsi:nil</code> attribute set to true, it can be left empty, even though its element declaration may have required content.</p>
+      <p><span class="glossaryTerm"><a name="term_Notation" id="term_Notation">Notation</a> </span>A notation is used to identify the format of a piece of data. Values of elements and attributes that are of type, NOTATION, must come from the names of declared notations. See: <a title="http://www.w3.org/TR/xmlschema-1/#cNotation_Declarations" href="http://www.w3.org/TR/xmlschema-1/#cNotation_Declarations">http://www.w3.org/TR/xmlschema-1/#cNotation_Declarations</a>.</p>
+      <p><span class="glossaryTerm"><a name="term_PreserveWS" id="term_PreserveWS">Preserve Whitespace Policy</a> </span>Preserve whitespaces exactly as they appear in instances.</p>
+      <p><span class="glossaryTerm"><a name="term_TypeFinal" id="term_TypeFinal">Prohibited Derivations</a> </span>(Applies to type definitions). Derivation methods that cannot be used to create sub-types from a given type definition.</p>
+      <p><span class="glossaryTerm"><a name="term_TypeBlock" id="term_TypeBlock">Prohibited Substitutions</a> </span>(Applies to complex type definitions). Prevents sub-types that have been derived using the specified derivation methods from validating element instances in place of the given type definition.</p>
+      <p><span class="glossaryTerm"><a name="term_ReplaceWS" id="term_ReplaceWS">Replace Whitespace Policy</a> </span>Replace tab, line feed, and carriage return characters with space character (Unicode character 32).</p>
+      <p><span class="glossaryTerm"><a name="term_Sequence" id="term_Sequence">Sequence Model Group</a> </span>Child elements and model groups must be provided <em>in the specified order</em> in instances. See: <a title="http://www.w3.org/TR/xmlschema-1/#element-sequence" href="http://www.w3.org/TR/xmlschema-1/#element-sequence">http://www.w3.org/TR/xmlschema-1/#element-sequence</a>.</p>
+      <p><span class="glossaryTerm"><a name="term_SubGroup" id="term_SubGroup">Substitution Group</a> </span>Elements that are <em>members</em> of a substitution group can be used wherever the <em>head</em> element of the substitution group is referenced.</p>
+      <p><span class="glossaryTerm"><a name="term_ElemFinal" id="term_ElemFinal">Substitution Group Exclusions</a> </span>(Applies to element declarations). Prohibits element declarations from nominating themselves as being able to substitute a given element declaration, if they have types that are derived from the original element's type using the specified derivation methods.</p>
+      <p><span class="glossaryTerm"><a name="term_TargetNS" id="term_TargetNS">Target Namespace</a> </span>The target namespace identifies the namespace that components in this schema belongs to. If no target namespace is provided, then the schema components do not belong to any namespace.</p>
+      <p><span class="glossaryTerm"><a name="term_Unique" id="term_Unique">Uniqueness Constraint</a> </span>Ensures uniqueness of an element/attribute value, or a combination of values, within a specified scope. See: <a title="http://www.w3.org/TR/xmlschema-1/#cIdentity-constraint_Definitions" href="http://www.w3.org/TR/xmlschema-1/#cIdentity-constraint_Definitions">http://www.w3.org/TR/xmlschema-1/#cIdentity-constraint_Definitions</a>.</p>
+      <div style="text-align: right; clear: both;">
+        <a href="#top">top</a>
+      </div>
+      <hr />
+    </div>
+    <p class="footer">Generated by <a href="http://xml.fiforms.org/xs3p/">xs3p</a> (<a href="http://titanium.dstc.edu.au/xml/xs3p">old link</a>)
+               . Last modified: <script type="text/javascript">
+<!--
+document.write(document.lastModified);
+// -->
+</script></p>
+  </body>
+</html>

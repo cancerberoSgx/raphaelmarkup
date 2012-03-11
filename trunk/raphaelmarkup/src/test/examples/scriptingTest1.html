@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="../../deps/jquery-1.7.1.js"></script>
+	<script src="../../deps/raphael-min.js"></script>
+	<script type="text/javascript" src="../../rm.js"></script>
+<title>Raphael markup - exporting any raphaël paper instance to XML</title>
+</head>
+<body>
+
+<p>show basic examples on how to script a rendered drawing:  </p>
+
+<script type="text/javascript">
+
+rm.renderAjax("../drawing1.xml", function (rdoc) {	
+	
+	/* first way: use the xml dom for locating desired shapes. In the 
+	following we will decorate all rects */
+	rdoc.find("rect").each(function(index){ //iterate rects using the dom
+		var rect = rm.getShape($(this)); //get raphael shape and script!
+		rect.attr({"stroke-width": 55, "stroke": "red"});	
+		rect.animate({x: 0, y: 0, width: 10, height: 10}, 20000, "easeOut");
+	});
+});
+
+</script>
+
+</body>
+</html>

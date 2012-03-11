@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="../../deps/jquery-1.7.1.js"></script>
+	<script src="../../deps/raphael-min.js"></script>
+	<script type="text/javascript" src="../../rm.js"></script>
+<title>Raphael markup - exporting any raphaël paper instance to XML</title>
+</head>
+<body>
+
+<p>I nthis exmaple, we will embedd a raphael XML document below. This document defines some shapes and also a 
+&lt;style> element with CSS rules that will apply to hose shapes. 
+Some comments indicates the differences between RaphaelMarkup style syntax and the CSS Standard.</p>
+
+
+<raphael>	
+	<paper x="10" y="10" width="400" height="400">
+		<rect x="20" y="30" width="100" height="200"></rect>
+		<rect x="200" y="30" width="100" height="200"></rect>
+		<circle cx="20" cy="300" radius="20" stroke="red"></circle>
+		
+		<set class="set1">
+			<circle cx="220" cy="300" radius="40" stroke="red"></circle>
+			<rect x="333" y="130" width="20" height="40"></rect>
+			<ellipse x="333" y="330" rx="20" ry="40"></ellipse>
+		</set>
+	</paper>
+	
+	<style>
+	
+	paper * {
+		opacity: 0.2;
+	}
+	paper rect { 
+ 		fill: blue;  
+ 		stroke-width: 10;
+ 	} 
+	.set1 {
+		fill: yellow;
+	}
+ 	.set1 circle { 
+ 		fill: black; 
+ 		stroke: red; 
+ 		stroke-width: 4; 
+	} 
+	</style>
+</raphael>
+
+
+
+<script type="text/javascript">
+
+var rdoc = rm.render();
+
+
+</script>
+
+</body>
+</html>
