@@ -5,29 +5,31 @@
 <head>
 	<script src="../deps/jquery-1.7.1.min.js"></script>
 	<script src="../deps/raphael-min.js"></script>
-  	<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" />
-	<script type="text/javascript" src="qunit.js"></script>
+<!--   	<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" /> -->
+<!-- 	<script type="text/javascript" src="qunit.js"></script> -->
 	<script type="text/javascript" src="../rm.js"></script>
 <title>Raphael markup test 1</title>
 </head>
 <body>
 
- <h1 id="qunit-header">QUnit raphael markup tests</h1>
- <h2 id="qunit-banner"></h2>
- <div id="qunit-testrunner-toolbar"></div>
- <h2 id="qunit-userAgent"></h2>
- <ol id="qunit-tests"></ol>
- <div id="qunit-fixture">test markup, will be hidden</div>
+<!--  <h1 id="qunit-header">QUnit raphael markup tests</h1> -->
+<!--  <h2 id="qunit-banner"></h2> -->
+<!--  <div id="qunit-testrunner-toolbar"></div> -->
+<!--  <h2 id="qunit-userAgent"></h2> -->
+<!--  <ol id="qunit-tests"></ol> -->
+<!--  <div id="qunit-fixture">test markup, will be hidden</div> -->
  
 
 <script type="text/javascript">
 var p = Raphael(2,2,400,400);
-var s1 = p.set();
-var r1 = p.rect(2,2,30,40);
-s1.push(r1);
-s1.attr("fill", "red");
-r1.attr("fill", "blue");
+// var s1 = p.set();
+// var r1 = p.rect(2,2,30,40);
+// s1.push(r1);
+// s1.attr("fill", "red");
+// r1.attr("fill", "blue");
 
+var path1 = p.path("M100,200L30,40"); 
+path1.attr("x", "300");
 
 //templating test
 var tmplCode = "<p><% for ( var i = 0; i < users.length; i++ ) { %>"+
@@ -41,6 +43,8 @@ var out = rm.tmpl(tmplCode); //compile
 alert(out(tmplData)); //use
 
 alert(rm.tmpl(tmplCode, tmplData));//or do both things at same time.
+
+
 
 </script>
 
