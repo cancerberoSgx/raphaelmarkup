@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="../../deps/jquery-1.7.1.js"></script>
+	<script src="../../deps/raphael-min.js"></script>
+	<script type="text/javascript" src="../../rm.js"></script>
+<title>Raphael markup - exporting any raphaël paper instance to XML</title>
+</head>
+<body>
+
+<p>show basic examples on how to make templates. here in the raphael document
+we first define a template that will be a set with a lot of random circles inside.
+the user can control some things about these circle creation using template parameters.</p>
+<p>Then the template is used tree times, the last time using shorted syntax.</p>
+<p>Also there are some styling rules affecting the two last template generated shapes. </p>
+
+<script type="text/javascript">
+rm.renderAjax("../drawingWTemplates1.xml", function (rdoc) {
+});
+</script>
+
+</body>
+</html>
+
+
+
+hello
+**ERROR**: <use>: Error parsing resulting output of template strange1. use id: strangeShape1
+**ERROR**: <use>: Error parsing resulting output of template strange1. use id: strangeShape2
+**ERROR**: <use>: Error parsing resulting output of template strange1. use id: undefined
+register rect: rect_1
+register rect: rect_2
+register circle: circle_3
+register circle: circle_4
+register rect: rect_5
+register ellipse: ellipse_6
+register set: set_7
+register paper: paper_8
