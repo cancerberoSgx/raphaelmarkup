@@ -9,10 +9,10 @@
 
 
 
-window.onerror=function(msg, url, linenumber){
- alert('Error message: '+msg+'\nURL: '+url+'\nLine Number: '+linenumber)
- return true
-}
+//window.onerror=function(msg, url, linenumber){
+// alert('Error message: '+msg+'\nURL: '+url+'\nLine Number: '+linenumber)
+// return true
+//}
 
 
 
@@ -135,23 +135,14 @@ buildRDocFromDOM : function(dom) {
  */
 _render : function(targetHtmlDoc, rdoc)	{
 	
-	/* first of all perorm preprosessing operations. TODO: we are discarding original document... */
-//	rdoc.hide();
-	
-	var origDoc = rdoc, err = false;
-//	try {
-		rdoc = rm.preproccess(rdoc);//$(rdoc.prop("documentElement")));
-//	}catch(ex) {
-//		err=true;		_render
-//	}
-	if(!rdoc||err||rdoc.size()==0) {		
+	/* first of all perorm preprosessing operations. 
+	 * TODO: we are discarding original document... 
+	 * TODO: preproccessing errors. */
+	rdoc = rm.preproccess(rdoc);
+
+	if(!rdoc||rdoc.size()==0) {		
 		alert("error when preproccessing. ");
 	}
-	/* first parse each <style> element against document. 
-	 * the DOM will be affected before rendering.*/
-	rdoc.find("style").each(function(i){
-		rm.applyCSS(rdoc, $(this).text());
-	});
 	
 	/* css note: we will evaluate CSS selectors using jquery, 
 	 * so all supported jquery selectors will be available. */
@@ -232,8 +223,7 @@ _renderPaper: function(rdoc, dom) {
 		rm._renderEl(rdoc, $(this), paper);
 	});
 	paper.type="paper";
-	rm._register(rdoc, "paper", paper, dom);	
-	rm._registerMutationEvents(rdoc, dom, paper);
+	rm._register(rdoc, "paper", paper, dom);
 	return paper;
 },
 /**
@@ -242,28 +232,26 @@ _renderPaper: function(rdoc, dom) {
  */
 _renderEl: function(rdoc, dom, paper) {
 	
-	var shape = null;
-	if(rm._getTagName(dom)=="image")
+	var shape = null, tag = rm._getTagName(dom);
+	if(tag=="imag") 
 		shape=this._renderImage(dom, paper);
-	else if(rm._getTagName(dom)=="rect")
+	if(tag=="text") 
+		shape=this._renderText(dom, paper);
+	else if(tag=="rect")
 		shape=this._renderRect(dom, paper);
-	else if(rm._getTagName(dom)=="path")
+	else if(tag=="path")
 		shape=this._renderPath(dom, paper);
-	else if(rm._getTagName(dom)=="set")
+	else if(tag=="set")
 		shape=this._renderSet(rdoc, dom, paper);
-	else if(rm._getTagName(dom)=="circle")
+	else if(tag=="circle")
 		shape=this._renderCircle(dom, paper);	
-	else if(rm._getTagName(dom)=="ellipse")
+	else if(tag=="ellipse")
 		shape=this._renderEllipse(dom, paper);
 	
 	if(shape!=null) {
 		rm._register(rdoc, shape.type, shape, dom);
-		rm._registerMutationEvents(rdoc, dom, shape);
 	}
 	return shape;
-},
-_getTagName: function(dom) {
-	return dom.get(0).tagName.toLowerCase()
 },
 /**
  * extracts xml raphael attributes to a js object
@@ -296,6 +284,21 @@ _renderImage: function(dom, paper) {
 	this._renderAttrs(dom, shape, paper);
 	return shape;
 },
+_renderText: function(dom, paper) {
+	var text = dom.attr("text") ? dom.attr("text") : rm._getInmediateText(dom), 
+		shape=null;
+	if(dom.attr("font") && paper.getFont(dom.attr("font"))) {
+		shape = paper.print(dom.attr("x"), dom.attr("y"), text,
+				paper.getFont(dom.attr("font")), 
+				dom.attr("size"), dom.attr("origin"), 
+				dom.attr("letter-spacing"))
+	} 
+	else {
+		shape = paper.text(dom.attr("x"), dom.attr("y"), text);
+		this._renderAttrs(dom, shape, paper);		
+	}
+	return shape;
+},
 _renderEllipse: function(dom, paper) {
 	var shape =  paper.ellipse(dom.attr("x"), dom.attr("y"), 
 		dom.attr("rx"), dom.attr("ry"));
@@ -309,21 +312,13 @@ _renderRect: function(dom, paper) {
 	return shape;
 },
 _renderPath: function(dom, paper) {
-	var shape = paper.path(dom.attr("path"));
+	var path = dom.attr("path")?dom.attr("path"):rm._getInmediateText(dom);
+	var shape = paper.path(path);
 	this._renderAttrs(dom, shape, paper);
 	return shape;
 },
 _renderSet: function(rdoc, dom, paper) {
-	/* note that we first render set attrs, and then render set's children attrs, so one can do in CSS: 
-	.set1 {
-		fill: yellow;
-	}
-	.set1 circle {
-		fill: black;
-	}
-	 */
 	var set = paper.set();
-	//set.paper = paper; //set lacks of paper reference
 	
 	//one iteration for building the set.
 	dom.children().each(function(index){		
@@ -335,7 +330,6 @@ _renderSet: function(rdoc, dom, paper) {
 	//other iteration for setting attributes of children (after set attrs )
 	dom.children().each(function(index){	
 		var shape = set[index];
-
 		//and then apply specific style
 		rm._renderAttrs($(this), shape, paper);
 	});	
@@ -347,66 +341,6 @@ _renderCircle: function(dom, paper) {
 	this._renderAttrs(dom, shape, paper);
 	return shape;
 },	
-
-
-
-//_mutationHandlers: {},
-/*
-DOMSubtreeModified 	(none) 	Fires when the subtree is modified 	Yes 	No
-DOMNodeInserted 	(none) 	Fires when a node has been added as a child of another node 	Yes 	No
-DOMNodeRemoved 	(none) 	Fires when a node has been removed from a DOM-tree 	Yes 	No
-DOMNodeRemovedFromDocument 	(none) 	Fires when a node is being removed from a document 	No 	No
-DOMNodeInsertedIntoDocument 	(none) 	Fires when a node is being inserted into a document 	No 	No
-DOMAttrModified 	(none) 	Fires when an attribute has been modified 	Yes 	No
-DOMCharacterDataModified 	(none) 	Fires when the character data has been modified 	Yes 	No*/
-_registerMutationEvents: function(rdoc, dom, shape) {	
-//	rm._log("_registerMutationEvents for "+dom.attr("id"));
-//	
-//	/* DOMAttrModified - Fires when an attribute has been modified - 
-//	 * here we only update the attributes of that shape. in case class or id change, 
-//	 * there we reapply all styles from this element in the DOM.
-//	 */
-//	var attrModifiedHandler = function(evt) {
-//		evt=rm._fixEvent(evt);
-//		/* note in FF 
-//		 * evt.attrName indicates the attribute name changed
-//		 * evt.originalEvent.newValue and evt.originalEvent.prevValue
-//		 */
-//		var id = $(evt.target).attr("id");
-//		var shape = rm.getShapeById(id);
-//		var doc = rm.getDocById(id), dom = doc.find("#"+id);
-//		rm._log("DOMAttrModified id. "+id+" - domcount: "+dom.size()+
-//				" - shape: "+shape+
-//				" - prevValue: "+evt.originalEvent.prevValue+
-//				" - newValue: "+evt.originalEvent.newValue);		
-//		if(shape) {//shape isn't created yet			
-//			rm._renderAttrs(dom, shape);
-//		}
-//	};
-//	
-//	rm._registerDOMAttrModified(dom, attrModifiedHandler);
-},
-//_registerDOMAttrModified: function(dom, callback) {
-//	if($.browser.webkit) {
-//		/* WebKit fails to fire DOMAttrModified events when an attribute is changed. 
-//		 * It does however fire the DOMSubtreeModified event after an attribute 
-//		 * is modified. So at least that gives us something to work with until 
-//		 * the good folks at WebKit squash the bug.*/
-////		dom.bind("DOMSubtreeModified", callback); //TODO: fix evt object
-//		dom.bind("DOMSubtreeModified", function(evt) {
-////			evt.type=""
-//			alert("DOMSubtreeModified");
-//		}); 
-//	}
-//	else {
-//		dom.bind("DOMAttrModified", attrModifiedHandler);
-//	}
-//},
-//_fixEvent: function(e) {
-//	e.newValue=e.originalEvent.newValue;
-//	e.prevValue=e.originalEvent.prevValue;
-//},
-
 
 
 
@@ -440,8 +374,6 @@ toXML: function(dom, level, tab) {
 	var childs = dom.children();
 	for ( var i = 0; i < childs.length; i++) {
 		var childXml = rm.toXML($(childs[i]), level+1, tab);
-		
-//		if(childXml && childXml+""!="undefined")
 		s+="\n"+rm._repeatStr(tab, level)+childXml;
 	}
 	s+="\n</"+tname+">";
@@ -477,13 +409,16 @@ _repeatStr: function(str, times) {
 createElement: function(parent, tagName, attrs) {
 	parent=$(parent);
 	var xmldoc = null;
-	//if they send us a document, we append it on the documentElement
-	
+	//if they send us a document, we append it on the documentElement	
 	if(rm.isDocument(parent)) {
 		parent=$(parent.prop("documentElement"));
-	}	
+		
+	}
 	xmldoc=parent.prop("ownerDocument");
-	
+	if(!xmldoc) {
+		debugger;
+		return null;
+	}
 	var e = $(xmldoc.createElement(tagName));
 	if(attrs)
 		e.attr(attrs);
@@ -491,6 +426,9 @@ createElement: function(parent, tagName, attrs) {
 	parent.append(e);
 	
 	return e;
+},
+_getTagName: function(dom) {
+	return dom.get(0).tagName.toLowerCase()
 },
 isDocument: function(dom) {
 	if(!dom||dom.size()==0) {
@@ -500,10 +438,20 @@ isDocument: function(dom) {
 },
 	/* * * * xml builder: build xml documents from 
 	 * raphael paper instances * * * */
-
+newRaphaelDocument: function() {
+	return $($.parseXML("<raphael></raphael>"));
+},
 parseXML: function(xmlStr) {
 	return $($.parseXML(xmlStr));
 },
+
+
+
+
+
+/* * * * * XML write * * * * 
+ * write / read native raphael papers to/ from XML syntax */
+
 /**
  * @param papers an array of raphael paper objects to be writen in the 
  * raphael xml document.
@@ -513,22 +461,10 @@ parseXML: function(xmlStr) {
  */
 xmlWritePaper: function(paper, x, y, width, height, doc) {
 	if(!doc)
-		doc=$($.parseXML("<raphael></raphael>"));
-	
-	//append the new empty raphael XML doc to global HTML doc and hide
-//	var containerId = rm._xmlGetId();
-//	$(document.body).append('<div id="'+containerId+'"></div>');
-//	var container = $("#containerId");
-//	container.hide();
-	
-	
-//	$(document.body).append(doc);
-//	doc.hide();
-	
+		doc=rm.newRaphaelDocument();
+		
 	var id = rm._xmlGetId(paper);
 	var paperDom = rm.createElement(doc, "paper", {"id": id});
-//	doc.append("<paper id=\""+id+"\" ></paper>");
-//	var paperDom = doc.find("#"+id);
 	paper.forEach(function (el) {
 		rm.xmlWriteShape(el, paperDom)
 	});
@@ -546,6 +482,8 @@ xmlWriteShape: function(el, parentDom) {
 		shapeDom=rm._xmlWriteCircle(el, parentDom);
 	else if(el.type=="path")
 		shapeDom=rm._xmlWritePath(el, parentDom);
+	else if(el.type=="image")
+		shapeDom=rm._xmlWriteImage(el, parentDom);
 	else if(el.type=="set")
 		shapeDom=rm._xmlWriteSet(el, parentDom);
 	else if(el.type=="ellipse")
@@ -558,9 +496,6 @@ xmlWriteShape: function(el, parentDom) {
 _xmlWriteRect: function(el, dom) {
 	var id = rm._xmlGetId(el);
 	return rm.createElement(dom, "rect", {"id": id});
-//	dom.append("<rect id=\""+id+"\"></rect>");
-//	var rectDom = $("#"+id);	
-//	return rectDom;
 },
 _xmlWriteAttrs: function(el, dom) {
 	var attr = el.attr();
@@ -572,22 +507,18 @@ _xmlWriteAttrs: function(el, dom) {
 _xmlWriteCircle: function(el, dom) {
 	var id = rm._xmlGetId(el);
 	return rm.createElement(dom, "circle", {"id": id});
-//	dom.append("<circle id=\""+id+"\"></rect>");
-//	var circleDom = $("#"+id);
-//	return circleDom;
+},
+_xmlWriteImage: function(el, dom) {
+	var id = rm._xmlGetId(el);
+	return rm.createElement(dom, "imag", {"id": id});
 },
 _xmlWritePath: function(el, dom) {
 	var id = rm._xmlGetId(el);
 	return rm.createElement(dom, "path", {"id": id});
-//	dom.append("<path id=\""+id+"\"></rect>");
-//	var pDom = $("#"+id);
-//	return pDom;
 },
 _xmlWriteSet: function(el, dom) {
 	var id = rm._xmlGetId(el);
 	var sDom = rm.createElement(dom, "set", {"id": id});
-//	dom.append("<set id=\""+id+"\"></set>");
-//	var sDom = $("#"+id);
 	for ( var i = 0; i < el.length; i++) {
 		var childDom = rm.xmlWriteShape(el[i], sDom);
 	}
@@ -599,21 +530,46 @@ _xmlWriteEllipse: function(el, dom) {
 },
 _xmlId: 0,
 _xmlGetId: function(el) {
-//	if(!el)
-//		el={type: "_raphaelPaperContainer"};
 	rm._xmlId++;
 	return (el.type?el.type:"paper")+rm._xmlId;
 },
-//xmlWrite: function(papers, doc) {
-//if(!doc)
-//	doc=$($.parseXML("<raphael></raphael>"));
-//for(var i = 0; i<papers.length; i++) {
-//	rm.xmlWritePaper(papers[i], doc);
-//}
-//return doc;
-//},
 
 
+
+
+
+
+/* * * * * JSON IO* * * * 
+ * utilities for reading/writing to/from JSON syntax objects proposed in 
+ * http://raphaeljs.com/reference.html#Paper.add TO / FROM XML DOM 
+ * (syntax proposed by raphaelmarkup, raphael.xsd) */
+
+/**
+ * @param paperDom - a jquery object pointing to a paper dom. The paper dom will be filled with deaded shapes
+ * @param json js array with syntax as proposed in http://raphaeljs.com/reference.html#Paper.add 
+ */
+jsonRead: function(json, paperDom) {
+	if(!json|| !json.length || !paperDom)
+		return null;
+	for ( var i = 0; i < json.length; i++) {
+		var shape = json[i];
+		//sets not supported
+		var dom=rm.createElement(paperDom, shape.type, shape);
+		paperDom.append(dom)
+	}
+},
+jsonReadDoc: function(json, paperX, paperY, paperW, paperH) {
+	var rdoc = rm.newRaphaelDocument();
+	var paperDom = rm.createElement(rdoc, "paper", {
+		"id": "paper1", 
+		"x": paperX, 
+		"y": paperY, 
+		"width": paperW, 
+		"height": paperH
+	});
+	rm.jsonRead(json, paperDom);
+	return rdoc;
+},
 
 
 
@@ -692,14 +648,14 @@ _raphaelAttrs: {"arrow-end": "none","arrow-start": "none",blur: 0,"clip-rect": "
  * so user can define its own rules for rendering
  * TODO: order of post renderers not respected
  * ** * * */
-_postRenderExtensions : {},
+_postRenderExtensions: [],
 _postRendering: function(rdoc) {
-	for(var i in rm._postRenderExtensions) {
+	for ( var i = 0; i < rm._postRenderExtensions.length; i++) {
 		rm._postRenderExtensions[i](rdoc);
 	}
 },
-postRendererRegister: function(name, handler) {
-	rm._postRenderExtensions[name]=handler;
+postRendererRegister: function(handler) {
+	rm._postRenderExtensions.push(handler);
 },
 
 
@@ -709,18 +665,17 @@ postRendererRegister: function(name, handler) {
 /* * * *  simple preproccessing extension mechanism 
  * so user can define its own preprocessing engines/dialects.
  * current template system is an extension of this type, and shows how other can be dne, for ex a template based on jrender.
- * TODO: order of preproccessors not respected
  * ** * * */
  
-_preprocessExtensions: {},
+_preprocessExtensions: [],
 preproccess: function(rdoc) {
-	for(var i in rm._preprocessExtensions) {
+	for ( var i = 0; i < rm._preprocessExtensions.length; i++) {
 		rdoc=rm._preprocessExtensions[i](rdoc);
 	}
 	return rdoc;
 },
-preproccessRegister: function(name, handler) {
-	rm._preprocessExtensions[name]=handler;
+preproccessRegister: function(handler) {
+	rm._preprocessExtensions.push(handler);
 },
 
 
@@ -736,7 +691,7 @@ preproccessRegister: function(name, handler) {
 
 /* * * * loggin tools * * * */	
 		
-_doLog: true, 
+_doLog: false, 
 _log : function(s) {
 	if(rm._doLog) {
 		if($("#rmlogger").size()==0) {
@@ -789,61 +744,6 @@ randomColor: function () {
 
 
 
-
-/* * * * CSS * * * */
-
-/**
- * this apply a css source string in a DOM. very simple version - not CSS conformant
- */
-applyCSS: function(doc, cssStr) {
-	var css = rm.parseCSS(cssStr);
-	for ( var i = 0; i < css.__order.length; i++) {
-		var sel = css.__order[i];
-		var el = doc.find(sel);
-		el.attr(css[sel]);
-	}
-},
-parseCSS: function(css) {
-    var rules = {};
-    rules.__order=[];
-    css = this._removeComments(css);
-    var blocks = css.split('}');
-    blocks.pop();
-    var len = blocks.length;
-    for (var i = 0; i < len; i++) {
-        var pair = blocks[i].split('{');
-        var sel = $.trim(pair[0]);
-    	rules.__order.push(sel);
-        rules[sel] = this._parseCSSBlock(pair[1]);
-    }
-    return rules;
-},
-_parseCSSBlock: function(css) { 
-    var rule = {};
-    var declarations = css.split(';');
-    var len = declarations.length;
-    for (var i = 0; i < len; i++) {
-        var loc = declarations[i].indexOf(':');
-        if(loc==-1)
-        	continue;
-        var property = $.trim(declarations[i].substring(0, loc));
-        var value = $.trim(declarations[i].substring(loc + 1));
-
-        if (property != "" && value != "") {
-            rule[property] = value;
-        }
-    }
-    return rule;
-},
-_removeComments: function(css) {
-    return css.replace(/\/\*(\r|\n|.)*\*\//g,"");
-}
-
-
-
-
 };
-
-
 
 

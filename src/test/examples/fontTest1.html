@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="../../deps/jquery-1.7.1.js"></script>
+	<script src="../../deps/raphael-min.js"></script>
+<!-- 	<script type="text/javascript" src="../../rm.js"></script>	 -->
+	<script type="text/javascript" src="../../rm-core.js"></script>
+	<script type="text/javascript" src="../../rm-ext.js"></script>
+	
+	<script type="text/javascript" 
+		src="../fonts/Anchor_Steam_NF_400.font.js"></script>
+<title>Raphael markup - exporting any raphaël paper instance to XML</title>
+</head>
+<body>
+
+<p>test using text and font. </p>
+<p>we create text using the &lttext element. If not font attribute is passed to text, the text will be created 
+		with paper.text(...) if a font name is passed in the font attribute, 
+		then the shape is created with paper.print() and:</p>
+<pre>
+1) the font script should be added and registered ni raphael
+2) attributes size, origin and letter-spacing can be passed:
+size -  size of the font, default is 16
+origin - could be "baseline" or "middle", default is "middle"
+letter_spacing - number in range -1..1, default is 0
+</pre>
+		
+<p>Also the text string can be passed via the text attribute or in the CDATA (inside the element)</p>
+		
+<raphael>
+
+<!-- 	<font-def src="../fonts/Anchor_Steam_NF_400.font.js" name="Anchor Steam NF"></font-def> -->
+	
+	<paper x="10" y="10" width="400" height="400">
+		<rect x="0" y="0" width="400" height="400" fill="white" opacity="0.5"></rect>
+		<ellipse x="333" y="330" rx="20" ry="40" fill="red"></ellipse>
+		 
+		<text x="133" y="130" fill="red"  font-size="18"
+		text="simple text using attrib"></text>
+			
+		<text x="133" y="330" font-size="24">
+			simple text using inner</text>
+			
+		<text font="Anchor Steam NF" x="0" y="230" size="34">
+		fonted sized text</text>
+		
+		<text font="Anchor Steam NF" x="0" y="270" size="34" letter-spacing="-0.2">
+		letter-spacing=-0.2</text>
+		
+		<text font="Anchor Steam NF" x="0" y="300" size="34" letter-spacing="0.4">
+		letter-spacing=+0.4</text>
+	</paper>
+</raphael>
+
+
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+	var rdoc = rm.render();
+});
+
+
+</script>
+
+</body>
+</html>

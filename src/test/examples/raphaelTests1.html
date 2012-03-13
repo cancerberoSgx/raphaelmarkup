@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="../../deps/jquery-1.7.1.js"></script>
+	<script src="../../deps/raphael-min.js"></script>
+	
+<!-- 	<script type="text/javascript" src="../../rm.js"></script>	 -->
+	<script type="text/javascript" src="../../rm-core.js"></script>
+	<script type="text/javascript" src="../../rm-ext.js"></script>
+<title>Raphael markup - exporting any raphaël paper instance to XML</title>
+</head>
+<body style="background-color: #333333">
+
+<p>In this page we try to reproduce some of raphael homepage examples using XML.- it is a big paper</p>
+
+<div style="display: none">
+<raphael >
+
+<paper x="0" y="0" width="600" height="700">
+	
+	<!-- 	try to do http://raphaeljs.com/reflection.html with google logo: 
+	r.image(img.src, 140, 140, 320, 240);
+    r.image(img.src, 140, 380, 320, 240).attr({
+        transform: "s1-1",
+        opacity: .5
+    });
+    r.rect(0, 380, 600, 160).attr({
+        fill: "90-#333-#333",
+        stroke: "none",
+        opacity: .5
+    });-->
+	
+	<imag src="https://www.google.com.uy/images/srpr/logo3w.png" 
+		x="0" y="0" width="275" height="95"></imag>
+		
+	<imag src="https://www.google.com.uy/images/srpr/logo3w.png" 
+		x="0" y="95" width="275" height="95" 
+		transform="s1-1" opacity="0.5"></imag>
+		
+	<rect x="0" y="95" width="275" height="95" fill="90-#333-#333" 
+		opacity="0.5" stroke="none"></rect>
+			
+</paper>
+</raphael>
+</div>
+
+<p>example ends</p>
+<br/><br/><br/><br/>
+<script type="text/javascript">
+
+var rdoc = rm.render()[0];
+
+</script>
+
+</body>
+</html>

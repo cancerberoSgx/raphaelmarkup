@@ -51,7 +51,7 @@
 				<xs:element ref="rect" />
 				<xs:element ref="circle" />
 				<xs:element ref="set" />
-				<xs:element ref="image" />
+				<xs:element ref="imag" />
 				<xs:element ref="ellipse" />
 				<xs:element ref="path" />
 			</xs:choice>
@@ -288,7 +288,53 @@ So, the example line above could be read like “translate by 100, 100; rotate 3
 	</xs:complexType>
 	
 	
-	<!-- the CircleType extends AttrsType but making attributes cx, cy, rx, ry mandatory -->
+	
+		<!-- the RectType extends AttrsType but making attributes x,y,width,height mandatory -->
+	<xs:complexType name="_TextType">		
+				
+		<xs:complexContent>
+		
+			<xs:restriction base="AttrsType">
+				<xs:attribute name="x" type="xs:int"  use="required">
+					<xs:annotation><xs:documentation>x coordinate of the top left corner</xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="y" type="xs:int"  use="required">
+					<xs:annotation><xs:documentation>y coordinate of the top left corner</xs:documentation></xs:annotation>
+				</xs:attribute>
+				
+			</xs:restriction>
+			
+		</xs:complexContent>	
+		
+	</xs:complexType>
+	
+	
+	<xs:complexType name="TextType">		
+				
+		<xs:complexContent>
+			<xs:extension base="_TextType">
+			
+<!-- 				<xs:attribute name="font" type="xs:string"> -->
+<!-- 					<xs:annotation><xs:documentation>font name for text. if not defined, the text will be created using paper.text(), if defined it will be created using paper.print(). The font script must be included and registered in raphael.  </xs:documentation></xs:annotation> -->
+<!-- 				</xs:attribute> -->
+				
+				<xs:attribute name="letter-spacing" type="xs:float">
+					<xs:annotation><xs:documentation>number in range -1..1, default is 0 </xs:documentation></xs:annotation>
+				</xs:attribute>
+				
+				<xs:attribute name="origin" type="xs:float">
+					<xs:annotation><xs:documentation>could be "baseline" or "middle", default is "middle"</xs:documentation></xs:annotation>
+				</xs:attribute>
+				
+<!-- 				TODO: origin and letter-spacing should only be specified when font!=null -->
+			</xs:extension>
+		</xs:complexContent>
+		
+	</xs:complexType>
+	
+	
+	
+	<!-- the EllipseType extends AttrsType but making attributes cx, cy, rx, ry mandatory -->
 	<xs:complexType name="EllipseType">		
 				
 		<xs:complexContent>
@@ -334,7 +380,7 @@ So, the example line above could be read like “translate by 100, 100; rotate 3
 					<xs:element ref="rect" />
 					<xs:element ref="circle" />
 					<xs:element ref="set" />
-					<xs:element ref="image" />
+					<xs:element ref="imag" />
 					<xs:element ref="ellipse" />
 					<xs:element ref="path" />
 				</xs:choice>
@@ -346,9 +392,12 @@ So, the example line above could be read like “translate by 100, 100; rotate 3
 	</xs:element>
 
 	<xs:element name="circle" type="CircleType">
-	</xs:element>
+	</xs:element>	
 	
-	<xs:element name="image" type="ImageType">
+	<xs:element name="imag" type="ImageType">
+	<xs:annotation><xs:documentation>
+	raphael image element is named "imag" because both img and image elements are parsed as html elements and cannot be embbeded ni html docs.
+	</xs:documentation></xs:annotation>
 	</xs:element>
 	
 	<xs:element name="ellipse" type="EllipseType">
