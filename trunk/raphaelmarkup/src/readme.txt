@@ -1,0 +1,1 @@
+rm.js and rm-min.js contains the entire framework. both files are generated from rm-core.js and rm-ext.js
