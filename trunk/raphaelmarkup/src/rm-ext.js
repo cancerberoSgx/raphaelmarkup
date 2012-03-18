@@ -440,12 +440,72 @@ rm._printonpath_do = function(text, paper, pathStr) {
 
 
 
+
+
 /* * * * * EVENTS * * * * */
-//rm._events_postRendering = function(rdoc) {
-//	rdoc.find("imag, text, print, circle, ellipse, rect, path").each(function(){
-//		if($(this).attr("onclick"))
-//	});
-//};
+/*events onclick, ondblclick, onmouseoever, etc are available
+in the event's code "this" refers to the jquery DOM object pointing to xml event source element  
+and "evt" is the event object. if you wnt to get the raphal shape use rm.getShape(this)  
+*/
+rm._events_postRendering = function(rdoc) {
+	rdoc.find("imag, text, print, circle, ellipse, rect, path").each(function(){
+		if($(this).attr("onclick")) {
+			rm.getShape($(this)).click(new Function("evt",$(this).attr("onclick")), $(this));
+		}
+		if($(this).attr("ondblclick")) {
+			rm.getShape($(this)).dblclick(new Function("evt",$(this).attr("ondblclick")), $(this));
+		}
+		if($(this).attr("onhoverin")) {
+			rm.getShape($(this)).hover(new Function("evt",$(this).attr("onhoverin")), null, $(this), null);
+		}
+		if($(this).attr("onhoverout")) {
+			rm.getShape($(this)).hover(null, new Function("evt",$(this).attr("onhoverout")), null, $(this));
+		}
+		if($(this).attr("onhover")) {
+			rm.getShape($(this)).hover(new Function("evt",$(this).attr("hover")), $(this), new Function("evt",$(this).attr("hover")), $(this));
+		}
+		if($(this).attr("onmousedown")) {
+			rm.getShape($(this)).mousedown(new Function("evt",$(this).attr("onmousedown")), $(this));
+		}
+		if($(this).attr("onmousemove")) {
+			rm.getShape($(this)).mousemove(new Function("evt",$(this).attr("onmousemove")), $(this));
+		}
+		if($(this).attr("onmouseout")) {
+			rm.getShape($(this)).mouseout(new Function("evt",$(this).attr("onmouseout")), $(this));
+		}
+		if($(this).attr("onmouseover")) {
+			rm.getShape($(this)).mouseover(new Function("evt",$(this).attr("onmouseover")), $(this));
+		}
+		if($(this).attr("onmousemove")) {
+			rm.getShape($(this)).mousemove(new Function("evt",$(this).attr("onmousemove")), $(this));
+		}
+		if($(this).attr("onmouseup")) {
+			rm.getShape($(this)).mouseup(new Function("evt",$(this).attr("onmouseup")), $(this));
+		}		
+		if($(this).attr("ontouchcancel")) {
+			rm.getShape($(this)).touchcancel(new Function("evt",$(this).attr("ontouchcancel")), $(this));
+		}
+		if($(this).attr("ontouchend")) {
+			rm.getShape($(this)).touchend(new Function("evt",$(this).attr("ontouchend")), $(this));
+		}
+		if($(this).attr("ontouchmove")) {
+			rm.getShape($(this)).touchmove(new Function("evt",$(this).attr("ontouchmove")), $(this));
+		}
+		if($(this).attr("ontouchstart")) {
+			rm.getShape($(this)).touchstart(new Function("evt",$(this).attr("ontouchstart")), $(this));
+		}		
+	});
+};
+
+
+
+
+
+
+
+/* * * * * tofront - toback attributes * * * * */ 
+
+
 
 
 //register all extensions (preproccessing)
@@ -457,7 +517,7 @@ rm.preproccessRegister(rm._preproccesCSS);
 
 //register all extensions (post rendering)
 rm.postRendererRegister(rm._printonpath_postRendering)
-
+rm.postRendererRegister(rm._events_postRendering)
 
 
 
