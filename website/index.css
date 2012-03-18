@@ -1,0 +1,9 @@
+#wrapper {
+	display: block;
+	width: 950px;
+	margin-left: auto;
+	margin-right: auto;
+}
+#paper1Wrapper {
+	width: 100%;
+}

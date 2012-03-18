@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- <raphael xmlns="http://raphaeljs.com"> -->
+
+<raphael
+	xmlns="http://raphaeljs.com"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://raphaeljs.com ../src/raphael.xsd">
+	
+	<paper id="headerPaper1" x="0" y="0" width="950" height="1000" containerId="headerPaperEl">
+	
+		<rect x="0" y ="0" width="950" height="200" fill="#b18c8c" 
+			stroke="#9c88a9" stroke-width="50" ></rect>
+		
+		<print class="title" x="0" y="0"
+			onpath="M 210 80 R 500 150 600 90 800 120">
+		raphaelMarkup</print>
+		
+		<imag src="rm.png" x="0" y="0" width="105" height="105"></imag>
+		
+<!-- 		<path stroke="red">M 210 80 R 500 150 600 90 800 120</path> -->
+	</paper>
+	
+	
+	<style>
+/*.text {
+	font: my underwood;
+	fill: #1a1a1a;
+	font-size: 16px;
+}*/
+#headerPaper1 .title {
+	font: my underwood;
+	size: 55;
+}
+	</style>
+	
+	
+	
+</raphael>
