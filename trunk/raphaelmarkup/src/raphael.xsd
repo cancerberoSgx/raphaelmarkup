@@ -4,12 +4,13 @@
 
 <!-- xml document refinition for raphael -->
 <!-- @author: sgurin -->
+<!-- TODO: 1) allow text, path and style elements contain text -->
 
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	targetNamespace="http://raphaeljs.com" xmlns="http://raphaeljs.com"
 	elementFormDefault="qualified">
 
-	<xs:element name="raphael">
+	<xs:element name="raphael" >
         <xs:annotation>
         	<xs:documentation>raphael is the main element. it contains one or more papers.</xs:documentation>
         </xs:annotation>
@@ -27,15 +28,31 @@
 	
 	
 	<xs:complexType name="BaseType">
+		
+	
+<!--     <xs:simpleContent> -->
+<!--       <xs:extension base="xs:string"> -->
+<!--         <xs:annotation><xs:documentation>All raphael objects are suceptible o fhaving and id and class attributes, even sets and papers. </xs:documentation></xs:annotation> -->
+<!-- 		<xs:attribute name="id" type="xs:ID"> -->
+<!-- 			<xs:annotation><xs:documentation>id of the raphael shape for retrieving it from dictionary and for referencing it in css using #shape1.</xs:documentation></xs:annotation> -->
+<!-- 		</xs:attribute> -->
+<!-- 		<xs:attribute name="class" type="xs:NMTOKENS"> -->
+<!-- 			<xs:annotation><xs:documentation>class of the raphael shape for retrieving it from dictionary and for referencing it in css using .shapeClass1</xs:documentation></xs:annotation> -->
+<!-- 		</xs:attribute> -->
+<!--       </xs:extension> -->
+<!--     </xs:simpleContent> -->
+    
+    
 		<xs:annotation><xs:documentation>All raphael objects are suceptible o fhaving and id and class attributes, even sets and papers. </xs:documentation></xs:annotation>
 		<xs:attribute name="id" type="xs:ID">
 			<xs:annotation><xs:documentation>id of the raphael shape for retrieving it from dictionary and for referencing it in css using #shape1.</xs:documentation></xs:annotation>
-		</xs:attribute>
-		
-		<!-- type like class attr in xhtml schema at http://www.w3.org/TR/xhtml1-schema/ -->
+		</xs:attribute>		
 		<xs:attribute name="class" type="xs:NMTOKENS">
 			<xs:annotation><xs:documentation>class of the raphael shape for retrieving it from dictionary and for referencing it in css using .shapeClass1</xs:documentation></xs:annotation>
 		</xs:attribute>
+		
+		
+		
 	</xs:complexType>
 
 
@@ -44,7 +61,7 @@
         <xs:annotation>
         	<xs:documentation>a paper contains shapes. it can be related to a html element using the elid attr</xs:documentation>
         </xs:annotation>        
-        <xs:complexType>
+        <xs:complexType mixed="true">
         <xs:complexContent>
 			<xs:extension base="BaseType">
 			<xs:choice maxOccurs="unbounded">
@@ -54,6 +71,8 @@
 				<xs:element ref="imag" />
 				<xs:element ref="ellipse" />
 				<xs:element ref="path" />
+				<xs:element ref="text" />
+				<xs:element ref="print" />
 			</xs:choice>
 	        <xs:attribute name="containerId" type="xs:string">
 				<xs:annotation><xs:documentation>ID of DOM element which is going to be a parent for drawing surface</xs:documentation></xs:annotation>
@@ -80,7 +99,7 @@
 	<!-- attrsType extends BaseType -->
 	<xs:complexType name="AttrsType">
 	
-		<xs:complexContent>
+		<xs:complexContent mixed="true">
 			<xs:extension base="BaseType">
 				<xs:attribute name="arrow-end" type="xs:string">
 					<xs:annotation><xs:documentation>
@@ -290,9 +309,9 @@ So, the example line above could be read like “translate by 100, 100; rotate 3
 	
 	
 		<!-- the RectType extends AttrsType but making attributes x,y,width,height mandatory -->
-	<xs:complexType name="_TextType">		
+	<xs:complexType name="TextType">		
 				
-		<xs:complexContent>
+		<xs:complexContent mixed="true">
 		
 			<xs:restriction base="AttrsType">
 				<xs:attribute name="x" type="xs:int"  use="required">
@@ -309,21 +328,28 @@ So, the example line above could be read like “translate by 100, 100; rotate 3
 	</xs:complexType>
 	
 	
-	<xs:complexType name="TextType">		
+	<xs:complexType name="PrintType">		
 				
-		<xs:complexContent>
-			<xs:extension base="_TextType">
+		<xs:complexContent mixed="true">
+			<xs:extension base="TextType">
 			
 <!-- 				<xs:attribute name="font" type="xs:string"> -->
-<!-- 					<xs:annotation><xs:documentation>font name for text. if not defined, the text will be created using paper.text(), if defined it will be created using paper.print(). The font script must be included and registered in raphael.  </xs:documentation></xs:annotation> -->
+<!-- 					<xs:annotation><xs:documentation>confon font name -->
+<!-- 					 </xs:documentation></xs:annotation> -->
 <!-- 				</xs:attribute> -->
 				
 				<xs:attribute name="letter-spacing" type="xs:float">
-					<xs:annotation><xs:documentation>number in range -1..1, default is 0 </xs:documentation></xs:annotation>
+					<xs:annotation><xs:documentation>
+					number in range -1..1, default is 0 </xs:documentation></xs:annotation>
 				</xs:attribute>
 				
 				<xs:attribute name="origin" type="xs:float">
-					<xs:annotation><xs:documentation>could be "baseline" or "middle", default is "middle"</xs:documentation></xs:annotation>
+					<xs:annotation><xs:documentation>
+					could be "baseline" or "middle", default is "middle"</xs:documentation></xs:annotation>
+				</xs:attribute>
+				
+				<xs:attribute name="onpath" type="xs:string">
+					<xs:annotation><xs:documentation></xs:documentation></xs:annotation>
 				</xs:attribute>
 				
 <!-- 				TODO: origin and letter-spacing should only be specified when font!=null -->
@@ -361,11 +387,11 @@ So, the example line above could be read like “translate by 100, 100; rotate 3
 	
 	<!-- the PathType extends AttrsType but making attributes path mandatory -->
 	<xs:complexType name="PathType">						
-		<xs:complexContent>		
+		<xs:complexContent mixed="true">		
 			<xs:restriction base="AttrsType">
-				<xs:attribute name="path" type="xs:string" use="required">
-					<xs:annotation><xs:documentation>path string in SVG format.</xs:documentation></xs:annotation>
-				</xs:attribute>
+<!-- 				<xs:attribute name="path" type="xs:string" use="required"> -->
+<!-- 					<xs:annotation><xs:documentation>path string in SVG format.</xs:documentation></xs:annotation> -->
+<!-- 				</xs:attribute> -->
 			</xs:restriction>
 			
 		</xs:complexContent>	
@@ -373,7 +399,7 @@ So, the example line above could be read like “translate by 100, 100; rotate 3
 	</xs:complexType>
 	
 	<!-- the Set type extends AttrsType -->
-	<xs:complexType name="SetType">
+	<xs:complexType name="SetType" mixed="true">
 		<xs:complexContent>
 			<xs:extension base="AttrsType">
 				<xs:choice maxOccurs="unbounded">
@@ -409,9 +435,23 @@ So, the example line above could be read like “translate by 100, 100; rotate 3
 	<xs:element name="set" type="SetType">
 	</xs:element>
 	
+	<xs:element name="text" type="TextType">
+	<xs:annotation><xs:documentation>
+	the analogous to call paper.text() in raphael. NATIVE Text that 
+	support font-family, font-size and other text. Font family in this case are not cufont font names, 
+	but CSS style like arial, courier, "serif", "sans-serif", etc.
+	</xs:documentation></xs:annotation>
+	</xs:element>
+	
+	<xs:element name="print" type="PrintType">	
+		<xs:annotation><xs:documentation>
+	analogous to call paper.print(). attributes, font-family, font-weight and other font related won't work, because 
+	this won't be native text, but a raphael set with letters (paths). origin, size, letter-spacing will be available.
+	</xs:documentation></xs:annotation>
+	</xs:element>
+	
 	
 	<xs:element name="style">
-	
 	<xs:annotation><xs:documentation>css style like tag for rapahël attributes.	
 	Style element is only valid as &lt;raphael> tag children
 	use jquery supported selectors and valid raphaël attribute names as propery names like: 
@@ -432,7 +472,15 @@ So, the example line above could be read like “translate by 100, 100; rotate 3
 	
 	&lt;/raphael>
 	</xs:documentation></xs:annotation>
-	</xs:element>
+	
+	<xs:complexType>
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+	
+		</xs:element>
 
 
 </xs:schema>

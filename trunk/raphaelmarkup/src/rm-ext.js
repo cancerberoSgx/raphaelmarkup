@@ -1,6 +1,3 @@
-
-
-
 /* * * * preproccessING - default templating : 
  * 	<template and template-use tags * * * */
 
@@ -335,11 +332,25 @@ rm._percentDim_postRendering = function(rdoc) {
 
 /* * * * CSS * * * */
 
+/**
+ * preprocess al style elements. 
+ */
 rm._preproccesCSS = function(rdoc) {
 	/* first parse each <style> element against document. 
 	 * the DOM will be affected before rendering.*/
 	rdoc.find("style").each(function(i){
-		rm._applyCSS(rdoc, $(this).text());
+//		if($(this).attr("href")) {
+//			$.ajax({
+//				"url": $(this).attr("href"),
+//				"context": rdoc,
+//				"success": function(data) {
+//					rm._applyCSS($(this), data);
+//				}
+//			});
+//		}
+//		else {
+			rm._applyCSS(rdoc, $(this).text());
+//		}
 	});	
 	return rdoc;
 };
@@ -351,8 +362,8 @@ rm._applyCSS= function(doc, cssStr) {
 	var css = rm._parseCSS(cssStr);
 	for ( var i = 0; i < css.__order.length; i++) {
 		var sel = css.__order[i];
-		var el = doc.find(sel);
-		el.attr(css[sel]);
+		var els = doc.find(sel);
+		els.attr(css[sel]);
 	}
 };
 rm._parseCSS= function(css) {
@@ -395,6 +406,48 @@ rm._removeComments= function(css) {
 
 
 
+
+
+
+/* * * * print onpath attribute support * * * */
+
+rm._printonpath_postRendering = function(rdoc) {
+	rdoc.find("print").each(function(){
+		if($(this).attr("onpath")) {
+			rm._printonpath_do(rm.getShape($(this)), 
+				rm.getShape($(this).parent("paper")), 
+				$(this).attr("onpath"));
+		}
+	});
+};
+rm._printonpath_do = function(text, paper, pathStr) {
+	var p = paper.path(pathStr).attr({stroke: "none"});
+	for ( var i = 0; i < text.length; i++) {
+		var letter = text[i];
+		var newP = p.getPointAtLength(letter.getBBox().x);
+		var newTransformation = letter.transform()+
+		 	"T"+(newP.x-letter.getBBox().x)+","+
+	        (newP.y-letter.getBBox().y-letter.getBBox().height);
+		
+		//also rotate the letter to correspond the path angle of derivative
+	    newTransformation+="R"+
+	        (newP.alpha<360 ? 180+newP.alpha : newP.alpha);
+	    letter.transform(newTransformation);
+	}
+};
+
+
+
+
+
+/* * * * * EVENTS * * * * */
+//rm._events_postRendering = function(rdoc) {
+//	rdoc.find("imag, text, print, circle, ellipse, rect, path").each(function(){
+//		if($(this).attr("onclick"))
+//	});
+//};
+
+
 //register all extensions (preproccessing)
 
 rm.preproccessRegister(rm._preproccess_template1);
@@ -403,4 +456,8 @@ rm.preproccessRegister(rm._preproccesCSS);
 
 
 //register all extensions (post rendering)
+rm.postRendererRegister(rm._printonpath_postRendering)
+
+
+
 

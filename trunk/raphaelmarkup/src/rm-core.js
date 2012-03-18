@@ -138,8 +138,11 @@ _render : function(targetHtmlDoc, rdoc)	{
 	/* first of all perorm preprosessing operations. 
 	 * TODO: we are discarding original document... 
 	 * TODO: preproccessing errors. */
+	
+	var origRDoc = rdoc;
 	rdoc = rm.preproccess(rdoc);
-
+	rdoc.__origRDoc = origRDoc;
+	
 	if(!rdoc||rdoc.size()==0) {		
 		alert("error when preproccessing. ");
 	}
@@ -235,8 +238,10 @@ _renderEl: function(rdoc, dom, paper) {
 	var shape = null, tag = rm._getTagName(dom);
 	if(tag=="imag") 
 		shape=this._renderImage(dom, paper);
-	if(tag=="text") 
+	else if(tag=="text") 
 		shape=this._renderText(dom, paper);
+	else if(tag=="print") 
+		shape=this._renderPrint(dom, paper);
 	else if(tag=="rect")
 		shape=this._renderRect(dom, paper);
 	else if(tag=="path")
@@ -284,19 +289,30 @@ _renderImage: function(dom, paper) {
 	this._renderAttrs(dom, shape, paper);
 	return shape;
 },
+_renderPrint: function(dom, paper) {
+	var text = dom.attr("text") ? dom.attr("text") : rm._getInmediateText(dom), 
+		
+		shape = paper.print(dom.attr("x"), dom.attr("y"), text,
+			paper.getFont(dom.attr("font")), 
+			dom.attr("size"), dom.attr("origin"), 
+			dom.attr("letter-spacing"));
+	
+		shape.type="print";
+	return shape;
+},
 _renderText: function(dom, paper) {
 	var text = dom.attr("text") ? dom.attr("text") : rm._getInmediateText(dom), 
 		shape=null;
-	if(dom.attr("font") && paper.getFont(dom.attr("font"))) {
-		shape = paper.print(dom.attr("x"), dom.attr("y"), text,
-				paper.getFont(dom.attr("font")), 
-				dom.attr("size"), dom.attr("origin"), 
-				dom.attr("letter-spacing"))
-	} 
-	else {
+//	if(dom.attr("font") && paper.getFont(dom.attr("font"))) {
+//		shape = paper.print(dom.attr("x"), dom.attr("y"), text,
+//				paper.getFont(dom.attr("font")), 
+//				dom.attr("size"), dom.attr("origin"), 
+//				dom.attr("letter-spacing"))
+//	} 
+//	else {
 		shape = paper.text(dom.attr("x"), dom.attr("y"), text);
 		this._renderAttrs(dom, shape, paper);		
-	}
+//	}
 	return shape;
 },
 _renderEllipse: function(dom, paper) {
@@ -416,7 +432,6 @@ createElement: function(parent, tagName, attrs) {
 	}
 	xmldoc=parent.prop("ownerDocument");
 	if(!xmldoc) {
-		debugger;
 		return null;
 	}
 	var e = $(xmldoc.createElement(tagName));
@@ -488,10 +503,22 @@ xmlWriteShape: function(el, parentDom) {
 		shapeDom=rm._xmlWriteSet(el, parentDom);
 	else if(el.type=="ellipse")
 		shapeDom=rm._xmlWriteEllipse(el, parentDom);
+	else if(el.type=="text")
+		shapeDom=rm._xmlWriteText(el, parentDom);
+	else if(el.type=="print")
+		shapeDom=rm._xmlWritePrint(el, parentDom);
 	
 	if(shapeDom!=null)
 		rm._xmlWriteAttrs(el, shapeDom);
 	return shapeDom;
+},
+_xmlWritePrint: function(el, dom) {
+	var id = rm._xmlGetId(el);
+	return rm.createElement(dom, "print", {"id": id});
+},
+_xmlWriteText: function(el, dom) {
+	var id = rm._xmlGetId(el);
+	return rm.createElement(dom, "text", {"id": id});
 },
 _xmlWriteRect: function(el, dom) {
 	var id = rm._xmlGetId(el);

@@ -8,6 +8,9 @@
 <!--   	<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" /> -->
 <!-- 	<script type="text/javascript" src="qunit.js"></script> -->
 	<script type="text/javascript" src="../rm.js"></script>
+	
+	<script type="text/javascript" src="fonts/my-underwood.cufonfonts.js"></script>
+	
 <title>Raphael markup test 1</title>
 </head>
 <body>
@@ -22,30 +25,34 @@
 
 <script type="text/javascript">
 var p = Raphael(2,2,400,400);
-// var s1 = p.set();
-// var r1 = p.rect(2,2,30,40);
-// s1.push(r1);
-// s1.attr("fill", "red");
-// r1.attr("fill", "blue");
+// // var s1 = p.set();
+// // var r1 = p.rect(2,2,30,40);
+// // s1.push(r1);
+// // s1.attr("fill", "red");
+// // r1.attr("fill", "blue");
 
 var path1 = p.path("M100,200L30,40"); 
 path1.attr("x", "300");
 
-//templating test
-var tmplCode = "<p><% for ( var i = 0; i < users.length; i++ ) { %>"+
-    "<li><a href=\"<%=users[i].url%>\"><%=users[i].name%></a></li>"+
-    "<% } %></p>";
-var tmplData = {users: [
- {name: "seba", url: "google.com"}, 
- {name: "laura", url: "laskjd.ss"}
-]};
-var out = rm.tmpl(tmplCode); //compile 
-alert(out(tmplData)); //use
-
-alert(rm.tmpl(tmplCode, tmplData));//or do both things at same time.
+// //templating test
+// var tmplCode = "<p><% for ( var i = 0; i < users.length; i++ ) { %>"+
+//     "<li><a href=\"<%=users[i].url%>\"><%=users[i].name%></a></li>"+
+//     "<% } %></p>";
+// var tmplData = {users: [
+//  {name: "seba", url: "google.com"}, 
+//  {name: "laura", url: "laskjd.ss"}
+// ]};
+// var out = rm.tmpl(tmplCode); //compile 
 
 
+// var t1 = p.print("hello", p.getFont("my underwood"));
 
+var txt = p.print(100, 100, "print", p.getFont("my underwood"), 30).
+	attr({fill: "red"});
+	
+txt.attr({"font-size": 77})
+
+// t1.attr();
 </script>
 
 </body>
