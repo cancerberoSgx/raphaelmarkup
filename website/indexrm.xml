@@ -9,16 +9,21 @@
 	
 	<paper id="headerPaper1" x="0" y="0" width="950" height="1000" containerId="headerPaperEl">
 	
+		
 		<rect x="0" y ="0" width="950" height="200" fill="#b18c8c" 
-			stroke="#9c88a9" stroke-width="50" ></rect>
+			stroke="#f89938" stroke-width="20" stroke-dasharray="."></rect>
 		
 		<print class="title" x="0" y="0"
 			onpath="M 210 80 R 500 150 600 90 800 120">
 		raphaelMarkup</print>
 		
-		<imag src="rm.png" x="0" y="0" width="105" height="105"></imag>
+		<imag src="rm.png" x="570" y="90" width="105" height="105"
+		onclick="alert('hello: '+this);" 
+		onhoverin="rm.getShape(this).animate({transform: 'R 180'}, 1000, '&lt;');"
+		onhoverout="rm.getShape(this).animate({transform: 'R 0'}, 1000, '&lt;');"></imag>
 		
-<!-- 		<path stroke="red">M 210 80 R 500 150 600 90 800 120</path> -->
+		<ellipse x="470" y="300" rx="460" ry="100"></ellipse>
+		
 	</paper>
 	
 	

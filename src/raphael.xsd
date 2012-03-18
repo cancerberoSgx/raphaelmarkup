@@ -226,6 +226,49 @@ So, the example line above could be read like “translate by 100, 100; rotate 3
 				
 				
 				
+<!-- 				events attributes -->
+				<xs:attribute name="onclick" type="xs:string">
+					<xs:annotation><xs:documentation></xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="ondblclick" type="xs:string">
+					<xs:annotation><xs:documentation></xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="onhoverin" type="xs:string">
+					<xs:annotation><xs:documentation></xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="onhoverout" type="xs:string">
+					<xs:annotation><xs:documentation></xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="onhover" type="xs:string">
+					<xs:annotation><xs:documentation></xs:documentation></xs:annotation>
+				</xs:attribute>				
+				<xs:attribute name="onmousedown" type="xs:string">
+					<xs:annotation><xs:documentation></xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="onmouseout" type="xs:string">
+					<xs:annotation><xs:documentation></xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="onmousemove" type="xs:string">
+					<xs:annotation><xs:documentation></xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="onmouseover" type="xs:string">
+					<xs:annotation><xs:documentation></xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="onmouseup" type="xs:string">
+					<xs:annotation><xs:documentation></xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="ontouchcancel" type="xs:string">
+					<xs:annotation><xs:documentation></xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="ontouchend" type="xs:string">
+					<xs:annotation><xs:documentation></xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="ontouchmove" type="xs:string">
+					<xs:annotation><xs:documentation></xs:documentation></xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="ontouchstart" type="xs:string">
+					<xs:annotation><xs:documentation></xs:documentation></xs:annotation>
+				</xs:attribute>
 				
 			</xs:extension>
 		</xs:complexContent>		
