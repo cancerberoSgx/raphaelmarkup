@@ -6,6 +6,10 @@
 <html>
 <head>
 	<script src="../src/deps/jquery-1.7.1.js"></script>
+	
+<!-- 	<script src="jqueryui/js/jquery-ui-1.8.18.custom.min.js"></script> -->
+<!-- 	<link rel="stylesheet" href="jqueryui/css/ui-lightness/jquery-ui-1.8.18.custom.css" type="text/css" media="screen" /> -->
+	
 	<script src="../src/deps/raphael-min.js"></script>
 	
 <!-- 	<script type="text/javascript" src="../src/rm.js"></script> -->	
@@ -23,12 +27,27 @@
 </head>
 <body>
 
-<!-- <p>raphaelmarkup website</p> -->
+<!-- raphaelmarkup website
+this page contains several raphael papers inside some markup elements. 
+The papers are defined in indexrm.xml and each will show a kind of page.
+
+ -->
+
 
 <div id="wrapper">
-<div id="header">
-<div id="headerPaperEl"></div>
-</div>
+	<div class="header">
+		<div id="headerPaperEl"></div>
+	</div>
+	<div class="content">
+	
+		<div class="section" id="section1PaperEl">>
+<!-- 			<div </div> -->
+		</div>	
+		<div class="section" id="section1PaperEl">
+<!-- 			<div ></div> -->
+		</div>		
+	</div>
+	
 </div>
 
 
@@ -39,6 +58,19 @@ rm.renderAjax("indexrm.xml", function (rdoc) {
 	we can access it for querying or even manipulate it: */
 // 	alert("the document has "+rdoc.find("rect")+" rectangles.");
 });
+
+
+
+myapp = {
+	openSection: function(el) {
+		$(".section").hide();
+		$(el).show();
+	},
+	closeSection: function(el) {
+		$(".section").hide();
+	},
+	"":""
+};
 </script>
 
 </body>
