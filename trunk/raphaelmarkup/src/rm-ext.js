@@ -1,5 +1,14 @@
-/* * * * preproccessING - default templating : 
- * 	<template and template-use tags * * * */
+/* * * * 
+ * 
+ * raphaelmarkup extensions. 
+ * several of raphaelmarkup features are infact extensions. This file contains a collection of the "official" extensions of rm.
+ * 
+ * Copyright (c) 2012 Sebastián Gurin (http://code.google.com/p/raphaelmarkup/)          │ \\
+ * Licensed under the MIT (http://www.opensource.org/licenses/mit-license.php) license.
+ * 
+ * @author: Sebastián Gurin
+ * 
+ * * * * */
 
 
 rm._preproccess_template1_rocTmpls = {};
@@ -408,34 +417,145 @@ rm._removeComments= function(css) {
 
 
 
+/* * * * ANIMATIONS - 
+ * define anims in XML and easily use them in javascript. 
+ * the rdoc dom document will be poblated with function getAnimationById()
+ * that will be return a valid animation object defined in animation element ided.
+ * * * * * */
+rm._anims_preproccess = function(rdoc) {
+	if(!rdoc._animRegister) {
+		rdoc._animRegister=function(animId, animObj){
+			if(!rdoc._anims)
+				rdoc._anims={};
+			rdoc._anims[animId]=animObj;
+		}
+	}
+	if(!rdoc.getAnimById) {
+		rdoc.getAnimById=function(id) {
+			if(rdoc._anims)
+				return rdoc._anims[id];
+			return null;
+		}
+	}
+	rdoc.find("animation").each(function(){
+		var animId = $(this).attr("id"), anim = {};
+		if(!animId) 
+			return;			
+		$(this).find("scene").each(function(){
+			var ellapse = $(this).attr("ellapse"), attrs = {};
+			for ( var i = 0; i < rm._raphaelAnimAttrs.length; i++) {
+				if($(this).attr(rm._raphaelAnimAttrs[i]))
+					attrs[rm._raphaelAnimAttrs[i]]=$(this).attr(rm._raphaelAnimAttrs[i]);				
+			}			
+			anim[ellapse]=attrs;
+			rdoc._animRegister(animId, anim);
+		});	
+	});
+	return rdoc;
+};
+rm.animate = function(dom, animId, ms) {
+	var rdoc = rm.getDocOf(dom), 
+		shape = rm.getShape(dom), 
+		anim = rdoc.getAnimById(animId);
+	shape.stop();
+	shape.animate(anim, ms);
+};
+rm._raphaelAnimAttrs = [
+    "blur", "clip-rect", "cx", "cy", "fill", "fill-opacity", 
+    "font-size", "height", "opacity", "path", "r", "rx", "ry", "stroke", 
+    "stroke-opacity", "stroke-width", "transform", "width","x", "y"
+];
 
-/* * * * print onpath attribute support * * * */
 
-rm._printonpath_postRendering = function(rdoc) {
+/* * * * PRINT text decoration  underline, etc
+ * some of these will *add* some shapes (to the set) to decoate a print.
+ * letters shapes are marked with shape.type=="letter", and decoration internal shape will be marked for ex: textdecoration-underline
+ * * * * * */
+
+rm._printunderline_postRendering = function(rdoc) {
 	rdoc.find("print").each(function(){
-		if($(this).attr("onpath")) {
-			rm._printonpath_do(rm.getShape($(this)), 
+		if($(this).attr("underline-color")||$(this).attr("underline-width")||
+				$(this).attr("underline-distance")||$(this).attr("underline-dasharray")||
+				$(this).attr("underline-opacity")) {
+			
+			rm._printUnderline_do(
+				rm.getShape($(this)), 
 				rm.getShape($(this).parent("paper")), 
-				$(this).attr("onpath"));
+				$(this).attr("underline-color"), 
+				$(this).attr("underline-width"), 
+				$(this).attr("underline-distance"),
+				$(this).attr("underline-dasharray"),
+				$(this).attr("underline-opacity"));
 		}
 	});
 };
-rm._printonpath_do = function(text, paper, pathStr) {
-	var p = paper.path(pathStr).attr({stroke: "none"});
-	for ( var i = 0; i < text.length; i++) {
-		var letter = text[i];
-		var newP = p.getPointAtLength(letter.getBBox().x);
-		var newTransformation = letter.transform()+
-		 	"T"+(newP.x-letter.getBBox().x)+","+
-	        (newP.y-letter.getBBox().y-letter.getBBox().height);
-		
-		//also rotate the letter to correspond the path angle of derivative
-	    newTransformation+="R"+
-	        (newP.alpha<360 ? 180+newP.alpha : newP.alpha);
-	    letter.transform(newTransformation);
-	}
-};
 
+//underline
+rm._printUnderline_do = function(text, paper, color, width, distance, dasharray, opacity) {
+	if(!color)color="black";
+	if(!distance)distance=10;
+	if(!width) width=1;
+	if(!dasharray)dasharray="";
+	if(!opacity)opacity=1.0;
+	var path = null;
+//	if(text._rm_topathPath) {
+////		path=paper.path(text._rm_topathPath.getSubPath(text.getBBox().x, text.getBBox().x+text.getBBox().width));//.clone();
+//		path=text._rm_topathPath.clone();//TODO: do this better because we can't rely on the provided path by onpath attr
+//		path.transform("T 0 "+distance);
+//	}
+//	else {
+		var pathStr = "M "+text[0].getBBox().x+" "+text[0].getBBox().y;	
+		for ( var i = 1; i < text.length; i++) {
+			pathStr+=" L "+text[i].getBBox().x+" "+(text[i].getBBox().height+text[i].getBBox().y+distance);
+		}
+		path = paper.path(pathStr);
+//	}
+	path.attr({
+		"stroke": color,
+		"stroke-width": width,
+		"stroke-dasharray": dasharray,
+		"stroke-opacity": opacity
+	});
+	path.rmtype="underline";
+//	alert(text);
+//	text.push(path); //make the underline path part of the text shape
+	text._rm_underlinePath=path;	
+}
+
+
+
+//on path - don't work anymore.
+
+//rm._printonpath_do = function(text, paper, pathStr) {
+//	var p = paper.path(pathStr).attr({stroke: "none"});
+//	for ( var i = 0; i < text.length; i++) {		
+//		var letter = text[i];
+////		if(letter.rmtype!="letter")
+////			continue;
+//		var newP = p.getPointAtLength(letter.getBBox().x);
+//		var newTransformation = letter.transform()+
+//		 	"T"+(newP.x-letter.getBBox().x)+","+
+//	        (newP.y-letter.getBBox().y-letter.getBBox().height);
+//		
+//		//also rotate the letter to correspond the path angle of derivative
+//	    newTransformation+="R"+
+//	        (newP.alpha<360 ? 180+newP.alpha : newP.alpha);
+//	    alert(newTransformation);
+//	    letter.transform(newTransformation);
+//	}
+//	text._rm_topathPath=p;
+//};
+//
+//rm._printonpath_postRendering = function(rdoc) {
+//	rdoc.find("print").each(function(){
+//		if($(this).attr("onpath")) {
+//			alert(rm.getShape($(this)).type);
+//			rm._printonpath_do(rm.getShape($(this)), 
+//				rm.getShape($(this).parent("paper")), 
+//				$(this).attr("onpath"));
+//		}
+//	});
+//};
 
 
 
@@ -501,6 +621,19 @@ rm._events_postRendering = function(rdoc) {
 
 
 
+/* * * * scripts * * * */
+rm._script_preproccess = function(rdoc) {
+	rdoc.find("script").each(function(){
+		try {
+			eval($(this).text());
+		} catch (e) {
+			rm._error("script failed to eval");
+		}		
+	});
+	return rdoc;
+};
+
+
 
 
 /* * * * * tofront - toback attributes * * * * */ 
@@ -513,11 +646,13 @@ rm._events_postRendering = function(rdoc) {
 rm.preproccessRegister(rm._preproccess_template1);
 rm.preproccessRegister(rm._preproccesCSS);
 //rm.preproccessRegister(rm._percentDimPreproccess);
+rm.preproccessRegister(rm._script_preproccess);
+rm.preproccessRegister(rm._anims_preproccess);
 
 
 //register all extensions (post rendering)
-rm.postRendererRegister(rm._printonpath_postRendering)
-rm.postRendererRegister(rm._events_postRendering)
-
+rm.postRendererRegister(rm._events_postRendering);
+//rm.postRendererRegister(rm._printonpath_postRendering);
+rm.postRendererRegister(rm._printunderline_postRendering);
 
 

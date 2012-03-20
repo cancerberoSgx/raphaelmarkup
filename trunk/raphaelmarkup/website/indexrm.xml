@@ -7,38 +7,97 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://raphaeljs.com ../src/raphael.xsd">
 	
+<!-- 	templates -->
+
+	<template name="ellipseButton">
+
+		<template-arg name="onclick" value="alert('clicked')"></template-arg>
+		<template-arg name="x" value="100"></template-arg>
+		<template-arg name="y" value="100"></template-arg>
+		<template-arg name="rx" value="10"></template-arg>	
+		<template-arg name="ry" value="10"></template-arg>
+		<template-arg name="fill" value="red"></template-arg>
+		<template-arg name="color" value="black"></template-arg>
+		<template-arg name="text" value="black"></template-arg>		
+	
+		<template-body>
+			<set class="ellipseButton">
+				<ellipse x="{%= x %}" y="{%= y %}" rx="{%= rx %}" ry="{%= ry %}" 
+					fill="{%= fill %}" onclick="{%= onclick%}"					
+					onhoverin="rm.getShape(this).attr('fill', 'brown')"
+					onhoverout="rm.getShape(this).attr('fill', '{%= fill %}')"
+					></ellipse>
+				<text color="{%= color %}" x="{%= x %}" y="{%= y %}" 
+					onclick="{%= onclick%}"
+					>{%= text%}</text>
+			</set>
+		</template-body>
+		
+	</template>
+
+
+
+<!-- header paper -->
+
 	<paper id="headerPaper1" x="0" y="0" width="950" height="1000" containerId="headerPaperEl">
 	
 		
 		<rect x="0" y ="0" width="950" height="200" fill="#b18c8c" 
-			stroke="#f89938" stroke-width="20" stroke-dasharray="."></rect>
+			stroke="#f89938" stroke-width="20" stroke-dasharray="."
+			
+			></rect>
 		
-		<print class="title" x="0" y="0"
-			onpath="M 210 80 R 500 150 600 90 800 120">
-		raphaelMarkup</print>
+		<print class="title" x="0" y="0"		
+			onhoverin="rm.animate(this, 'textglowing1', 1000)">
+		raphaelMarkup site</print>
 		
-		<imag src="rm.png" x="570" y="90" width="105" height="105"
-		onclick="alert('hello: '+this);" 
-		onhoverin="rm.getShape(this).animate({transform: 'R 180'}, 1000, '&lt;');"
-		onhoverout="rm.getShape(this).animate({transform: 'R 0'}, 1000, '&lt;');"></imag>
+		<imag id="rmlogo" src="rm.png" x="570" y="90" width="105" height="105"
+			onhoverin="rm.getShape(this).animate({transform: 'R 180'}, 1000, '&gt;');"
+			onhoverout="rm.getShape(this).animate({transform: 'R 0'}, 1000, '&lt;');"></imag>
 		
 		<ellipse x="470" y="300" rx="460" ry="100"></ellipse>
+		<circle  cx="470" cy="300" r="40" fill="red" 
+			onclick="myapp.openSection('#section1PaperEl')"></circle>
+		
 		
 	</paper>
 	
 	
+	
+<!-- 	section "about" paper -->
+
+	<paper id="sectionAbout" x="0" y="0" width="700" height="600" 
+		containerId="section1PaperEl">
+		<rect x="0" y="0" width="700" height="600" fill="white"></rect>
+		<text x="100" y="200">hello</text>
+		<template-use name="ellipseButton"  class="closebutton" 
+			x="150" y="320" rx="40" ry="10" text="close"
+			onclick="myapp.closeSection('section1PaperEl')"
+			
+			></template-use>
+	</paper>
+	
+	
+	
+	
+	<animation id="textglowing1">	
+		<scene ellapse="0%" fill="black"></scene>
+		<scene ellapse="33%" transform="S1.5" easing="easy-in"></scene>
+		<scene ellapse="66%" transform="s0.6 r33" easing="easy-out"></scene>
+		<scene ellapse="100%" transform="S1.0 R0" fill="red" easing="elastic"></scene>
+	</animation>
+	
 	<style>
-/*.text {
-	font: my underwood;
-	fill: #1a1a1a;
-	font-size: 16px;
-}*/
+
 #headerPaper1 .title {
 	font: my underwood;
 	size: 55;
+	underline-width: 3; 
+	underline-color: red; 
+	underline-dasharray: -.;
+	underline-opacity: 0.7;
 }
 	</style>
-	
 	
 	
 </raphael>

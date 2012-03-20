@@ -1,20 +1,14 @@
-/* raphael markup javascript - raphael xml and css renderer and utilities 
- * dependencies: 
- * raphael.js
- * jquery.js :; for easy xml parsing 
- * @author: sgurin
-.*/
-
-
-
-
-
-//window.onerror=function(msg, url, linenumber){
-// alert('Error message: '+msg+'\nURL: '+url+'\nLine Number: '+linenumber)
-// return true
-//}
-
-
+/* * * * 
+ * 
+ * raphaelmarkup javascript
+ 
+ * dependencies: raphael.js and jquery.js
+ * Copyright (c) 2012 Sebastián Gurin (http://code.google.com/p/raphaelmarkup/)          │ \\
+ * Licensed under the MIT (http://www.opensource.org/licenses/mit-license.php) license.
+ * 
+ * @author: Sebastián Gurin
+ * 
+ * * * * */
 
 
 var rm = {
@@ -26,23 +20,6 @@ var rm = {
 
 		/* * * * raphael markup renderer * * * */	
 
-///**
-// * main render entry point. Will render the raphael markup and css code in the given html document object.
-// * Usage: 
-// * <pre>
-// * var rap1 = rm.render(document, "<raphael....", ".apple-class1 {stroke: ...}")
-// * rap1.find("#paper2 @apple1234").addClass("apple-class1"); // access to the document dynamically and css styles will be applied.
-// * @param targetDoc - html document in which to render the raphael markup
-// * @param xmlCode - the raphael markup, must be valid raphel.xsd document
-// * @param cssCode - css code for raphael markup
-// * @return the jquery document object  
-// */
-//renderRMSource: function (targetHtmlDoc, xmlCode, cssCode) {	
-//	var css = rm.parseCSS(cssCode), 
-//		xml = $.parseXML(xmlCode);
-//	
-//	renderRM(targetDoc, xml, css);
-//},
 
 /**
  * render all <raphael elements in current html document
@@ -292,12 +269,17 @@ _renderImage: function(dom, paper) {
 _renderPrint: function(dom, paper) {
 	var text = dom.attr("text") ? dom.attr("text") : rm._getInmediateText(dom), 
 		
-		shape = paper.print(dom.attr("x"), dom.attr("y"), text,
-			paper.getFont(dom.attr("font")), 
-			dom.attr("size"), dom.attr("origin"), 
-			dom.attr("letter-spacing"));
+	shape = paper.print(dom.attr("x"), dom.attr("y"), text,
+		paper.getFont(dom.attr("font")), 
+		dom.attr("size"), dom.attr("origin"), 
+		dom.attr("letter-spacing"));
 	
-		shape.type="print";
+//	shape.type="print";
+	
+	/* mark all the letters (for differentiating them from other artificial shapes in the text like decorations */
+	for ( var i = 0; i < shape.length; i++) {
+		shape[i].rmtype="letter";
+	}
 	return shape;
 },
 _renderText: function(dom, paper) {
@@ -634,6 +616,9 @@ _unregister: function(rdoc, dom, shape) {
 getDocById: function(id) {
 	return rm._docsById[id];
 },
+getDocOf: function(el) {
+	return rm.getDocById($(el).attr("id"));
+},
 ///**
 // * reguster a dom element for mutation events, so if the dom change, 
 // */
@@ -667,7 +652,6 @@ _raphaelAttrs: {"arrow-end": "none","arrow-start": "none",blur: 0,"clip-rect": "
 	"stroke-opacity": 1,"stroke-width": 1,target: "_blank","text-anchor": "middle",
 	title: "Raphael",transform: "",width: 0,x: 0,y: 0
 },
-
 
 
 

@@ -10,3 +10,12 @@ body {
 #paper1Wrapper {
 	width: 100%;
 }
+
+.section {
+	position: absolute;
+	top: 0px; 
+	left: 0px;
+	width: 700px;
+	height: 600px;
+	display: none;
+}
