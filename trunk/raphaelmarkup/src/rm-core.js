@@ -13,9 +13,39 @@
 
 var rm = {
 		
-		
-		
-
+_doInclude: function(rdoc, onFinnish) {
+	var includes = rdoc.find("include[src]");
+	rm._includeCount = includes.size();
+	if(rm._includeCount==0)
+		onFinnish(rdoc);
+	includes.each(function(){
+		$.ajax({
+			"url": $(this).attr("src"),
+			"dataType": "xml",			
+			"context": {
+				"rdoc": rdoc, 
+				"rmdom": $(this),
+				"url": $(this).attr("src"), 
+				"onFinnish": onFinnish
+			},			
+			"success": function(data) {
+				var domToInclude = $(data)
+				rm._includeCount--;				
+				if(rm._includeCount>=0) {
+					$(domToInclude.prop("documentElement")).insertAfter(this["rmdom"]);
+					this["rmdom"].remove();
+				}
+				if(rm._includeCount==0) {
+					this["onFinnish"](this["rdoc"]);
+				}
+			},
+			"error": function(jqXHR, errStr, err) {
+				rm._includeCount=-1;
+				rm._error("error including "+this["url"]+". cause: "+errStr);
+			},
+		});
+	});
+},
 
 
 		/* * * * raphael markup renderer * * * */	
@@ -112,31 +142,38 @@ buildRDocFromDOM : function(dom) {
  */
 _render : function(targetHtmlDoc, rdoc)	{
 	
-	/* first of all perorm preprosessing operations. 
-	 * TODO: we are discarding original document... 
-	 * TODO: preproccessing errors. */
-	
-	var origRDoc = rdoc;
-	rdoc = rm.preproccess(rdoc);
-	rdoc.__origRDoc = origRDoc;
-	
-	if(!rdoc||rdoc.size()==0) {		
-		alert("error when preproccessing. ");
-	}
-	
-	/* css note: we will evaluate CSS selectors using jquery, 
-	 * so all supported jquery selectors will be available. */
-	
-	/* TODO: use xml mutation events for being notified with class 
-	 * or ids change?? http://en.wikipedia.org/wiki/DOM_Events. won't be supported on old IE*/
+	/* first of all do the async preproccessing for include tegas */
+	rm._doInclude(rdoc, function(rdoc){
 		
-	rdoc.find("paper").each(function(i){
-		var paper = null;
+
+		/* first of all perorm preprosessing operations. 
+		 * TODO: we are discarding original document... 
+		 * TODO: preproccessing errors. */
 		
-		rm._renderPaper(rdoc, $(this), paper);
-	}); 
+		var origRDoc = rdoc;
+		rdoc = rm.preproccess(rdoc);
+		rdoc.__origRDoc = origRDoc;
+		
+		if(!rdoc||rdoc.size()==0) {		
+			alert("error when preproccessing. ");
+		}
+		
+		/* css note: we will evaluate CSS selectors using jquery, 
+		 * so all supported jquery selectors will be available. */
+		
+		/* TODO: use xml mutation events for being notified with class 
+		 * or ids change?? http://en.wikipedia.org/wiki/DOM_Events. won't be supported on old IE*/
+			
+		rdoc.find("paper").each(function(i){
+			var paper = null;
+			
+			rm._renderPaper(rdoc, $(this), paper);
+		}); 
+		
+		rm._postRendering(rdoc);
+		
+	});
 	
-	rm._postRendering(rdoc);
 	
 	return rdoc;
 },
@@ -148,7 +185,7 @@ _render : function(targetHtmlDoc, rdoc)	{
 update : function(rdoc, dom) {
 	if(!dom) //update all papers
 		dom = rdoc.find("paper");
-	dom.each(function(index) {
+	dom.each(function() {
 		rm.updateShape(rdoc, $(this));
 	});
 },
@@ -691,6 +728,22 @@ preproccessRegister: function(handler) {
 
 
 
+
+
+
+///* * * * ASYNC preproccessing 
+// * @based on jquery derreferred object (http://api.jquery.com/category/deferred-object/)
+// * @see rm-ext.js@include for example* * * */
+//
+//_asyncPreproccessData: [],
+//asyncPreproccessRegister: function(aPreproccessDerrefered) {
+//	rm._asyncPreproccessData.push(aPreproccessDerrefered);
+//},
+//_asyncPreproccess: function(rdoc, onFinish) {
+//	$.when(rm._asyncPreproccessData).then(function(){
+//		onFinnish(rdoc);
+//	})
+//},
 
 
 

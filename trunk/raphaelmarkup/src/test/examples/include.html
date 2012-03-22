@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="../../deps/jquery-1.7.1.js"></script>
+	<script src="../../deps/raphael-min.js"></script>
+<!-- 	<script type="text/javascript" src="../../rm.js"></script> -->
+	<script type="text/javascript" src="../../rm-core.js"></script>
+	<script type="text/javascript" src="../../rm-ext.js"></script>
+	<script type="text/javascript" src="../fonts/Acquaintance_400.font.js"></script>
+<title>Raphael markup - exporting any raphaël paper instance to XML</title>
+</head>
+<body>
+
+<p>in this example we show how to use include for including/reusing rm parts.
+in this example, the main document (see above) define templates, animations and a paper.
+The paper only contains a include tag that includes include_part1.xml.
+That xml contains a template call.</p>
+
+<raphael style="display: none">
+	
+	<template name="ellipseButton2">
+		<use-tag name="ellipse-button2"></use-tag>
+
+		<template-arg name="onclick" value="alert('clicked')"></template-arg>
+		<template-arg name="x" value="100"></template-arg>
+		<template-arg name="y" value="100"></template-arg>
+		<template-arg name="rx" value="10"></template-arg>	
+		<template-arg name="ry" value="10"></template-arg>
+		<template-arg name="fill" value="red"></template-arg>
+		<template-arg name="color" value="black"></template-arg>
+		<template-arg name="text" value="black"></template-arg>
+		<template-arg name="size" value="30"></template-arg>			
+	
+		<template-body>
+			<set class="ellipseButton">
+				<ellipse x="{%= x %}" y="{%= y %}" rx="{%= rx %}" ry="{%= ry %}" 
+					fill="{%= fill %}" onclick="{%= onclick%}"					
+					onhoverin="rm.animate(this, 'borderglowing1', 2000)"
+					></ellipse>
+				<print font="Acquaintance" fill="{%= color %}" x="{%= x-rx*1.5 %}" 
+					y="{%= y %}" onclick="{%= onclick%}" size="{%= size %}">
+					
+					{%= text%}</print>
+			</set>
+		</template-body>
+		
+	</template>
+
+	<paper x="20" y="110" width="650" height="600">
+	
+		<include src="include_part1.xml"></include>
+		<rect x="2" y="2" width="100" height="100"></rect>
+		
+	</paper>
+	
+	<animation id="borderglowing1">	
+		<scene ellapse="0%" stroke-width="10" stroke="red" easing="easy-out"></scene>
+		<scene ellapse="33%" stroke-width="40" stroke="blue" easing="easy-out"></scene>
+		<scene ellapse="66%" transform="s0.6 r33" stroke-width="5" stroke="yellow" easing="easy-out"></scene>
+		<scene ellapse="100%" transform="S1.0 R0" fill="red" easing="elastic"></scene>
+	</animation>
+		
+</raphael>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+	debugger;
+	rm.render();
+});
+</script>
+</body>
+</html>

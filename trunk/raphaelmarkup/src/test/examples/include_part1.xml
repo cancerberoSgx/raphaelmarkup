@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- this is a part of indexrm.xml document included with &lt;include tag -->
+<ellipse-button2 x="170" y="100" rx="80" ry="21" text="hiiii" size="20"
+	onclick="myapp.openSection('#section1PaperEl')"></ellipse-button2>

@@ -4,7 +4,7 @@
 <html lang="en-US">
 <head>
 <!-- 	<script src="../deps/jquery-1.7.1.min.js"></script> -->
-	<script src="../deps/raphael-min.js"></script>
+	<script src="../deps/raphael.js"></script>
 <!--   	<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" /> -->
 <!-- 	<script type="text/javascript" src="qunit.js"></script> -->
 <!-- 	<script type="text/javascript" src="../rm.js"></script> -->
@@ -25,20 +25,54 @@
  
 
 <script type="text/javascript">
-var p = Raphael(2, 2, 400, 400);
-var txt1 = p.print(100, 100, "text1", p.getFont("my underwood"), 66).attr({fill: "red"});
-alert(txt1.length);
 
-var txt2 = p.print(200, 100, "text1", p.getFont("Acquaintance"), 66).attr({fill: "blue"});
-alert(txt2.length);
+// t.attr("text", tempText.substring(1));
+
+/**
+ * @return a new text shape
+ */
+function textWrapp(paper, content, width) {
+	var t = paper.text(width, width).attr('text-anchor', 'start');	
+	var words = content.split(" ");
+	var tempText = "";
+	for (var i=0; i<words.length; i++) {
+	  t.attr("text", tempText + " " + words[i]);
+	  if (t.getBBox().width > maxWidth) {
+	    tempText += "\n" + words[i];
+	  } else {
+	    tempText += " " + words[i];
+	  }
+	}
+	t.attr("text", tempText.substring(1));
+	return t;
+}
+
+function textWrapp2(t, width) {
+//	var t = paper.text(width, width).attr(attrs).attr('text-anchor', 'start');
+	t.attr({'text-anchor': 'start'});
+	var	content = t.attr("text"), 
+		words = content.split(" "), tempText = "";
+	for (var i=0; i<words.length; i++) {
+	  t.attr("text", tempText + " " + words[i]);
+	  if (t.getBBox().width > maxWidth) {
+	    tempText += "\n" + words[i];
+	  } else {
+	    tempText += " " + words[i];
+	  }
+	}
+	t.attr("text", tempText.substring(1));
+}
 
 
-// alert(txt1.length);
-// txt1.click(function() {
-//     txt1.transform("s 0.5");
-//     alert(txt1.length+"");
-// });
+var r = Raphael(0, 0, 500, 500);
+// var t = r.text(100, 100).attr('text-anchor', 'start');
+var maxWidth = 100;
+
+var content = "Mauris mauris ante, blandit et, ultrices a, suscipit eget, quam. Integer ut neque. Vivamus nisi metus, molestie vel, gravida in, condimentum sit amet, nunc. Nam a nibh. Donec suscipit eros. Nam mi. Proin viverra leo ut odio. Curabitur malesuada. Vestibulum a velit eu ante scelerisque vulputate. ";
+var t = r.text(100, 100, content).attr('text-anchor', 'start');
+textWrapp2(t, maxWidth); 
 </script>
+
 
 </body>
 </html>
