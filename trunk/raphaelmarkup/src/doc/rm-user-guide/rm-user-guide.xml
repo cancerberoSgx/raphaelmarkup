@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?xml-stylesheet type="text/xsl" href="docbook-xsl/xhtml/docbook.xsl"?> 
+
+<article version="5.0" xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:svg="http://www.w3.org/2000/svg"
+         xmlns:m="http://www.w3.org/1998/Math/MathML"
+         xmlns:html="http://www.w3.org/1999/xhtml"
+         xmlns:db="http://docbook.org/ns/docbook">
+  <info>
+    <title>raphaelMarkup User Guide</title>
+
+    <author>
+      <personname><firstname>Sebastián</firstname><surname>Gurin</surname></personname>
+
+      <affiliation>
+        <orgname>softpoint</orgname>
+      </affiliation>
+    </author>
+
+    <pubdate>06-17-2010</pubdate>
+  </info>
+  
+  <abstract><para>raphaelMarkup User reference and guide</para></abstract>
+   
+  <revhistory>  
+    <revision>
+      <revnumber>0.01</revnumber>
+      <date>20 March 2012</date>
+      <authorinitials>sgurin</authorinitials>
+      <revremark>Initial revision and release with only some sections</revremark>
+    </revision>
+  
+  </revhistory>
+  
+   <section id="sec-about-this-document">
+    <title>About this document</title>
+  	<para>This document is available in the following formats:</para>  
+  	<orderedlist>    
+	  <listitem><formalpara><title>pdf</title><para>
+	  <ulink url="../rm-user-guide.pdf">raphaelMarkup User Guide</ulink></para></formalpara></listitem>
+	  
+	  <listitem><formalpara><title>html fragmented</title><para>
+	  <ulink url="../rm-user-guide-htmls">raphaelMarkup User Guide</ulink></para></formalpara></listitem>
+	  
+	  <listitem><formalpara><title>docbook (sources) </title><para>
+	  <ulink url="../rm-user-guide.xml">raphaelMarkup User Guide</ulink></para></formalpara></listitem>
+	  
+	  <listitem><formalpara><title>download htmls</title><para>
+	  <ulink url="../rm-user-guide-htmls.tgz">raphaelMarkup User Guide</ulink></para></formalpara></listitem>
+  
+  	</orderedlist>
+  </section>
+  
+  
+  <section id="sec-introduction">
+    <title >Introduction</title>
+
+    <para> blablabal. </para>
+    
+    <para><ulink url="http://rapaheljs.com">raphaël</ulink></para>    
+    
+    
+    
+  	<programlisting>lkasjdlksad();
+  	</programlisting>
+  </section>
+  
+   
+</article>
