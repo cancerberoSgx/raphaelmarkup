@@ -18,6 +18,9 @@ the user can control some things about these circle creation using template para
 	
 <template name="strange1">
 
+<!-- 	with use-tag we can define a custom tag for use our template  -->
+	<use-tag name="strange1-tag"></use-tag>
+
 	<!-- 	define our template first. this tempalte 
 	is a strange set with random circles inside  -->	
 
@@ -89,6 +92,11 @@ the user can control some things about these circle creation using template para
 <!-- 	because you cannot name your parameters "id", "class" or "name" -->
 	<template-use class="strange1Class1" name="strange1" 
 		cx="150" cy="320" size="160" circleCount="78" circleMaxRadius="50"></template-use>
+		
+		
+		or use the tag defined with use-tag eleent in template definition:
+		<strange1-tag class="strange1Class1" name="strange1" 
+		cx="250" cy="220" size="160" circleCount="78" circleMaxRadius="50"></strange1-tag>
 </paper>
 
 <style>

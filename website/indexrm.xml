@@ -9,7 +9,8 @@
 	
 <!-- 	templates -->
 
-	<template name="ellipseButton">
+	<template name="ellipseButton1">
+		<use-tag name="ellipse-button"></use-tag>
 
 		<template-arg name="onclick" value="alert('clicked')"></template-arg>
 		<template-arg name="x" value="100"></template-arg>
@@ -36,6 +37,36 @@
 	</template>
 
 
+	<template name="ellipseButton2">
+		<use-tag name="ellipse-button2"></use-tag>
+
+		<template-arg name="onclick" value="alert('clicked')"></template-arg>
+		<template-arg name="x" value="100"></template-arg>
+		<template-arg name="y" value="100"></template-arg>
+		<template-arg name="rx" value="10"></template-arg>	
+		<template-arg name="ry" value="10"></template-arg>
+		<template-arg name="fill" value="red"></template-arg>
+		<template-arg name="color" value="black"></template-arg>
+		<template-arg name="text" value="black"></template-arg>
+		<template-arg name="size" value="30"></template-arg>			
+	
+		<template-body>
+			<set class="ellipseButton">
+				<ellipse x="{%= x %}" y="{%= y %}" rx="{%= rx %}" ry="{%= ry %}" 
+					fill="{%= fill %}" onclick="{%= onclick%}"					
+					onhoverin="rm.animate(this, 'borderglowing1', 2000)"
+					></ellipse>
+				<print font="Acquaintance" fill="{%= color %}" x="{%= x-rx*1.5 %}" 
+					y="{%= y %}" onclick="{%= onclick%}" size="{%= size %}">
+					
+					{%= text%}</print>
+			</set>
+		</template-body>
+		
+		
+		
+	</template>
+
 
 <!-- header paper -->
 
@@ -56,10 +87,39 @@
 			onhoverout="rm.getShape(this).animate({transform: 'R 0'}, 1000, '&lt;');"></imag>
 		
 		<ellipse x="470" y="300" rx="460" ry="100"></ellipse>
-		<circle  cx="470" cy="300" r="40" fill="red" 
-			onclick="myapp.openSection('#section1PaperEl')"></circle>
+<!-- 		<circle  cx="470" cy="300" r="40" fill="red"  -->
+<!-- 			onclick="myapp.openSection('#section1PaperEl')"></circle> -->
 		
 		
+		<animation id="rectamin1">	
+			<scene ellapse="55%" transform="S2.5 R144" easing="easy-in"></scene>
+			<scene ellapse="100%" transform="S1.0 R0" easing="elastic"></scene>
+		</animation>
+		<rect  x="330" y="350" width="100" height="100"
+			fill="url(imgs/lblue018.gif)"
+			onhoverin="rm.animate(this, 'rectamin1', 3000)"
+			>
+		</rect>
+		
+		<ellipse-button2 x="470" y="300" rx="80" ry="21" text="about" size="20"
+			onclick="myapp.openSection('#section1PaperEl')"></ellipse-button2>
+			
+			
+		<include src="part1.xml"></include>
+		
+		<text x="100" y="200" width="200" fill="blue" font-size="17px">
+		
+		Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus euismod tempor leo in facilisis. Ut ac turpis turpis, eget rhoncus risus. Duis quis mauris non orci tincidunt ullamcorper sed et velit. Proin vestibulum tristique eros quis dapibus. Etiam ullamcorper pretium nunc a blandit. Morbi consectetur fringilla mauris vel mattis. Maecenas orci metus, sollicitudin non suscipit id, vehicula et lorem. Maecenas ut tortor a libero suscipit tempus. Duis auctor velit id mauris eleifend vitae sodales mauris vestibulum. Praesent mi urna, egestas luctus imperdiet eu, consequat eget metus. Morbi blandit, risus sit amet aliquam vehicula, elit nisl convallis arcu, id accumsan quam ante ut neque.
+
+Phasellus eget velit nec ligula eleifend rhoncus et non urna. Fusce ornare, sem ut scelerisque blandit, augue lorem rutrum arcu, congue ullamcorper est turpis vitae nunc. Suspendisse placerat fermentum velit, a vestibulum ligula feugiat quis. Donec at tellus justo, quis luctus lorem. Mauris facilisis pharetra vulputate. Cras vel tempor magna. Nunc cursus quam ac ipsum egestas a mollis nunc faucibus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In tristique orci id eros vestibulum sit amet dignissim tortor iaculis. Donec vitae turpis pretium orci egestas imperdiet. Phasellus tristique viverra orci sed auctor. Donec blandit nisl ut magna interdum congue suscipit est aliquet. Morbi orci sapien, accumsan id sodales a, elementum pharetra elit. Ut aliquet scelerisque vehicula.
+
+Quisque elit est, pharetra id consectetur quis, fringilla sed elit. Aenean magna urna, facilisis ut rutrum ac, tristique in lorem. Maecenas rutrum purus vel nibh faucibus at consectetur tortor laoreet. Quisque gravida nisl in lorem ultrices suscipit. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Mauris laoreet, arcu id ultricies accumsan, nibh nisi venenatis dolor, ac mattis orci turpis bibendum turpis. Duis rhoncus, augue eget gravida rhoncus, lorem nibh ultricies metus, id dapibus magna erat id dolor. Nam eleifend laoreet turpis, id blandit neque tempus sed. Sed rhoncus, erat nec mattis sagittis, ante mauris malesuada eros, eu lobortis arcu massa in sem.
+
+Nam tincidunt, felis eu semper posuere, elit erat tristique purus, eget tristique lectus dui id turpis. Vivamus tortor metus, euismod sed posuere id, pulvinar sit amet augue. Pellentesque adipiscing commodo orci at fringilla. Nunc eget elit eu dolor ultricies aliquet at eu neque. Sed congue volutpat ipsum, vitae tempor tellus rutrum ut. Morbi eu nulla vitae lacus dictum porta. Suspendisse nec purus nisi, eget vulputate nulla. Vivamus vel felis sem. Maecenas sollicitudin convallis arcu eu condimentum. Integer eu dictum erat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ullamcorper lobortis sapien, vel sodales lorem ornare a.
+
+Proin elit nibh, facilisis id porttitor porta, ullamcorper vitae diam. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nulla mauris, cursus varius ultricies sit amet, ornare at libero. Aenean in pulvinar ipsum. Phasellus sit amet nibh lectus. Nulla rhoncus lacinia ligula. Ut hendrerit, elit vitae dapibus tempus, odio justo sagittis sapien, at faucibus mauris velit quis purus. Nullam volutpat, augue sit amet ornare aliquam, mi justo sollicitudin enim, et mollis est nibh vel leo. Praesent cursus nisi sit amet sem interdum faucibus. Nam ipsum lectus, dictum a interdum nec, feugiat id elit. Morbi tellus sapien, tincidunt et sagittis non, rhoncus non justo. Duis bibendum feugiat sem, ultrices ultricies ipsum ultricies a. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Praesent in nunc ut nunc suscipit consequat. 
+
+		</text>
 	</paper>
 	
 	
@@ -70,20 +130,34 @@
 		containerId="section1PaperEl">
 		<rect x="0" y="0" width="700" height="600" fill="white"></rect>
 		<text x="100" y="200">hello</text>
-		<template-use name="ellipseButton"  class="closebutton" 
-			x="150" y="320" rx="40" ry="10" text="close"
-			onclick="myapp.closeSection('section1PaperEl')"
 			
+		<template-use name="ellipseButton1"  class="closebutton" 
+			x="150" y="320" rx="40" ry="10" text="close"
+			onclick="myapp.closeSection('#section1PaperEl')"			
 			></template-use>
+			
+		<ellipse-button1 x="50" y="320" rx="50" ry="11" text="close2"
+			onclick="myapp.closeSection('#section1PaperEl')"></ellipse-button1>
+			
+		<ellipse-button2 x="600" y="100" rx="80" ry="21" text="close3" size="20"
+			onclick="myapp.closeSection('#section1PaperEl')"></ellipse-button2>
+			
 	</paper>
 	
 	
 	
-	
+<!-- 	animations -->
 	<animation id="textglowing1">	
 		<scene ellapse="0%" fill="black"></scene>
 		<scene ellapse="33%" transform="S1.5" easing="easy-in"></scene>
 		<scene ellapse="66%" transform="s0.6 r33" easing="easy-out"></scene>
+		<scene ellapse="100%" transform="S1.0 R0" fill="red" easing="elastic"></scene>
+	</animation>
+	
+	<animation id="borderglowing1">	
+		<scene ellapse="0%" stroke-width="10" stroke="red" easing="easy-out"></scene>
+		<scene ellapse="33%" stroke-width="40" stroke="blue" easing="easy-out"></scene>
+		<scene ellapse="66%" transform="s0.6 r33" stroke-width="5" stroke="yellow" easing="easy-out"></scene>
 		<scene ellapse="100%" transform="S1.0 R0" fill="red" easing="elastic"></scene>
 	</animation>
 	

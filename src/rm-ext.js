@@ -11,7 +11,96 @@
  * * * * */
 
 
+
+/* * * * ajax include other xml files - this is an asynchronous preproccessing example. 
+ * async preproccessing are different from normal preproccesing.async 
+ * preproccesing handlers accept a callback that will be called on preprocecss 
+ * task end. the original dom doc object is be modified (¿async access to dom if 
+ * many?). 
+ * 
+ * original dom  --- async preproccessing --->  dom1 ---normal proproccessing ---> dom2  ---- render  ---> {dom2, paper1}  --- postrendering ----> {dom2, paper2}  
+ */
+
+
+//rm._include_handlers={};
+//rm._include_registerUrl=function(rdoc, dom, url, h) {
+//	if(!rm._include_handlers[rdoc])
+//		rm._include_handlers[rdoc]={};
+//	rm._include_handlers[rdoc][dom]=h;
+//	return $.ajax({
+//		"url": url,
+//		"success": function(data) {
+//			var domToInclude= $(data);
+//			domToInclude.insertAfter(this["dom"]);
+//			this["dom"].remove();
+//			//callback
+//			rm._include_handlers[this["rdoc"]][this["dom"]]();
+//		},
+//		"context": {"rdoc": rdoc, "dom": dom},
+//		"error": errorHandler,
+//		"dataType": "xml"
+//	});
+//}
+//rm._include_asyncPreproccess = function(rdoc) {
+//	var data=[];
+//	rdoc.find("include[src]").each(function(){
+//		data.push({
+//			"ajax": rm._include_registerUrl(rdoc, $(this), $(this).attr("src"))
+//		});
+//	});
+//
+//	return $.when(data).then(function(results){		
+//	});
+//	
+////	rm._include_onFinnish=onFinnish;
+//}
+//rm.asyncPreproccessRegister(rm._include_asyncPreproccess);
+
+
+
+
+
+////rm._include_handlers={};
+//rm._include_registerUrl=function(rdoc, dom, url, h) {
+////	if(!rm._include_handlers[rdoc])
+////		rm._include_handlers[rdoc]={};
+////	rm._include_handlers[rdoc][dom]=h;
+//	return $.ajax({
+//		"url": url,
+//		"success": function(data) {
+//			var domToInclude= $(data);
+//			$(domToInclude.prop("documentElement")).insertAfter(this["dom"]);
+//			this["dom"].remove();
+//			
+//			alert(rm.toXML(rdoc));
+//			rm.preproccess(rdoc);
+//			alert(rm.toXML(rdoc))
+//			
+//			rm.update(this["rdoc"], this["dom"].parent());
+//			rm._postRendering(rdoc);
+//		},
+//		"context": {"rdoc": rdoc, "dom": dom},
+//		"dataType": "xml"
+//	});
+//}
+//rm._include_asyncPreproccess = function(rdoc) {
+//	var data=[];
+//	rdoc.find("include[src]").each(function(){
+//		rm._include_registerUrl(rdoc, $(this), $(this).attr("src"));		
+//	});
+//	return rdoc;
+//}
+//rm.preproccessRegister(rm._include_asyncPreproccess);
+
+
+
+
+
+/* * * * * * TEMPLATE * * * * */
 rm._preproccess_template1_rocTmpls = {};
+
+rm._preproccess_template1_useTags = {};
+
 /**
  * main function for preproccessing templates. 
  * This function receives the DOM with templates elements
@@ -19,8 +108,12 @@ rm._preproccess_template1_rocTmpls = {};
  */
 rm._preproccess_template1 = function(rdoc) {
 	
+	if(!rdoc) {
+		debugger;
+		return;
+	}
 	rm._preproccess_template1_rocTmpls[rdoc]={};
-
+	rm._preproccess_template1_useTags[rdoc]={};
 	
 	//first read each template
 	rdoc.find("template").each(function(index){
@@ -53,27 +146,47 @@ rm._preproccess_template1 = function(rdoc) {
 //		}catch(ex) {
 //			rm._error("cannot ghet template body html - "+e);
 //		}
-		var tmpl = rm.tmpl(tmplCode);
-		
-		rm._preproccess_template1_rocTmpls[rdoc][$(this).attr("name")] = {
+		var tmpl = rm.tmpl(tmplCode), tmplInfo = {
+			"name": $(this).attr("name"),
 			"tmpl": tmpl,
 			"data": data, 
 			"paramDefaultValues": paramDefaultValues
 		};
 		
+		rm._preproccess_template1_rocTmpls[rdoc][$(this).attr("name")] = tmplInfo;
+		
+		//now see if a use-tagname exists and if so, register the tagname to this template
+		if($(this).find("use-tag").size()>0 && $(this).find("use-tag").attr("name")) {
+			rm._preproccess_template1_useTags[rdoc][$(this).find("use-tag").attr("name")]=tmplInfo;
+		}
+		
 		//last remove the template element from DOM
-		$(this).remove();
+//		$(this).remove();
 	});
 
-	//now apply all templates in all <use tags
-	rdoc.find("template-use").each(function(){
-		var name = $(this).attr("name");
-		if(!name) {
+	//now apply all templates in all <use tags and custom use-tag s
+	var sel = "template-use";
+	for(var i in rm._preproccess_template1_useTags[rdoc]) {
+		sel+=", "+i;
+	}
+//	alert(sel+" - "+rdoc.find(sel).size());
+	rdoc.find(sel).each(function(){
+		var name = $(this).attr("name"),  
+			tagName = rm._getTagName($(this)), 
+			templateObj = null;
+		
+//		debugger;
+		if(!name&&tagName=="template-use") {
 			return;
 		}
+		if(tagName!="template-use") {
+			name=rm._preproccess_template1_useTags[rdoc][tagName]["name"];
+		}
+		
 		var tmplData = {}, 
 			templateObj = rm._preproccess_template1_rocTmpls[rdoc][name];
 		
+//		alert("name: "+name)
 		if(!rm._preproccess_template1_rocTmpls[rdoc][name]) {
 			rm._error("<use>_ "+"with non existent template: "+name);
 			return; //template not found.
@@ -159,8 +272,8 @@ rm._preproccess_template1 = function(rdoc) {
 		//TODO: add the class <use> to generated documentelement 
 	});
 	//also remove all template and template-use elements 
-	rdoc.remove("template");
-	rdoc.remove("template-use");
+//	rdoc.remove("template");
+//	rdoc.remove("template-use");
 	return rdoc;
 };
 
@@ -204,6 +317,8 @@ rm._tmplCreateFunc = function(str, data) {
 	return f;
 };
 rm._tmplCache={};
+
+
 
 
 
@@ -330,6 +445,8 @@ rm._percentDim_postRendering = function(rdoc) {
 		
 	});
 };
+
+
 
 
 
@@ -524,6 +641,10 @@ rm._printUnderline_do = function(text, paper, color, width, distance, dasharray,
 
 
 
+
+
+
+
 //on path - don't work anymore.
 
 //rm._printonpath_do = function(text, paper, pathStr) {
@@ -562,6 +683,8 @@ rm._printUnderline_do = function(text, paper, color, width, distance, dasharray,
 
 
 
+
+
 /* * * * * EVENTS * * * * */
 /*events onclick, ondblclick, onmouseoever, etc are available
 in the event's code "this" refers to the jquery DOM object pointing to xml event source element  
@@ -569,6 +692,8 @@ and "evt" is the event object. if you wnt to get the raphal shape use rm.getShap
 */
 rm._events_postRendering = function(rdoc) {
 	rdoc.find("imag, text, print, circle, ellipse, rect, path").each(function(){
+		if(!rm.getShape($(this)))
+			return; //could be caused by bad xml 
 		if($(this).attr("onclick")) {
 			rm.getShape($(this)).click(new Function("evt",$(this).attr("onclick")), $(this));
 		}
@@ -621,7 +746,11 @@ rm._events_postRendering = function(rdoc) {
 
 
 
+
+
+
 /* * * * scripts * * * */
+
 rm._script_preproccess = function(rdoc) {
 	rdoc.find("script").each(function(){
 		try {
@@ -636,7 +765,66 @@ rm._script_preproccess = function(rdoc) {
 
 
 
+
+/* * * * * text : width-wrapping 
+ * this extension modify text content string adding |n chars to wrapp ina given width. * * * */
+/**
+ * @param t a raphael text shape
+ * @param width - pixels to wrapp text width
+ * modify t text adding new lines characters for wrapping it to given width.
+ */
+rm._textWrapp = function(t, width) {
+	var content = t.attr("text");
+	var abc="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	t.attr({'text-anchor': 'start', "text": abc});
+	var letterWidth=t.getBBox().width / abc.length;
+	t.attr({"text": content});
+	var words = content.split(" "), x=0, s=[];
+	for ( var i = 0; i < words.length; i++) {
+		var l = words[i].length;
+		if(x+l>width) {
+			s.push("\n")
+			x=0;
+		}
+		else {
+			x+=l*letterWidth;
+		}
+		s.push(words[i]+" ");
+	}
+	t.attr({"text": s.join("")});
+};
+
+rm._text_widthrwrappPostRendering = function(rdoc) {
+	rdoc.find("text[width]").each(function(){
+		var t = rm.getShape(this);
+		rm._textWrapp(t, parseInt($(this).attr("width")));
+	});;
+	return rdoc;
+}
+
+
+
+
+
 /* * * * * tofront - toback attributes * * * * */ 
+
+rm._toFrontBackPostRendering = function(rdoc) {
+	rdoc.find("*[tofront]").each(function(){
+		 rm.getShape(this).toFront();
+	});;
+	rdoc.find("*[toback]").each(function(){
+		 rm.getShape(this).toBack();
+	});;
+	return rdoc;
+	return rdoc;
+}
+
+
+
+
+
+
+
 
 
 
@@ -654,5 +842,6 @@ rm.preproccessRegister(rm._anims_preproccess);
 rm.postRendererRegister(rm._events_postRendering);
 //rm.postRendererRegister(rm._printonpath_postRendering);
 rm.postRendererRegister(rm._printunderline_postRendering);
-
+rm.postRendererRegister(rm._text_widthrwrappPostRendering);
+rm.postRendererRegister(rm._toFrontBackPostRendering);
 

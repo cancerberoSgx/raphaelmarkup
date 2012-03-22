@@ -20,6 +20,7 @@
 	<link rel="stylesheet" href="index.css" type="text/css" media="screen" />
 	
 	<script type="text/javascript" src="../src/test/fonts/my-underwood.cufonfonts.js"></script>
+	<script type="text/javascript" src="../src/test/fonts/Acquaintance_400.font.js"></script>
 	
 	<meta charset="UTF-8"/>
 	
@@ -64,10 +65,10 @@ rm.renderAjax("indexrm.xml", function (rdoc) {
 myapp = {
 	openSection: function(el) {
 		$(".section").hide();
-		$(el).show();
+		$(el).show(1000);
 	},
 	closeSection: function(el) {
-		$(".section").hide();
+		$(".section").hide(1000);
 	},
 	"":""
 };
