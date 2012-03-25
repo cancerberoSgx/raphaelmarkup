@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?xml-stylesheet type="text/xsl" href="docbook-xsl/xhtml/docbook.xsl"?> 
+<!DOCTYPE article [
+    <!ENTITY R "raphaël">
+    <!ENTITY RM "raphaëlMarkup">
+]>
 
 <article version="5.0" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -10,7 +13,7 @@
          xmlns:html="http://www.w3.org/1999/xhtml"
          xmlns:db="http://docbook.org/ns/docbook">
   <info>
-    <title>raphaelMarkup User Guide</title>
+    <title>&RM; User Guide</title>
 
     <author>
       <personname><firstname>Sebastián</firstname><surname>Gurin</surname></personname>
@@ -23,7 +26,7 @@
     <pubdate>06-17-2010</pubdate>
   </info>
   
-  <abstract><para>raphaelMarkup User reference and guide</para></abstract>
+  <abstract><para>&RM; User Guide and Reference</para></abstract>
    
   <revhistory>  
     <revision>
@@ -58,15 +61,254 @@
   <section id="sec-introduction">
     <title >Introduction</title>
 
-    <para> blablabal. </para>
+    <para>In this section we will try to explain what is &RM;. </para>
     
-    <para><ulink url="http://rapaheljs.com">raphaël</ulink></para>    
+    <para><ulink url="http://rapaheljs.com">&R;</ulink> is a portable and easy to use javascript library for vector drawing.
+    This project, <ulink url="http://code.google.com/p/raphaelmarkup">&RM;</ulink> 
+    brings &R; API to XML, so users can "do &R; drawing" in XML.</para>
+    
+    <para>This means that &RM; defines a XML syntax for &R; API and implements a 
+    javascript engine for rendering XML Documents in raphael </para>    
+    
+    <mediaobject>
+    <imageobject> <imagedata fileref="img/rm1.png" format="PNG"/> </imageobject>
+    <textobject> <phrase>first look at raphaelmarkup as a component</phrase> </textobject>
+    </mediaobject>
+    
+    <para>&RM; can be divided in two main sections. First, the core part that define and implement a base &R; XML API. 
+    It also implements a simple xml preproccessing and raphael shape post rendering extension mechanism. </para>
+    <para>The sencond part is called EXT because the are a bunch of CORE EXTENSIONS 
+    that perform some job before XML proccess (preproccessing) or after raphael shape rendering (postrendering). </para>    
+    
+    <para>While the core module peovide simple base and definition for shape rendering from XML the extensions 
+    module provide very usefull utilities and API support, like 
+    1) animation XML definition and usage tools, 2) CSS styles for shapes, 3) templates javascript, 
+    4) relative bounds, 5) script and events, etc.
+    So the following is a more elaborated perspective view of &RM; :  </para>
+    
+    <mediaobject>
+    <imageobject> <imagedata fileref="img/rm2.png" format="PNG"/> </imageobject>
+    <textobject> <phrase>complete look at raphaelmarkup as a component</phrase> </textobject>
+    </mediaobject>
     
     
     
-  	<programlisting>lkasjdlksad();
-  	</programlisting>
   </section>
   
    
+   
+   
+   <section><title>Getting started</title>
+   
+   <para>So do you want to draw webpages using XML? Let's get some fun with &RM;. First
+   download latest version from 
+   <ulink url="code.google.com/p/raphaelmarkup/">&RM; project site</ulink>. 
+   </para>
+   
+   From all the files inside the .zip 
+   </section>
+   
+   
+   
+   
+   
+     
+  <section id="raphael-tags">
+    <title >IN this section we will describe &R; tags. </title>
+    
+    
+    <section><title>raphael</title>
+    <para>It is the main document tag. a valid &RM; document consist in a single &lt;raphael> tag. It contains papers, animations., styles, etc. </para>
+    </section>
+    
+    <section><title>paper</title>
+    <para>Defines a new paper</para>
+    </section>
+    
+    <section><title>rect</title><para></para></section>
+    <section><title>circle</title><para></para></section>
+    <section><title>path</title><para></para></section>
+    <section><title>ellipse</title><para></para></section>
+    <section><title>set</title><para></para></section>
+    <section><title>text</title><para></para></section>
+    <section><title>print</title><para></para></section>
+    
+    
+
+    <para> blablabal. </para>
+    
+    <para><ulink url="http://rapaheljs.com">raphaël</ulink></para>  
+  </section>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+   <section id="sec-extensions">
+    <title >Extensions</title>
+	<para>In this section we will document each extension specifics.</para>
+	<para>TODO: Explain exactly what extensions are - preproccesing - postrendering </para>
+	
+	
+	
+	
+    <section>
+    <title>CSS style</title>
+    <para>Since we are working with XML DOM we spect to define styles of elements nusing CSS for 
+    setting selectors attribute values. 
+    &RM; include a extension for doing this that will parse CSS like code </para>
+    
+    <para>
+    It is important to know that current CSS like support is not CSS. Some CSS language rules are not 
+    supported or differet than CSS. For example CSS selector deepths. The main difference is no selector depth
+    is respected: a CSS sentence will always overwrite previus selected elements.
+	</para>
+	
+	<para>
+    Another big firreference is that &lt;set> childrens (the only &R; box) ) won't inherith parent's style. </para>
+    
+    </section>
+    
+    
+      
+    
+    
+    <section><title>Events</title>
+    <para>The events extension provide support for writing events handler functions in XML attributes onclick, etc just like 
+    in html code. </para>
+    </section>
+    
+    
+    <section><title>Animations</title>
+    <para>The animation extension provide support for two things 1) be able to define animations in XML and 
+    2) provide utilities for easy animation calling using javascript from eventshandlers and other js code.</para>
+    
+    <para>In the following example source code, we show how easily is to call an animation defined in xml from an event handler: </para>
+    <programlisting>
+    
+&lt;raphael>
+&lt;animation id="textglowing1">	
+	&lt;scene ellapse="0%" fill="black">&lt;/scene>
+	&lt;scene ellapse="33%" transform="S1.5" easing="easy-in">&lt;/scene>
+	&lt;scene ellapse="66%" transform="...s0.6 r33" easing="easy-out">&lt;/scene>
+	&lt;scene ellapse="100%" transform="S1.0 R0" fill="red" easing="elastic">&lt;/scene>
+&lt;/animation>
+
+&lt;paper x="0" y="0" width="950" height="1000">
+	&lt;rect  x="330" y="350" width="100" height="100"
+		fill="url(imgs/lblue018.gif)"
+		onhoverin="rm.animate(this, 'textglowing1', 3000)"
+		>
+	&lt;/rect>
+&lt;/paper>
+&lt;/raphael>
+    </programlisting>
+    </section>
+	
+	
+	
+	
+	<section><title>script</title>
+	<para>A &lt;script> tag just like html's is supported for putting (javascript) scripts inside
+	&RM; markup. </para>
+	</section>
+	
+	
+	<section><title>include</title>
+	<para>&RM; supports an include tag that can be used to include a markup in other file to current document. 
+	Tee file content is reading dynamicaly using an ajax request. This is not a &RM; extension but a core mechanism available for 
+	include other file contents. </para>
+	</section>
+	
+	
+	 <section>
+	 <title>Percentual bounds</title>
+	 
+	 <para>&RM; comes with an extension that let specify a shape's dimension and 
+	 position in relative coordinates. If a dimension/position attribute 
+	 values ends with '%' it is precalculated according to its parent dimension/position. 
+	 To shapes that do not support bounding attrs, like set and path, x, y, width, and height 
+	 artificila attributes can be used. In the case of a set, you can assign a set a 
+	 absolute or percentual position/size, and its children can 
+	 spcify relative bounding attributes like x="80%" or height="20%" and they will 
+	 be preproccessed relative to set's base..</para>
+	 
+	 <programlisting>	 	 
+	 Example: the following markup: 
+	 
+&lt;paper x="0" y="0" width="400" height="400">	
+	&lt;set class="set1" x="80%" y="80%" width="20%" height="20%">
+		&lt;rect x="0%" y="0%" width="100%" height="100%" fill="blue">&lt;/rect>
+		&lt;text x="50%" y="50%">blue rectangle bottom-left &lt;/text>		
+	&lt;/set>	
+&lt;/paper>
+
+Will be translated to the following markup at preproccessing
+
+&lt;paper x="0" y="0" width="400" height="400">	
+	&lt;set class="set1" x="10%" y="10%" width="20%" height="20%">
+		&lt;rect x="40" y="40" width="80" height="80" fill="blue">&lt;/rect>
+		&lt;text x="200" y="200">blue rectangle bottom-left &lt;/text>		
+	&lt;/set>	
+&lt;/paper>
+	 </programlisting>
+	 
+	 
+	 <para>In the case of paths, only position and width will work. Paths are special. The other base raphael 
+	 shapes like rects, circles, ellipses all have bounding attrinbutes like x, y, cx, cy, width, height, rx, 
+	 ry, radious. But path hasn't, because the bounds of the shape is defined by the shape 
+	 string itself. This extension adds support for path, x, y, and width attributes that can be percentual or 
+	 not, but if specified, will force a path to translate/scale to fit specified x,y,width (apppending 
+	 transformation at postrendering.)</para>
+	 <para>in the case of print will be the same as paths</para>
+	 <para>In the case of text only position will work.</para>
+	 </section>
+  </section>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <section><title>Exporting and loading from other sources. </title>
+  
+  <para>&RM; is designed to be integrated in a number of ways. It not only serves for drawing in XML but also
+  export and load data from different format and sources, load a native &R; javascript paper object to a XML DOM
+  for reading/modifying and later re-render the original paper for updating changes. In this section we will disccuss 
+  this and other related scenarios. </para>
+  
+  <section><title>Reading and writing XML</title>
+  <para></para></section>
+  
+  
+  <section><title>Reading and writing JSON</title>
+  <para></para></section>
+  
+   <section><title>Reading a &R; paper in a XML DOM and updating changes</title>
+   
+   
+  <para></para></section>
+  
+  </section>
+  
 </article>

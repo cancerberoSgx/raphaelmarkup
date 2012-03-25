@@ -32,7 +32,8 @@ _doInclude: function(rdoc, onFinnish) {
 				var domToInclude = $(data)
 				rm._includeCount--;				
 				if(rm._includeCount>=0) {
-					$(domToInclude.prop("documentElement")).insertAfter(this["rmdom"]);
+//					alert(domToInclude.find("rm-include>*").size());
+					$(domToInclude.prop("documentElement")).children().insertAfter(this["rmdom"]);
 					this["rmdom"].remove();
 				}
 				if(rm._includeCount==0) {
@@ -391,11 +392,13 @@ _renderCircle: function(dom, paper) {
  * We iterate using paper.forEach that do not respect sets, only concrete shapes.
  */
 toXML: function(dom, level, tab) {
+	if(!tab)
+		tab="";
 	if(rm.isDocument(dom)) {		
 		dom=$(dom.prop("documentElement"));
 	}
-//	if(dom.prop("nodeType")!=1)
-//		return null;
+	if(dom.prop("nodeType")!=1)
+		return "";
 	var tname = rm._getTagName(dom);
 	
 	var s = "<"+tname;
@@ -409,9 +412,9 @@ toXML: function(dom, level, tab) {
 	var childs = dom.children();
 	for ( var i = 0; i < childs.length; i++) {
 		var childXml = rm.toXML($(childs[i]), level+1, tab);
-		s+="\n"+rm._repeatStr(tab, level)+childXml;
+		s+=/*rm._repeatStr(tab, level)+*/childXml;
 	}
-	s+="\n</"+tname+">";
+	s+="</"+tname+">\n";
 	return s;
 },
 _getInmediateText: function(dom) {
@@ -428,13 +431,21 @@ _getAttributeNames: function(dom) {
 _repeatStr: function(str, times) {
 	if(str&&times) {		
 		var s = "";
-		for ( var i = 0; i < times; i++) {
-			s+=str;
-		}
+		for ( var i = 0; i < times; i++) 
+			s+=str;		
 		return s;
 	}
 	return "";
-} ,
+},
+copyAttrs: function(dom1, dom2, except) {
+	except=except||{};
+	var attrNames = rm._getAttributeNames(dom1);
+	for ( var i = 0; i < attrNames.length; i++) {
+		if(!except[attrNames[i]])
+			dom2.attr(attrNames[i], dom1.attr(attrNames[i]));
+	}
+	return dom2;
+},
 /**
  * create a new element in raphael XML dom
  * @param parent an html dom or jquery selector or object 
