@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<rm-include>
+
+<template name="ellipseButton1">
+	<use-tag name="ellipse-button"></use-tag>
+
+	<template-arg name="onclick" value="alert('clicked')"></template-arg>
+	<template-arg name="x" value="100"></template-arg>
+	<template-arg name="y" value="100"></template-arg>
+	<template-arg name="rx" value="10"></template-arg>	
+	<template-arg name="ry" value="10"></template-arg>
+	<template-arg name="fill" value="red"></template-arg>
+	<template-arg name="color" value="black"></template-arg>
+	<template-arg name="text" value="black"></template-arg>		
+
+	<template-body>
+		<set class="ellipseButton button">
+			<ellipse x="{%= x %}" y="{%= y %}" rx="{%= rx %}" ry="{%= ry %}" 
+				fill="{%= fill %}" onclick="{%= onclick%}"					
+				onhoverin="rm.getShape(this).attr('fill', 'brown')"
+				onhoverout="rm.getShape(this).attr('fill', '{%= fill %}')"
+				></ellipse>
+			<text color="{%= color %}" x="{%= x %}" y="{%= y %}" 
+				onclick="{%= onclick%}"
+				>{%= text%}</text>
+		</set>
+	</template-body>
+	
+</template>
+
+<template name="ellipseButton2">
+	<use-tag name="ellipse-button2"></use-tag>
+
+	<template-arg name="onclick" value="alert('clicked')"></template-arg>
+	<template-arg name="x" value="100"></template-arg>
+	<template-arg name="y" value="100"></template-arg>
+	<template-arg name="rx" value="10"></template-arg>	
+	<template-arg name="ry" value="10"></template-arg>
+	<template-arg name="fill" value="red"></template-arg>
+	<template-arg name="color" value="black"></template-arg>
+	<template-arg name="text" value="black"></template-arg>
+	<template-arg name="size" value="30"></template-arg>			
+
+	<template-body>
+		<set class="ellipseButton button">
+			<ellipse x="{%= x %}" y="{%= y %}" rx="{%= rx %}" ry="{%= ry %}" 
+				fill="{%= fill %}" onclick="{%= onclick%}"					
+				onhoverin="rm.animate(this, 'borderglowing1', 2000)"
+				></ellipse>
+			<print font="Acquaintance" fill="{%= color %}" x="{%= x-rx*1.5 %}" 
+				y="{%= y %}" onclick="{%= onclick%}" size="{%= size %}">
+				
+				{%= text%}</print>
+		</set>
+	</template-body>	
+</template>
+
+
+
+<template name="starButton1">
+	<use-tag name="star-button1"></use-tag>
+	<template-arg name="onclick" value="alert('clicked')"></template-arg>
+	<template-arg name="x" value="100"></template-arg>
+	<template-arg name="y" value="100"></template-arg>
+	<template-arg name="width" value="10"></template-arg>	
+	<template-arg name="height" value="10"></template-arg>
+	<template-arg name="size" value="14"></template-arg>
+	<template-arg name="text" value="hello"></template-arg>	
+
+
+<!-- 				transform="{%= 'T'+x+', '+y%}"	 -->
+<!-- 				stroke="black"			 -->
+				
+	<template-body>
+		<set class="ellipseButton button">
+
+			<path fill="red" onclick="{%= onclick%}"
+				transform="{%= 'T'+x+', '+y%}"
+				onhoverin="rm.animate(this, 'borderglowing2', 2000)">
+				M3.3999999999999986,-29.6C3.3999999999999986,-29.6,-4.600000000000001,-41,-4.600000000000001,-41C-4.600000000000001,-41,-10,-20,-10,-20C-10,-20,-28.8,-32.8,-28.8,-32.8C-28.8,-32.8,-24.8,-13.399999999999999,-24.8,-13.399999999999999C-24.8,-13.399999999999999,-44.2,-11.399999999999999,-44.2,-11.399999999999999C-44.2,-11.399999999999999,-31.400000000000002,4,-31.400000000000002,4C-31.400000000000002,4,-49.6,10,-49.6,10C-49.6,10,-34.2,21.6,-34.2,21.6C-34.2,21.6,-43.8,33.00000000000001,-43.8,33.00000000000001C-43.8,33.00000000000001,-27.4,35.00000000000001,-27.4,35.00000000000001C-27.4,35.00000000000001,-26.8,50.6,-26.8,50.6C-26.8,50.6,-14.799999999999997,34.4,-14.799999999999997,34.4C-14.799999999999997,34.4,-9.399999999999999,41.800000000000004,-9.399999999999999,41.800000000000004C-9.399999999999999,41.800000000000004,-4,30.800000000000004,-4,30.800000000000004C-4,30.800000000000004,4.200000000000003,37.800000000000004,4.200000000000003,37.800000000000004C4.200000000000003,37.800000000000004,6.800000000000004,24.199999999999996,6.800000000000004,24.199999999999996C6.800000000000004,24.199999999999996,19.6,30.800000000000004,19.6,30.800000000000004C19.6,30.800000000000004,18.199999999999996,16.800000000000004,18.199999999999996,16.800000000000004C18.199999999999996,16.800000000000004,37.800000000000004,22.800000000000004,37.800000000000004,22.800000000000004C37.800000000000004,22.800000000000004,26.199999999999996,7.399999999999999,26.199999999999996,7.399999999999999C26.199999999999996,7.399999999999999,35.00000000000001,2.6000000000000014,35.00000000000001,2.6000000000000014C35.00000000000001,2.6000000000000014,29.000000000000007,-6,29.000000000000007,-6C29.000000000000007,-6,50.6,-18.8,50.6,-18.8C50.6,-18.8,26.199999999999996,-19.4,26.199999999999996,-19.4C26.199999999999996,-19.4,33.800000000000004,-35,33.800000000000004,-35C33.800000000000004,-35,17.6,-22.8,17.6,-22.8C17.6,-22.8,19.000000000000007,-49.6,19.000000000000007,-49.6C19.000000000000007,-49.6,3.3999999999999986,-29.6,3.3999999999999986,-29.6C3.3999999999999986,-29.6,3.3999999999999986,-29.6,3.3999999999999986,-29.6C3.3999999999999986,-29.6,3.3999999999999986,-29.6,3.3999999999999986,-29.6
+			</path>
+			<print font="Acquaintance" fill="blue" stroke="blue" x="{%= x-100 %}" 
+				y="{%= y %}" onclick="{%= onclick%}" size="{%= size %}">				
+				{%= text%}</print>
+		</set>
+	</template-body>	
+</template>
+
+			
+			
+			
+
+
+	
+<!-- 	animations -->
+	<animation id="textglowing1">	
+		<scene ellapse="0%" fill="black"></scene>
+		<scene ellapse="33%" transform="S1.5" easing="easy-in"></scene>
+		<scene ellapse="66%" transform="...s0.6 r33" easing="easy-out"></scene>
+		<scene ellapse="100%" transform="S1.0 R0" fill="red" easing="elastic"></scene>
+	</animation>
+	
+	<animation id="borderglowing1">	
+		<scene ellapse="0%" stroke-width="10" stroke="red" easing="easy-out"></scene>
+		<scene ellapse="33%" stroke-width="40" stroke="blue" easing="easy-out"></scene>
+		<scene ellapse="66%" transform="s0.6 r33" stroke-width="5" stroke="yellow" easing="easy-out"></scene>
+		<scene ellapse="100%" transform="S1.0 R0" fill="red" easing="elastic"></scene>
+	</animation>
+	<animation id="borderglowing2">	
+		<scene ellapse="0%" stroke-width="10" stroke="red" easing="easy-out"></scene>
+		<scene ellapse="33%" stroke-width="40" stroke="blue" easing="easy-out"></scene>
+		<scene ellapse="66%" transform="...r33" stroke-width="5" stroke="yellow" easing="easy-out"></scene>
+		<scene ellapse="100%" transform="...r0" fill="red" easing="elastic"></scene>
+	</animation>
+	<style>
+
+#headerPaper1 .title {
+	font: my underwood;
+	size: 55;
+	underline-width: 3; 
+	underline-color: red; 
+	underline-dasharray: -.;
+	underline-opacity: 0.7;
+}
+.button {
+cursor: pointer;
+}
+	</style>
+
+	
+</rm-include>

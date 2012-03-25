@@ -7,66 +7,8 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://raphaeljs.com ../src/raphael.xsd">
 	
-<!-- 	templates -->
-
-	<template name="ellipseButton1">
-		<use-tag name="ellipse-button"></use-tag>
-
-		<template-arg name="onclick" value="alert('clicked')"></template-arg>
-		<template-arg name="x" value="100"></template-arg>
-		<template-arg name="y" value="100"></template-arg>
-		<template-arg name="rx" value="10"></template-arg>	
-		<template-arg name="ry" value="10"></template-arg>
-		<template-arg name="fill" value="red"></template-arg>
-		<template-arg name="color" value="black"></template-arg>
-		<template-arg name="text" value="black"></template-arg>		
 	
-		<template-body>
-			<set class="ellipseButton">
-				<ellipse x="{%= x %}" y="{%= y %}" rx="{%= rx %}" ry="{%= ry %}" 
-					fill="{%= fill %}" onclick="{%= onclick%}"					
-					onhoverin="rm.getShape(this).attr('fill', 'brown')"
-					onhoverout="rm.getShape(this).attr('fill', '{%= fill %}')"
-					></ellipse>
-				<text color="{%= color %}" x="{%= x %}" y="{%= y %}" 
-					onclick="{%= onclick%}"
-					>{%= text%}</text>
-			</set>
-		</template-body>
-		
-	</template>
-
-
-	<template name="ellipseButton2">
-		<use-tag name="ellipse-button2"></use-tag>
-
-		<template-arg name="onclick" value="alert('clicked')"></template-arg>
-		<template-arg name="x" value="100"></template-arg>
-		<template-arg name="y" value="100"></template-arg>
-		<template-arg name="rx" value="10"></template-arg>	
-		<template-arg name="ry" value="10"></template-arg>
-		<template-arg name="fill" value="red"></template-arg>
-		<template-arg name="color" value="black"></template-arg>
-		<template-arg name="text" value="black"></template-arg>
-		<template-arg name="size" value="30"></template-arg>			
-	
-		<template-body>
-			<set class="ellipseButton">
-				<ellipse x="{%= x %}" y="{%= y %}" rx="{%= rx %}" ry="{%= ry %}" 
-					fill="{%= fill %}" onclick="{%= onclick%}"					
-					onhoverin="rm.animate(this, 'borderglowing1', 2000)"
-					></ellipse>
-				<print font="Acquaintance" fill="{%= color %}" x="{%= x-rx*1.5 %}" 
-					y="{%= y %}" onclick="{%= onclick%}" size="{%= size %}">
-					
-					{%= text%}</print>
-			</set>
-		</template-body>
-		
-		
-		
-	</template>
-
+	<include src="indexrm_aux.xml"></include>
 
 <!-- header paper -->
 
@@ -86,7 +28,7 @@
 			onhoverin="rm.getShape(this).animate({transform: 'R 180'}, 1000, '&gt;');"
 			onhoverout="rm.getShape(this).animate({transform: 'R 0'}, 1000, '&lt;');"></imag>
 		
-		<ellipse x="470" y="300" rx="460" ry="100"></ellipse>
+<!-- 		<ellipse x="470" y="300" rx="460" ry="100"></ellipse> -->
 <!-- 		<circle  cx="470" cy="300" r="40" fill="red"  -->
 <!-- 			onclick="myapp.openSection('#section1PaperEl')"></circle> -->
 		
@@ -104,8 +46,14 @@
 		<ellipse-button2 x="470" y="300" rx="80" ry="21" text="about" size="20"
 			onclick="myapp.openSection('#section1PaperEl')"></ellipse-button2>
 			
+<!-- 		<path fill="red" onclick="{%= onclick%}" -->
+<!-- 				stroke="black"			 -->
+<!-- 				onhoverin="rm.animate(this, 'borderglowing1', 2000)"> -->
+<!-- 				M3.3999999999999986,-29.6C3.3999999999999986,-29.6,-4.600000000000001,-41,-4.600000000000001,-41C-4.600000000000001,-41,-10,-20,-10,-20C-10,-20,-28.8,-32.8,-28.8,-32.8C-28.8,-32.8,-24.8,-13.399999999999999,-24.8,-13.399999999999999C-24.8,-13.399999999999999,-44.2,-11.399999999999999,-44.2,-11.399999999999999C-44.2,-11.399999999999999,-31.400000000000002,4,-31.400000000000002,4C-31.400000000000002,4,-49.6,10,-49.6,10C-49.6,10,-34.2,21.6,-34.2,21.6C-34.2,21.6,-43.8,33.00000000000001,-43.8,33.00000000000001C-43.8,33.00000000000001,-27.4,35.00000000000001,-27.4,35.00000000000001C-27.4,35.00000000000001,-26.8,50.6,-26.8,50.6C-26.8,50.6,-14.799999999999997,34.4,-14.799999999999997,34.4C-14.799999999999997,34.4,-9.399999999999999,41.800000000000004,-9.399999999999999,41.800000000000004C-9.399999999999999,41.800000000000004,-4,30.800000000000004,-4,30.800000000000004C-4,30.800000000000004,4.200000000000003,37.800000000000004,4.200000000000003,37.800000000000004C4.200000000000003,37.800000000000004,6.800000000000004,24.199999999999996,6.800000000000004,24.199999999999996C6.800000000000004,24.199999999999996,19.6,30.800000000000004,19.6,30.800000000000004C19.6,30.800000000000004,18.199999999999996,16.800000000000004,18.199999999999996,16.800000000000004C18.199999999999996,16.800000000000004,37.800000000000004,22.800000000000004,37.800000000000004,22.800000000000004C37.800000000000004,22.800000000000004,26.199999999999996,7.399999999999999,26.199999999999996,7.399999999999999C26.199999999999996,7.399999999999999,35.00000000000001,2.6000000000000014,35.00000000000001,2.6000000000000014C35.00000000000001,2.6000000000000014,29.000000000000007,-6,29.000000000000007,-6C29.000000000000007,-6,50.6,-18.8,50.6,-18.8C50.6,-18.8,26.199999999999996,-19.4,26.199999999999996,-19.4C26.199999999999996,-19.4,33.800000000000004,-35,33.800000000000004,-35C33.800000000000004,-35,17.6,-22.8,17.6,-22.8C17.6,-22.8,19.000000000000007,-49.6,19.000000000000007,-49.6C19.000000000000007,-49.6,3.3999999999999986,-29.6,3.3999999999999986,-29.6C3.3999999999999986,-29.6,3.3999999999999986,-29.6,3.3999999999999986,-29.6C3.3999999999999986,-29.6,3.3999999999999986,-29.6,3.3999999999999986,-29.6 -->
+<!-- 			</path> -->
 			
-		<include src="part1.xml"></include>
+		<star-button1 x="270" y="400" text="starb" size="20"
+			onclick="myapp.openSection('#section1PaperEl')"></star-button1>
 		
 		<text x="100" y="200" width="200" fill="blue" font-size="17px">
 		
@@ -131,47 +79,20 @@ Proin elit nibh, facilisis id porttitor porta, ullamcorper vitae diam. Lorem ips
 		<rect x="0" y="0" width="700" height="600" fill="white"></rect>
 		<text x="100" y="200">hello</text>
 			
-		<template-use name="ellipseButton1"  class="closebutton" 
-			x="150" y="320" rx="40" ry="10" text="close"
-			onclick="myapp.closeSection('#section1PaperEl')"			
-			></template-use>
+<!-- 		<template-use name="ellipseButton1"  class="closebutton"  -->
+<!-- 			x="150" y="320" rx="40" ry="10" text="close" -->
+<!-- 			onclick="myapp.closeSection('#section1PaperEl')"			 -->
+<!-- 			></template-use> -->
 			
-		<ellipse-button1 x="50" y="320" rx="50" ry="11" text="close2"
+		<ellipse-button1 x="550" y="120" rx="50" ry="11" text="close2" size="30"
 			onclick="myapp.closeSection('#section1PaperEl')"></ellipse-button1>
 			
-		<ellipse-button2 x="600" y="100" rx="80" ry="21" text="close3" size="20"
+		<ellipse-button2 x="600" y="100" rx="80" ry="21" text="close" size="30"
 			onclick="myapp.closeSection('#section1PaperEl')"></ellipse-button2>
 			
 	</paper>
 	
 	
-	
-<!-- 	animations -->
-	<animation id="textglowing1">	
-		<scene ellapse="0%" fill="black"></scene>
-		<scene ellapse="33%" transform="S1.5" easing="easy-in"></scene>
-		<scene ellapse="66%" transform="s0.6 r33" easing="easy-out"></scene>
-		<scene ellapse="100%" transform="S1.0 R0" fill="red" easing="elastic"></scene>
-	</animation>
-	
-	<animation id="borderglowing1">	
-		<scene ellapse="0%" stroke-width="10" stroke="red" easing="easy-out"></scene>
-		<scene ellapse="33%" stroke-width="40" stroke="blue" easing="easy-out"></scene>
-		<scene ellapse="66%" transform="s0.6 r33" stroke-width="5" stroke="yellow" easing="easy-out"></scene>
-		<scene ellapse="100%" transform="S1.0 R0" fill="red" easing="elastic"></scene>
-	</animation>
-	
-	<style>
-
-#headerPaper1 .title {
-	font: my underwood;
-	size: 55;
-	underline-width: 3; 
-	underline-color: red; 
-	underline-dasharray: -.;
-	underline-opacity: 0.7;
-}
-	</style>
 	
 	
 </raphael>

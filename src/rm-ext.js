@@ -220,7 +220,6 @@ rm._preproccess_template1 = function(rdoc) {
 //		alert($(this).find("template-arg").size());
 		$(this).find("template-arg").each(function(){
 			var an=$(this).attr("name"), av = $(this).attr("value");
-
 //			try {
 			tmplData[an]=av;
 //			}catch(ex) {
@@ -323,128 +322,6 @@ rm._tmplCache={};
 
 
 
-
-
-
-
-
-/* * * * * percentual bounds extension - 
- * could be in other files and are optional 
-
-/* (an example preprocessing extension) - porcentual width and height parameters
- * it will preprocess some attributes values like width, height, cx, cy, x, y, r, rx, ry, etc
- * if the value ends with a "%" it will be seten in pixels comparing with the parent's attribute value.
- * 
- * this extension has 2 parts:
- * 1) preproccessing : will fix attrs names that ends with "%" in all elemnts
- * 2) postRender, give validity to attrs x,y,width, height for paths. a post
- * renderer will transform paths to apply this attrs
- * 
- * this extension must be registered after templates and style
- * 
- * discussion: what about paths? paths doesn't have cx, x or width attributes. 
- * we can only move/translate using transformations.
- * this extension could do the following:
- * 1) give usability to attributes "width" and "height" for paths
- * 2) all shapes including path percentual attribs will be fixed at preprocessing
- * 3) provide a render extension that will perform the following after a shape is rendered: 
- * get its calculated width/height/x and y attrs and perform translation/
- */
-rm._percentDimPreproccess = function(rdoc) {
-	rdoc.find("paper").each(function(){
-		var pw = parseInt($(this).attr("width")), 
-			ph = parseInt($(this).attr("height"));
-		var base = rm._percentDim_buildBase(pw, ph);
-		$(this).children().each(function(){
-			rm._percentDim_($(this), base);
-		});
-	});
-	return rdoc;
-};
-rm._percentDim_buildBase = function(pw, ph) {
-	return {
-		"width": pw,
-		"height": ph, 
-		"r": pw,
-		"x": pw, 
-		"y": ph,
-		"cx": pw, 
-		"cy": ph, 
-		"rx": pw,
-		"ry": ph
-	};	
-};
-rm._percentDim_attrs = [
-	"width","height", "r", "x", "y", "cx", "cy", "rx", "ry"
-];
-rm._percentDim_ = function(dom, base) {
-	
-	//first set percentual attributes
-	if(rm._getTagName(dom)=="set"||rm._getTagName(dom)=="path") {
-		/* in the case of sets and paths, if not specified, we temporarily store 
-		 * base width and heights as parameters */
-		var w = dom.attr("width") ? $.trim(dom.attr("width")):base["width"];
-		var h = dom.attr("height") ? $.trim(dom.attr("height")):base["height"];
-//		if(w) 
-//		if( && dom.attr("width").indexOf("%")==dom.attr("width").length-1) {
-//			
-//		}
-		if(!dom.attr("width"))
-			dom.attr("width", base["width"]);
-		if(!dom.attr("height"))
-			dom.attr("height", base["height"]);
-	}
-	
-	//now fixe pecentual attributes
-	for ( var i = 0; i < rm._percentDim_attrs.length; i++) {
-		rm._percentDim_fixAttr(dom, rm._percentDim_attrs[i], base);
-	}	
-	
-	//second, now that bounds attrs are fixed, get the next base for fix childs	
-	if($(this).children().size()>0) {
-		var newWidth = base["width"], 
-			newHeight = base["height"], 
-			tagName = rm._getTagName(dom);
-		
-		if(tagName=="rect") {
-			newWidth = parseInt(dom.attr("width"));
-			newHeight = parseInt(dom.attr("height"));		
-		}
-		else if(tagName=="circle") {
-			newWidth = parseInt(dom.attr("r"));
-			newHeight = parseInt(dom.attr("r"));		
-		}
-		else if(tagName=="ellipse") {
-			newWidth = parseInt(dom.attr("rx"));
-			newHeight = parseInt(dom.attr("ry"));		
-		}
-		else if(tagName=="path" || tagName=="set") {
-			newWidth = parseInt(dom.attr("width"));
-			newHeight = parseInt(dom.attr("height"));		
-		}
-		var newBase = rm._percentDim_buildBase(newWidth, newWidth);
-		$(this).children().each(function(){
-			rm._percentDim_($(this), newBase);
-		});
-	}
-};
-rm._percentDim_fixAttr=function(dom, attrName, base) {	
-	var val = dom.attr(attrName);
-	if(!val)
-		return false;
-	if($.trim(val).indexOf("%")==val.length-1) {
-		val = parseInt(val.substring(0, val.length-1));
-		dom.attr(attrName, Math.round(base[attrName]*(val/100)));
-		return true;
-	}
-	else
-		return false;	
-};
-rm._percentDim_postRendering = function(rdoc) {
-	rdoc.find("path").each(function(){
-		
-	});
-};
 
 
 
@@ -584,60 +461,7 @@ rm._raphaelAnimAttrs = [
 ];
 
 
-/* * * * PRINT text decoration  underline, etc
- * some of these will *add* some shapes (to the set) to decoate a print.
- * letters shapes are marked with shape.type=="letter", and decoration internal shape will be marked for ex: textdecoration-underline
- * * * * * */
 
-rm._printunderline_postRendering = function(rdoc) {
-	rdoc.find("print").each(function(){
-		if($(this).attr("underline-color")||$(this).attr("underline-width")||
-				$(this).attr("underline-distance")||$(this).attr("underline-dasharray")||
-				$(this).attr("underline-opacity")) {
-			
-			rm._printUnderline_do(
-				rm.getShape($(this)), 
-				rm.getShape($(this).parent("paper")), 
-				$(this).attr("underline-color"), 
-				$(this).attr("underline-width"), 
-				$(this).attr("underline-distance"),
-				$(this).attr("underline-dasharray"),
-				$(this).attr("underline-opacity"));
-		}
-	});
-};
-
-//underline
-rm._printUnderline_do = function(text, paper, color, width, distance, dasharray, opacity) {
-	if(!color)color="black";
-	if(!distance)distance=10;
-	if(!width) width=1;
-	if(!dasharray)dasharray="";
-	if(!opacity)opacity=1.0;
-	var path = null;
-//	if(text._rm_topathPath) {
-////		path=paper.path(text._rm_topathPath.getSubPath(text.getBBox().x, text.getBBox().x+text.getBBox().width));//.clone();
-//		path=text._rm_topathPath.clone();//TODO: do this better because we can't rely on the provided path by onpath attr
-//		path.transform("T 0 "+distance);
-//	}
-//	else {
-		var pathStr = "M "+text[0].getBBox().x+" "+text[0].getBBox().y;	
-		for ( var i = 1; i < text.length; i++) {
-			pathStr+=" L "+text[i].getBBox().x+" "+(text[i].getBBox().height+text[i].getBBox().y+distance);
-		}
-		path = paper.path(pathStr);
-//	}
-	path.attr({
-		"stroke": color,
-		"stroke-width": width,
-		"stroke-dasharray": dasharray,
-		"stroke-opacity": opacity
-	});
-	path.rmtype="underline";
-//	alert(text);
-//	text.push(path); //make the underline path part of the text shape
-	text._rm_underlinePath=path;	
-}
 
 
 
@@ -829,11 +653,139 @@ rm._toFrontBackPostRendering = function(rdoc) {
 
 
 
+
+
+
+
+
+/* * * * * percentual bounds extension - 
+ * could be in other files and are optional 
+
+/* (an example preprocessing extension) - porcentual width and height parameters
+ * it will preprocess some attributes values like width, height, cx, cy, x, y, r, rx, ry, etc
+ * if the value ends with a "%" it will be seten in pixels comparing with the parent's attribute value.
+ * 
+ * this extension has 2 parts:
+ * 1) preproccessing : will fix attrs names that ends with "%" in all elemnts
+ * 2) postRender, give validity to attrs x,y,width, height for paths. a post
+ * renderer will transform paths to apply this attrs
+ * 
+ * this extension must be registered after templates and style
+ * 
+ * discussion: what about paths? paths doesn't have cx, x or width attributes. 
+ * we can only move/translate using transformations.
+ * this extension could do the following:
+ * 1) give usability to attributes "width" and "height" for paths
+ * 2) all shapes including path percentual attribs will be fixed at preprocessing
+ * 3) provide a render extension that will perform the following after a shape is rendered: 
+ * get its calculated width/height/x and y attrs and perform translation/
+ */
+rm._percentDimPreproccess = function(rdoc) {
+	rdoc.find("paper").each(function(){
+		var pw = parseInt($(this).attr("width")), 
+			ph = parseInt($(this).attr("height"));
+		var base = rm._percentDim_buildBase(pw, ph, 0, 0);
+		$(this).children().each(function(){
+			rm._percentDim_($(this), base);
+		});
+	});
+	return rdoc;
+};
+rm._percentDim_buildBase = function(pw, ph, newX, newY) {
+	return {
+		"width": pw,
+		"height": ph, 
+		"r": pw,
+		"x": pw, 
+		"y": ph,
+		"cx": pw, 
+		"cy": ph, 
+		"rx": pw,
+		"ry": ph,
+		"newX": newX,
+		"newY": newY
+	};	
+};
+rm._percentDim_attrs = [
+	"width","height", "r", "x", "y", "cx", "cy", "rx", "ry"
+];
+rm._percentDim_ = function(dom, base) {
+	//fix pecentual attributes
+	for ( var i = 0; i < rm._percentDim_attrs.length; i++) {
+		rm._percentDim_fixAttr(dom, rm._percentDim_attrs[i], base);
+	}	
+	
+	//second, now that bounds attrs are fixed, get the next base for fix childs	
+	if(dom.children().size()>0) {
+		var newWidth = parseInt(dom.attr("width")), //for rect, path, set
+			newHeight = parseInt(dom.attr("height")),
+			newX=parseInt(dom.attr("x")), 
+			newY=parseInt(dom.attr("y")),	//rect, ellypse		
+			tagName = rm._getTagName(dom);
+		
+		//first get shape bounds from markup (can be percent vals)	
+		if(tagName=="circle") {
+			newWidth = parseInt(dom.attr("radius"));
+			newHeight = parseInt(dom.attr("radius"));
+			newX=parseInt(dom.attr("cx"));
+			newY=parseInt(dom.attr("cy"));
+		}
+		else if(tagName=="ellipse") {
+			newWidth = parseInt(dom.attr("rx"));
+			newHeight = parseInt(dom.attr("ry"));
+		}
+		
+		var newBase = rm._percentDim_buildBase(newWidth, newHeight, newX, newY);
+		dom.children().each(function(){
+			rm._percentDim_($(this), newBase);
+		});
+	}
+};
+rm._percentDim_fixAttr=function(dom, attrName, base) {	
+	var val = dom.attr(attrName), newVal=0;
+	if(!val)
+		return false;
+	if($.trim(val).indexOf("%")==val.length-1) {
+		val = parseInt(val.substring(0, val.length-1)), 
+			newVal = Math.round(base[attrName]*(val/100));
+		if(attrName=="x" || attrName=="cx")
+			newVal+=base["newX"];
+		if(attrName=="y" || attrName=="cy")
+			newVal+=base["newY"];
+		dom.attr(attrName, newVal);
+		return true;
+	}
+	else
+		return false;	
+};
+/**
+ * this post renderingwill transform paths with x/y/width/height attrs to match the visual to its values.
+ * @param rdoc
+ */
+rm._percentDim_postRendering = function(rdoc) {	
+	rdoc.find("path").each(function(){
+		var shape = rm.getShape($(this));
+		if($(this).attr("x")) {
+			shape.transform("...t"+(parseInt($(this).attr("x"))-shape.getBBox().x)+",0");
+		}
+		if($(this).attr("y")) {
+			shape.transform("...t0,"+(parseInt($(this).attr("y"))-shape.getBBox().y));
+		}
+		if($(this).attr("width")) {alert((parseFloat($(this).attr("width"))/shape.getBBox().width))
+			shape.transform("...s"+(parseFloat($(this).attr("width"))/shape.getBBox().width));
+		}
+	});
+	return rdoc;
+};
+
+
+
+
 //register all extensions (preproccessing)
 
 rm.preproccessRegister(rm._preproccess_template1);
 rm.preproccessRegister(rm._preproccesCSS);
-//rm.preproccessRegister(rm._percentDimPreproccess);
+rm.preproccessRegister(rm._percentDimPreproccess);
 rm.preproccessRegister(rm._script_preproccess);
 rm.preproccessRegister(rm._anims_preproccess);
 
@@ -841,7 +793,123 @@ rm.preproccessRegister(rm._anims_preproccess);
 //register all extensions (post rendering)
 rm.postRendererRegister(rm._events_postRendering);
 //rm.postRendererRegister(rm._printonpath_postRendering);
-rm.postRendererRegister(rm._printunderline_postRendering);
+//rm.postRendererRegister(rm._printunderline_postRendering);
 rm.postRendererRegister(rm._text_widthrwrappPostRendering);
 rm.postRendererRegister(rm._toFrontBackPostRendering);
+rm.postRendererRegister(rm._percentDim_postRendering);
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+//not in use:
+
+
+
+
+
+/* * * * PRINT - onpath 
+ * replace a <print onpath="nonempty"> witha <set> with paths for each letter (previous print() raphael impl) and align the letters on the path
+ * * * * */
+//rm._printonpath_count=0;
+//rm._printonpath_getId = function(){
+//	rm._printonpath_count++;
+//	return "printonpath"+rm._printonpath_count;
+//}
+/**
+ * this preproccess will replace print[onpath] with a <set of <prints, each one for a letter
+ */
+//rm._printonpath_preproccessing = function(rdoc) {
+//	rdoc.find("print[onpath]").each(function(){
+//		var text = $(this).attr("text") || rm._getInmediateText($(this)), 
+//			x=$(this).attr("x")||0, 
+//			y=$(this).attr("y")||0, 
+//			set = rm.createElement($(this).parent(), "set"), 
+//			letter = null;
+//			
+//		rm.copyAttrs($(this), set);
+//		for ( var i = 0; i < text.length; i++) {
+//			letter = rm.createElement(set, "print", {});
+//			letter.attr($(this).attr())
+//			
+//		}
+//		var p = 
+//	});
+//}
+//rm._printonpath_preproccessing = function(rdoc) {
+//	rdoc.find("print[onpath]").each(function(){
+//		var p = 
+//	});
+//}
+
+
+
+//
+//
+///* * * * PRINT text decoration  underline, etc
+// * some of these will *add* some shapes (to the set) to decoate a print.
+// * letters shapes are marked with shape.type=="letter", and decoration internal shape will be marked for ex: textdecoration-underline
+// * * * * * */
+//
+//rm._printunderline_postRendering = function(rdoc) {
+//	rdoc.find("print").each(function(){
+//		if($(this).attr("underline-color")||$(this).attr("underline-width")||
+//				$(this).attr("underline-distance")||$(this).attr("underline-dasharray")||
+//				$(this).attr("underline-opacity")) {
+//			
+//			rm._printUnderline_do(
+//				rm.getShape($(this)), 
+//				rm.getShape($(this).parent("paper")), 
+//				$(this).attr("underline-color"), 
+//				$(this).attr("underline-width"), 
+//				$(this).attr("underline-distance"),
+//				$(this).attr("underline-dasharray"),
+//				$(this).attr("underline-opacity"));
+//		}
+//	});
+//};
+//
+////underline
+//rm._printUnderline_do = function(text, paper, color, width, distance, dasharray, opacity) {
+//	if(!color)color="black";
+//	if(!distance)distance=10;
+//	if(!width) width=1;
+//	if(!dasharray)dasharray="";
+//	if(!opacity)opacity=1.0;
+//	var path = null;
+////	if(text._rm_topathPath) {
+//////		path=paper.path(text._rm_topathPath.getSubPath(text.getBBox().x, text.getBBox().x+text.getBBox().width));//.clone();
+////		path=text._rm_topathPath.clone();//TODO: do this better because we can't rely on the provided path by onpath attr
+////		path.transform("T 0 "+distance);
+////	}
+////	else {
+//		var pathStr = "M "+text[0].getBBox().x+" "+text[0].getBBox().y;	
+//		for ( var i = 1; i < text.length; i++) {
+//			pathStr+=" L "+text[i].getBBox().x+" "+(text[i].getBBox().height+text[i].getBBox().y+distance);
+//		}
+//		path = paper.path(pathStr);
+////	}
+//	path.attr({
+//		"stroke": color,
+//		"stroke-width": width,
+//		"stroke-dasharray": dasharray,
+//		"stroke-opacity": opacity
+//	});
+//	path.rmtype="underline";
+////	alert(text);
+////	text.push(path); //make the underline path part of the text shape
+//	text._rm_underlinePath=path;	
+//}
+//
+//
+//
+//
