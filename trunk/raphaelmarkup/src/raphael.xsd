@@ -59,7 +59,8 @@
 	<!-- paper type extends BaseType -->
 	<xs:element name="paper">
         <xs:annotation>
-        	<xs:documentation>a paper contains shapes. it can be related to a html element using the elid attr</xs:documentation>
+        	<xs:documentation>a paper contains shapes. 
+        	it can be related to a html element using the containerId attr</xs:documentation>
         </xs:annotation>        
         <xs:complexType mixed="true">
         <xs:complexContent>
