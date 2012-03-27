@@ -519,52 +519,66 @@ rm._events_postRendering = function(rdoc) {
 		if(!rm.getShape($(this)))
 			return; //could be caused by bad xml 
 		if($(this).attr("onclick")) {
-			rm.getShape($(this)).click(new Function("evt",$(this).attr("onclick")), $(this));
+			rm.getShape($(this)).click(new Function("event",$(this).attr("onclick")), $(this));
 		}
 		if($(this).attr("ondblclick")) {
-			rm.getShape($(this)).dblclick(new Function("evt",$(this).attr("ondblclick")), $(this));
+			rm.getShape($(this)).dblclick(new Function("event",$(this).attr("ondblclick")), $(this));
 		}
+		
 		if($(this).attr("onhoverin")) {
-			rm.getShape($(this)).hover(new Function("evt",$(this).attr("onhoverin")), null, $(this), null);
+			rm.getShape($(this)).hover(new Function("event",$(this).attr("onhoverin")), null, $(this), null);
 		}
 		if($(this).attr("onhoverout")) {
-			rm.getShape($(this)).hover(null, new Function("evt",$(this).attr("onhoverout")), null, $(this));
+			rm.getShape($(this)).hover(null, new Function("event",$(this).attr("onhoverout")), null, $(this));
 		}
+		
+		if($(this).attr("ondragmove")) {
+			rm.getShape($(this)).drag(new Function("dx", "dy", "x", "y", "event",$(this).attr("ondragmove")), null, null, $(this), null, null);
+		}
+		if($(this).attr("ondragstart")) {
+			rm.getShape($(this)).drag(null, new Function("x", "y", "event", $(this).attr("ondragstart")), null, null, $(this), null);
+		}
+		if($(this).attr("ondragend")) {
+			rm.getShape($(this)).drag(null, null, new Function("event",$(this).attr("ondragend")), null, null, $(this));
+		}		
+		
 		if($(this).attr("onhover")) {
-			rm.getShape($(this)).hover(new Function("evt",$(this).attr("hover")), $(this), new Function("evt",$(this).attr("hover")), $(this));
+			rm.getShape($(this)).hover(new Function("event",$(this).attr("hover")), $(this), new Function("event",$(this).attr("hover")), $(this));
 		}
 		if($(this).attr("onmousedown")) {
-			rm.getShape($(this)).mousedown(new Function("evt",$(this).attr("onmousedown")), $(this));
+			rm.getShape($(this)).mousedown(new Function("event",$(this).attr("onmousedown")), $(this));
 		}
 		if($(this).attr("onmousemove")) {
-			rm.getShape($(this)).mousemove(new Function("evt",$(this).attr("onmousemove")), $(this));
+			rm.getShape($(this)).mousemove(new Function("event",$(this).attr("onmousemove")), $(this));
 		}
 		if($(this).attr("onmouseout")) {
-			rm.getShape($(this)).mouseout(new Function("evt",$(this).attr("onmouseout")), $(this));
+			rm.getShape($(this)).mouseout(new Function("event",$(this).attr("onmouseout")), $(this));
 		}
 		if($(this).attr("onmouseover")) {
-			rm.getShape($(this)).mouseover(new Function("evt",$(this).attr("onmouseover")), $(this));
+			rm.getShape($(this)).mouseover(new Function("event",$(this).attr("onmouseover")), $(this));
 		}
 		if($(this).attr("onmousemove")) {
-			rm.getShape($(this)).mousemove(new Function("evt",$(this).attr("onmousemove")), $(this));
+			rm.getShape($(this)).mousemove(new Function("event",$(this).attr("onmousemove")), $(this));
 		}
 		if($(this).attr("onmouseup")) {
-			rm.getShape($(this)).mouseup(new Function("evt",$(this).attr("onmouseup")), $(this));
+			rm.getShape($(this)).mouseup(new Function("event",$(this).attr("onmouseup")), $(this));
 		}		
 		if($(this).attr("ontouchcancel")) {
-			rm.getShape($(this)).touchcancel(new Function("evt",$(this).attr("ontouchcancel")), $(this));
+			rm.getShape($(this)).touchcancel(new Function("event",$(this).attr("ontouchcancel")), $(this));
 		}
 		if($(this).attr("ontouchend")) {
-			rm.getShape($(this)).touchend(new Function("evt",$(this).attr("ontouchend")), $(this));
+			rm.getShape($(this)).touchend(new Function("event",$(this).attr("ontouchend")), $(this));
 		}
 		if($(this).attr("ontouchmove")) {
-			rm.getShape($(this)).touchmove(new Function("evt",$(this).attr("ontouchmove")), $(this));
+			rm.getShape($(this)).touchmove(new Function("event",$(this).attr("ontouchmove")), $(this));
 		}
 		if($(this).attr("ontouchstart")) {
-			rm.getShape($(this)).touchstart(new Function("evt",$(this).attr("ontouchstart")), $(this));
+			rm.getShape($(this)).touchstart(new Function("event",$(this).attr("ontouchstart")), $(this));
 		}		
 	});
 };
+
+
 
 
 
@@ -585,6 +599,8 @@ rm._script_preproccess = function(rdoc) {
 	});
 	return rdoc;
 };
+
+
 
 
 
@@ -625,6 +641,8 @@ rm._text_widthrwrappPostRendering = function(rdoc) {
 	});;
 	return rdoc;
 }
+
+
 
 
 
@@ -736,7 +754,7 @@ rm._percentDim_ = function(dom, base) {
 		}
 		
 		var newBase = rm._percentDim_buildBase(newWidth, newHeight, newX, newY);
-		dom.children().each(function(){
+		dom.children().each(function(){ /* iterall without filtering so other extensions can use me */
 			rm._percentDim_($(this), newBase);
 		});
 	}
@@ -771,12 +789,53 @@ rm._percentDim_postRendering = function(rdoc) {
 		if($(this).attr("y")) {
 			shape.transform("...t0,"+(parseInt($(this).attr("y"))-shape.getBBox().y));
 		}
-		if($(this).attr("width")) {alert((parseFloat($(this).attr("width"))/shape.getBBox().width))
+		if($(this).attr("width")) {
 			shape.transform("...s"+(parseFloat($(this).attr("width"))/shape.getBBox().width));
 		}
 	});
 	return rdoc;
 };
+
+
+
+//
+///** * * * * html "inside" - this just get a given html element 
+// * over a paper and shape it. User is responsible for
+// * creating the html take care abuut zindex.etc. 
+// * 
+// * Because this is not really html content inserting, the html elements won't respond to any raphael attrs or transfmrtions.
+// * 
+// * coopeates with percentDim, shuld be registered after it. 
+// * height and width are provided by html
+// * * * * 
+// */
+//rm._html_postrendering=function(rdoc) {
+//	rdoc.find("include-html[element]").each(function(){
+//		var dom = $($(this).attr("element"));
+//		if(dom.size()>0 && $(this).attr("x") && 
+//			$(this).attr("y")) {
+//			
+//			var paper = rm.getShape($(this).parents("paper")), 
+//				paperPos = $(paper.canvas).offset();
+//			
+//			dom.parent().css({"x-index": 9999});
+//			
+//			dom.css({
+//				"x-index": 9999,
+//				"position": "absolute",
+//				"display": "block",
+//				"top": (paperPos.top+parseInt($(this).attr("y")))+"px",
+//				"left": (paperPos.left+parseInt($(this).attr("x")))+"px",
+//			});
+//		}
+//	});
+//	return rdoc;
+//}
+
+
+
+
+
 
 
 
@@ -797,7 +856,7 @@ rm.postRendererRegister(rm._events_postRendering);
 rm.postRendererRegister(rm._text_widthrwrappPostRendering);
 rm.postRendererRegister(rm._toFrontBackPostRendering);
 rm.postRendererRegister(rm._percentDim_postRendering);
-
+//rm.postRendererRegister(rm._html_postrendering);
 
 
 

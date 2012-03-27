@@ -26,6 +26,9 @@
 		blue rectangle 20-20
 		bottom-left 
 		</text>
+		
+		
+		<include-html element="#html1" x="20%" y="20%"></include-html>
 	</set>
 	
 	<!--another set absolute positioned, what  other nested sets -->
@@ -39,6 +42,9 @@
 		<path x="50%" y="50%" width="100">M10,20L30,40</path>
 	</set>
 	
+	
+<!-- 	<include-html element="#html1" x="180" y="130"></include-html> -->
+	
 <!-- 	<path transform="t120,120">M10,20L30,40</path> -->
 </paper>
 
@@ -51,10 +57,16 @@ rect{opacity: 0.5}
 
 <script type="text/javascript">
 
-var rdoc = rm.render()[0];
-// alert(rdoc.find(".set1 circle").size())
+$(document).ready(function(){
+	var rdoc = rm.render()[0];	
+})
 
 </script>
 
+
+<div style="display:none" id="html1">
+<p>helloworld</p>
+</div>
+<style>body{border: 1px solid black;}</style>
 </body>
 </html>

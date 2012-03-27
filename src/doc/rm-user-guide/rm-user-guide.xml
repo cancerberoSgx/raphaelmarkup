@@ -3,6 +3,8 @@
 <!DOCTYPE article [
     <!ENTITY R "raphaël">
     <!ENTITY RM "raphaëlMarkup">
+    <!ENTITY RMBASE "http://localhost:8081/rm">
+      
 ]>
 
 <article version="5.0" xmlns="http://docbook.org/ns/docbook"
@@ -105,39 +107,204 @@
    <ulink url="code.google.com/p/raphaelmarkup/">&RM; project site</ulink>. 
    </para>
    
-   From all the files inside the .zip 
+   <para>From all the files inside the .zip you will only need src/rm.js, 
+   src/deps/jquery-1.7.1.js and src/deps/raphael-min.js. Of courcse you 
+   can use your own raphaeljs or jquery files. </para>
+   
+   <note><para>If you want a non minified version of the library, 
+   then include "src/rm-core.js" and "src/rm-ext.js" (in that order) intead "src/rm.js". </para></note>
+   
+   <para>So lets write our first html web page with a XML drawing inside: </para>
+   
+   <programlisting>
+&lt;!DOCTYPE html>
+&lt;html>
+&lt;head>
+	&lt;script src="jquery-1.7.1.js">&lt;/script>
+	&lt;script src="raphael-min.js">&lt;/script>
+	&lt;script type="text/javascript" src="rm.js">&lt;/script>
+&lt;title>Raphael markup test 1&lt;/title>
+&lt;/head>
+&lt;body>
+
+&lt;raphael xmlns="http://raphaeljs.com">	
+	&lt;paper class="paper1" x="10" y="10" width="400" height="400">
+		&lt;rect id="rect1" x="20" y="30" width="100" 
+			height="200" fill="red">&lt;/rect>
+	&lt;/paper>	
+&lt;/raphael>
+
+
+&lt;script type="text/javascript">
+/* render all raphaels elements in this document */
+rm.render();
+&lt;/script>
+
+&lt;/body>
+&lt;/html>
+   
+   </programlisting>
+   
+   
+   <para>Ok so this first html web page will draw a red rectangle that we 
+   defined inside our &lt;raphael> tag. Also, at the end of the html 
+   document, a &lt;script> call the javascript renderer to render 
+   that drawing in the page. Notice also how at the beggining we included the three 
+   neccesary scripts, jquery, raphael and rm.js.</para>
+   
    </section>
    
    
    
    
    
+   
+   <section><title>&R; XML Document</title>
+   
+    <para>Why &R; in XML ?  Basically we want to use XML and friend technologies for drawing 
+    with &R; and accessing and manipulating existing &R; objects with XML tools. In a browser XML format is
+    specially usefull because is easy to load and transverse. For example, in the case of &RM; tools like jQuery provide
+    portable platform for XML proccessing and DOM manipulation.</para>
+    
+    <para></para>
+    
+    <para>Let's compare raphael javascript vs. the equivalent XML markup (a markup that when rendered will perform a similar result). </para>
+    
+    <programlisting>
+var paper = Raphael(0,0,400,400);
+var rect = paper.rect(20,20,40,50);
+rect.attr({"fill": "red", "stroke": "blue"});
+    </programlisting>
+    
+    <para>Now let see the XML counterpart: </para>
+    
+    <programlisting>
+    
+&lt;raphael xmlns="http://raphaeljs.com">
+	&lt;paper x="0" y="0" width="400" height="400">
+		&lt;rect x="0" y ="0" width="950" height="200" fill="red" stroke="blue">&lt;/rect>
+	&lt;/paper>	
+&lt;/raphael>
+
+    </programlisting>
+    
+    <para>Now some notes about the &R; XML Document. 
+    containing shapes. </para>
+    
+    <itemizedlist>
+    <listitem>
+    <formalpara><title>&R; document</title>
+    <para>In general, a &RM; document is a XML &lt;raphael> 
+    tag with one or more papers. These papers contains different kind of 
+    shapes elements like &lt;rect> &lt;path> &lt;circle>, etc. </para></formalpara>
+    </listitem>
+    
+    <listitem>
+    <formalpara><title>Attributes. </title>
+    <para>Element attributes correspond to raphael attributes. Also, all elements 
+    support attributes "id" and "class" so we can   
+   	 use transverse the dom using CSS like selectors, for example, using jquery for 
+   	 selecting only certain shapes $("#set1 .button>rect").attr("")</para></formalpara>
+    </listitem>
+    
+    <listitem>
+    <formalpara><title>Elements</title>
+    <para>Each element correspond to a raphael concept, like a paper, shape, set, 
+    etc. Specially in XML, sets gain importance because they act as a DOM 
+    container</para></formalpara>
+    </listitem>
+    
+     <listitem>
+    <formalpara><title></title>
+    <para></para></formalpara>
+    </listitem>
+    </itemizedlist>
+    
+    
+    
+   </section>
+   
+   
      
   <section id="raphael-tags">
-    <title >IN this section we will describe &R; tags. </title>
-    
+  
+    <title>&R; elements</title>
+    <para>In this section we will describe &R; related tags. These are what we 
+    use for drawing text, path, shapes and images. 
+     </para>
+        
+        
     
     <section><title>raphael</title>
-    <para>It is the main document tag. a valid &RM; document consist in a single &lt;raphael> tag. It contains papers, animations., styles, etc. </para>
+    
+    <para>See <ulink url="&RMBASE;/src/doc/raphael.xsd.html#element_raphael">this element  XML reference. </ulink>. </para>
+    
+    <para>It is the main document tag. a valid &RM; document consist in a single &lt;raphael> tag. It contains papers, animations., styles, etc. 
+   this element do not contain more attributes than id and class. 
+    </para>
     </section>
+    
+    
     
     <section><title>paper</title>
-    <para>Defines a new paper</para>
+    
+    <para>See <ulink url="&RMBASE;/src/doc/raphael.xsd.html#element_paper">this element  XML reference. </ulink>. </para>
+    
+    <para>Defines a new paper, that is, where the shapes are. Paper is the root shape container. Its dimension and position must be defined. Example 1
+    : defining a paper that will be showed at 20,30 with size 400,400: </para>
+    
+    <programlisting>
+	&lt;paper x="20" y="30" width="400" height="400">
+	...
+	&lt;/paper>
+    </programlisting>
+    
+    <para>Also as in &R; we can render the paper inside an HTML element: </para>
+    
+     <programlisting>
+	&lt;paper x="20" y="30" width="400" height="400" containerEl="">
+	...
+	&lt;/paper>
+    </programlisting>
+    
+    
+    
     </section>
     
-    <section><title>rect</title><para></para></section>
-    <section><title>circle</title><para></para></section>
-    <section><title>path</title><para></para></section>
-    <section><title>ellipse</title><para></para></section>
-    <section><title>set</title><para></para></section>
-    <section><title>text</title><para></para></section>
-    <section><title>print</title><para></para></section>
+    <section><title>shape rect</title><para></para></section>
+    
+    <para>See <ulink url="&RMBASE;/src/doc/raphael.xsd.html#element_rect">this element XML reference. </ulink>. </para>
+    
+    <section><title>shape circle</title>
+    <para>See <ulink url="&RMBASE;/src/doc/raphael.xsd.html#element_circle">this element XML reference. </ulink>. </para>
+    <para></para>
+    </section>
     
     
+    <section><title>shape path</title
+    ><para></para>
+    <para>See <ulink url="&RMBASE;/src/doc/raphael.xsd.html#element_path">this element XML reference. </ulink>. </para>
+    </section>
+    
+    <section><title>shape ellipse</title>
+    <para>See <ulink url="&RMBASE;/src/doc/raphael.xsd.html#element_ellipse">this element XML reference. </ulink>. </para>
+    <para></para></section>  
+      
+    <section><title>shape text</title><para></para>
+    <para>See <ulink url="&RMBASE;/src/doc/raphael.xsd.html#element_text">this element XML reference. </ulink>. </para>
+    </section>
+    
+    <section><title>shape print</title>
+    <para>See <ulink url="&RMBASE;/src/doc/raphael.xsd.html#element_print">this element XML reference. </ulink>. </para>
+    <para></para></section>
+    
+    <section><title>set</title>
+    <para>See <ulink url="&RMBASE;/src/doc/raphael.xsd.html#element_set">this element XML reference. </ulink>. </para>
+    <para>In &R; a set is an artificial shape that "contains" other elements in the sence that if an attribute is set to 
+    the set, all "children " elements will be affected as well. In XML Markup, sets are specially usefull for grouping and using CSS selectors on them.
+    Sets contain other sets or shapes. See <xref linkend="exts-percentual"/> on how sets can affect bounds of children elements.</para>
+    </section>
 
-    <para> blablabal. </para>
-    
-    <para><ulink url="http://rapaheljs.com">raphaël</ulink></para>  
   </section>
   
   
@@ -188,15 +355,299 @@
     
     
       
+    <section id="exts-template">
+    <title>Templates</title>
+    <para>&RM; supports the concept of templates. You can define a template, for example, a cool 
+    button, panel or whatever and then reuse that component any time you want in your XML. More, you can define 
+    input parameters for these componentes, like color, size, etc, and then pass the values in the template-calling. </para>
+    
+    <para>In &RM; working with templates are divided in two parts, first defining the template in XML, and second, using 
+    that template in some parts of your XML code. 
+    </para>
+    
+    <para>We define the templates using the &lt;template tag declaring template parameters and the template body, that is what the template do.
+    The template scripting languag supported is javascript. If you know a server page technology like JSP (java server pages) 
+    or php, you will see that &RM; templates are similar. It is based on 
+    <ulink url="http://ejohn.org/blog/javascript-micro-templating/">John Resig's idea for JavaScript Micro-Templating</ulink>. </para>
+    
+    <para>The following is a &RM; document that define a template for drawing ellipse buttons. It also containa paper 
+    with some shapes and ellipse buttons. Please read that define a button in a template, so
+    we can usa that template for defining multiple buttons. </para>
+    
+    <programlisting>
+&lt;?xml version="1.0" encoding="ISO-8859-1"?>
+&lt;raphael xmlns="http://raphaeljs.com"
+
+&lt;template name="ellipseButton">
+
+	&lt;!-- with use-tag we can define a custom xml tag for use 
+		calling this template -->
+	&lt;use-tag name="ellipse-button">&lt;/use-tag>
+
+	&lt;!-- The following are template parameter declarations and are optional, 
+		here we put it for informative purposes and for default values -->
+		
+	&lt;template-arg name="onclick" value="alert('clicked')">&lt;/template-arg>
+	&lt;template-arg name="x" value="100">&lt;/template-arg>
+	&lt;template-arg name="y" value="100">&lt;/template-arg>
+	&lt;template-arg name="rx" value="10">&lt;/template-arg>	
+	&lt;template-arg name="ry" value="10">&lt;/template-arg>
+	&lt;template-arg name="fill" value="red">&lt;/template-arg>
+	&lt;template-arg name="color" value="black">&lt;/template-arg>
+	&lt;template-arg name="text" value="black">&lt;/template-arg>		
+
+	&lt;!-- The template body is where we write the markup of the template. 
+		In this case we build the ellipse button usng a set with an 
+		ellipse and a text. Notice how we evaluate parameter values 
+		using {%= %} -->
+	&lt;template-body>
+		&lt;set class="ellipseButton button">
+			&lt;ellipse x="{%= x %}" y="{%= y %}" rx="{%= rx %}" ry="{%= ry %}" 
+				fill="{%= fill %}" onclick="{%= onclick%}"					
+				onhoverin="rm.getShape(this).attr('fill', 'brown')"
+				onhoverout="rm.getShape(this).attr('fill', '{%= fill %}')"
+			>&lt;/ellipse>
+			&lt;text color="{%= color %}" x="{%= x %}" y="{%= y %}" 
+				onclick="{%= onclick%}" font-size="{%= size%}"
+				onhoverin="rm.getShape(this.prev()).attr('fill', 'brown')"
+				onhoverout="rm.getShape(this.prev()).attr('fill', '{%= fill %}')"
+			>{%= text%}&lt;/text>
+		&lt;/set>
+	&lt;/template-body>
+	
+&lt;/template>
+
+&lt;!-- Now a paper  with two ellipse buttons -->
+
+&lt;paper x="10" y="100" width="600" height="600">
+
+	&lt;ellipse-button x="120" y="100" rx="80" ry="21" text="Hello" size="20"
+		onclick="myapp.openSection('#section1PaperEl')">
+	&lt;/ellipse-button>
+		
+	&lt;ellipse-button x="320" y="190" rx="80" ry="21" color="blue"
+		text="world" size="40"
+		onclick="myapp.openSection('#section1PaperEl')">
+	&lt;/ellipse-button>
+			
+&lt;/paper>
+
+&lt;/raphael>
+    </programlisting>
+    
+    <para>You can open an html with this example 
+    <ulink src="&RMBASE;/src/test/examples/templatingTest2.html">here. </ulink>
+    </para>
+    
+    <para>The most important part is the template's body definition (what's inside &lt;template-body>)
+    and how parameters passed by template caller can be accessed there for drawing it. for example, the template code
+    <code>&lt;text color="{%= color %}"</code> will be translated to <code>&lt;text color="blue"</code> in the
+    template calling <code>&lt; ellipse-button .. color="blue"...></code>. </para>
+    
+    <para>More importantly is that we are allowed to execute any javascript and even do control flow 
+    with javascript (just like java scriptlets in JSPs). </para> 
+    
+    <para>An interesting thing to notice is that we choose the XML tag "ellipse-button" at template definition using
+    <code>&lt;use-tag name="ellipse-button">&lt;/use-tag></code> and then in the paper's we 
+    use that XML tag for ǎlling the template. This allows to enrich current &RM; markup with drawing specific dialects. 
+    Nevertheless, using custom xml tags is optional, and one can call any template using <code>&lt;template-use></code>. </para>
     
     
-    <section><title>Events</title>
-    <para>The events extension provide support for writing events handler functions in XML attributes onclick, etc just like 
-    in html code. </para>
+    <para>The following example works on this two things. It contains a template that 
+    draw a complex entity formed by many small circles drawed and painted randomly. This example use a javascript <code>for()</code>
+    loop to create many circle shapes. 
+    <ulink src="&RMBASE;/src/test/examples/templatingTest1.html">here. </ulink></para>
+    
+    <programlisting>
+
+&lt;raphael>
+	
+&lt;template name="strange1">
+
+	&lt;use-tag name="strange1-tag">&lt;/use-tag>
+	
+	&lt;!-- parameters: -->
+	&lt;template-arg name="cx" value="100">&lt;/template-arg>	
+	&lt;template-arg name="cy" value="100">&lt;/template-arg>
+	&lt;template-arg name="size" value="100">&lt;/template-arg>
+	&lt;template-arg name="circleCount" value="10">&lt;/template-arg>	
+	&lt;template-arg name="circleMaxRadius" value="10">&lt;/template-arg>	
+	
+	&lt;!-- this is the hard part of the template definition:
+	1) First of all, all template parameters will be of type string,
+	so we may need to cast them to numbers.
+	2) Inside a scriptlet {% .. %} we must scape all &lt; and &amp;, for example in 
+	"for(var i=0; i&lt;circleCount; i++) {"-->
+	&lt;template-body>
+		&lt;set class="strange1">
+			{%
+			circleCount=parseInt(circleCount);
+			size=parseInt(size);
+			circleMaxRadius=parseInt(circleMaxRadius);
+			cx=parseInt(cx);
+			cy=parseInt(cy);
+			for(var i=0; i&lt;circleCount; i++) { %}
+				&lt;circle cx="{%= cx+rm.randomBetween(-size/2, size/2)%}"
+					cy="{%= cy+rm.randomBetween(-size/2, size/2)%}"
+					fill="{%=rm.randomColor()%}"
+					r="{%=rm.randomBetween(2, circleMaxRadius)%}"
+					stroke-width="2" stroke="{%=rm.randomColor()%}">&lt;/circle>
+			{%}%}	
+		&lt;/set>
+	&lt;/template-body>
+&lt;/template>
+
+&lt;!-- now deifne the paper with some shapes and then use our template: -->
+
+&lt;paper x="10" y="100" width="600" height="600">
+
+	&lt;rect x="20" y="30" width="100" height="200">&lt;/rect>
+	&lt;rect x="200" y="30" width="100" height="200">&lt;/rect>
+	&lt;circle cx="20" cy="300" radius="20" stroke="red">&lt;/circle>
+	
+	&lt;set class="set1">
+		&lt;circle cx="220" cy="300" radius="40" stroke="red">&lt;/circle>
+		&lt;rect x="333" y="130" width="20" height="40">&lt;/rect>
+		&lt;ellipse x="333" y="330" rx="20" ry="40">&lt;/ellipse>
+	&lt;/set>
+	
+	&lt;!-- now call our template -->
+	&lt;template-use id="strangeShape1" name="strange1">
+		&lt;template-arg name="cx" value="100">&lt;/template-arg>
+		&lt;template-arg name="cy" value="100">&lt;/template-arg>
+		&lt;template-arg name="size" value="140">&lt;/template-arg>
+		&lt;template-arg name="circleCount" value="150">&lt;/template-arg>
+		&lt;template-arg name="circleMaxRadius" value="8">&lt;/template-arg>		
+	&lt;/template-use>
+	
+	&lt;template-use id="strangeShape2" name="strange1">
+		&lt;template-arg name="cx" value="300">&lt;/template-arg>
+		&lt;template-arg name="cy" value="200">&lt;/template-arg>
+		&lt;template-arg name="size" value="100">&lt;/template-arg>
+		&lt;template-arg name="circleCount" value="80">&lt;/template-arg>
+		&lt;template-arg name="circleMaxRadius" value="8">&lt;/template-arg>		
+	&lt;/template-use>
+	
+&lt;!-- 	&lt;use also support a short syntax using attributes. But be carefull using this,  -->
+&lt;!-- 	because you cannot name your parameters "id", "class" or "name" -->
+	&lt;template-use class="strange1Class1" name="strange1" 
+		cx="150" cy="320" size="160" circleCount="78" circleMaxRadius="50">&lt;/template-use>
+		
+		
+		or use the tag defined with use-tag eleent in template definition:
+	&lt;strange1-tag class="strange1Class1" name="strange1" 
+		cx="250" cy="220" size="160" circleCount="78" circleMaxRadius="50">&lt;/strange1-tag>
+&lt;/paper>
+&lt;/raphael>
+
+    </programlisting>
+    
+    
+    
+    <section><title>Template language</title>
+    
+    <para>Here are some notes about this template language, that is the template definition inside the template-body tag. </para>
+    
+    <formalpara><title>Printing</title><para>You can print any javascript evaluated expression using the keywords 
+    	<code>{%= %}</code>. For example 
+    	<code>
+    	&lt;p>Current year is: {%= new Date().getFullYear() =}. &lt;/p>
+    	</code>
+    	
+    	will be translated to 
+    	
+    	<code>
+    	&lt;p>Current year is 2012. &lt;/p>
+    	</code>
+    	
+    	
+    	</para></formalpara>
+    
+    <formalpara><title>Executing</title>
+    <para>The most usefull thing about templates is that you can do any javascript you want, even call another 
+    javascript framework to perform some neccessary calculationf to print &R; shapes as desired. </para>
+    
+    <important><para>Inside a scriptlet <code>{% .. %}</code> we must scape all &amp;lt; and &amp;amp;, for example in 
+	<code>for(var i=0; i&amp;lt;circleCount; i++) {</code>. For minimizing risk it is recommended that you use as little 
+	javascript code as possible insidethe template body. Instead try to put the javascript code in your page's scripts (loaded in head). This can reduce template 
+	rendering time in pages with lots of templates, 
+	</para></important>
+	</formalpara>
+    
+    <formalpara><title>Parameters</title><para>The important thing about parameters is that they all are strings, so
+    perhaps it is required to parse them as numbers in case of numerical calculations (like in the second example). </para></formalpara>
+    <formalpara><title>Printing</title><para></para></formalpara>
+    <formalpara><title>Printing</title><para></para></formalpara>
+    
+	
     </section>
     
     
-    <section><title>Animations</title>
+    </section>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <section><title>Events</title>
+    
+    
+    <para>The events extension provide support for writing events handler functions in XML attributes onclick, etc just like 
+    in html code. All &R; events are supported. </para>    
+    
+    <para>In the event handler code, the <code>this</code> keyword points to the DOM object that generates the event.
+    The shape correspongding to that DOM node can be obtained using 
+    <code>rm.getShape(this)</code>.  
+    Also the variable <code>event</code> is passed with the mouse event generated. </para>
+    
+    <para>In the following example we register a click handler 
+    in a rectangle and show the user the click's coordinates:</para>
+    
+    <programlisting>
+&lt;rect  x="330" y="350" width="100" height="100" fill="red"
+	onclick="alert('click coords: '+event.clientX+','+event.clientY)">
+&lt;/rect>
+    </programlisting>
+    
+    <para>Now the same rectangle but changin colors on hovering (make it red with mouse enters and make it yellow when mouse leave):</para>
+    
+    <programlisting>
+&lt;rect  x="330" y="350" width="100" height="100" fill="red"
+	onhoverin="rm.getShape(this).attr('fill', 'yellow')"
+	onhoverout="rm.getShape(this).attr('fill', 'red')">
+&lt;/rect>
+    </programlisting>
+        
+    <para>Some of them are separated in two or more handlers. For
+    example, &R; support the function <code>hover(hoverIn, hoverOut)</code> for registering both hover-in and hover-out events. 
+    In &RM; we separate this in two event attributes <code>onhoverin</code> and <code>onhoverout</code>. 
+    The same happens with ondrag event that is divided in three event attributes <code>ondragstart, ondragend, ondragmove</code>. 
+    As in &R; in the case of these advanced handlers, event information is passed to handlers with the same names defined in &R; 
+    reference. For example, the ondragmove handler will pass mouse position and dx, dy and this information can be 
+    used for moving a shape. For example, this is a classic shape dragging code: </para>
+    
+    <programlisting>
+&lt;rect  x="330" y="350" width="100" height="100" 
+	radius="10" fill="red"
+	ondragmove="rm.getShape(this).transform('t'+dx+','+dy)">
+&lt;/rect>
+    </programlisting>
+    
+    <para>In <xref linkend="exts-animation"/> we will se other event example for animating a shape after the user clicks it.</para>
+    
+    </section>
+    
+
+
+
+
+    <section id="exts-animation"><title>Animations</title>
     <para>The animation extension provide support for two things 1) be able to define animations in XML and 
     2) provide utilities for easy animation calling using javascript from eventshandlers and other js code.</para>
     
@@ -220,7 +671,12 @@
 &lt;/paper>
 &lt;/raphael>
     </programlisting>
+    
+    <para>As you can see we made two things, first define an entire animation and name it "textglowing1", using the &lt;animation> tag. Second, 
+    easily use that animation for animating a shape when it is clicked.</para>
     </section>
+	
+	
 	
 	
 	
@@ -231,14 +687,43 @@
 	</section>
 	
 	
+	
+	
 	<section><title>include</title>
+	
 	<para>&RM; supports an include tag that can be used to include a markup in other file to current document. 
-	Tee file content is reading dynamicaly using an ajax request. This is not a &RM; extension but a core mechanism available for 
-	include other file contents. </para>
+	File content is reading dynamicaly using an ajax request. This is not a &RM; extension but a core mechanism available for 
+	include other file contents before any preproccessing is done at all.</para>
+	
+	<para>The included .xml document must in the document element tag <code>&lt;rm-include></code>, for example, for putting all your page templates in a separate .xml file you do it content like this: </para>
+	
+	<programlisting>
+&lt;?xml version="1.0" encoding="ISO-8859-1"?>
+
+&lt;rm-include>
+
+&lt;template name="templ1Name">
+...
+&lt;/template>
+...
+
+&lt;/rm-include>
+	</programlisting>
+	
+	<para>&lt;include only support one level of inclusion. For example, if you 
+	include a document that includes another document it won't work. </para>
+	
+	<para>It is not recommended to use &lt;include> intensively; if you can 
+	use templates and don't use include. </para>
+	
 	</section>
 	
 	
-	 <section>
+	
+	
+	
+	
+	 <section id="exts-percentual">
 	 <title>Percentual bounds</title>
 	 
 	 <para>&RM; comes with an extension that let specify a shape's dimension and 
@@ -249,6 +734,7 @@
 	 absolute or percentual position/size, and its children can 
 	 spcify relative bounding attributes like x="80%" or height="20%" and they will 
 	 be preproccessed relative to set's base..</para>
+	 
 	 
 	 <programlisting>	 	 
 	 Example: the following markup: 
@@ -271,7 +757,13 @@ Will be translated to the following markup at preproccessing
 	 </programlisting>
 	 
 	 
-	 <para>In the case of paths, only position and width will work. Paths are special. The other base raphael 
+	 <para>This extension does two things: </para>
+	 <para>1) at preproccessing, it calculate the real position and sizes of shapes 
+	 with "%" attributes. Since a paper must have non percentual dimensions, this can be calculated at 
+	 preproccessing only using the dom. </para>
+	 
+	 <para>2) in post rendering, transform paths translate and scaling them to feet x,y,width and height specified attributes. 
+	 In the case of paths, only position and width will work. Paths are special. The other base raphael 
 	 shapes like rects, circles, ellipses all have bounding attrinbutes like x, y, cx, cy, width, height, rx, 
 	 ry, radious. But path hasn't, because the bounds of the shape is defined by the shape 
 	 string itself. This extension adds support for path, x, y, and width attributes that can be percentual or 
@@ -283,6 +775,177 @@ Will be translated to the following markup at preproccessing
   </section>
   
   
+  
+  
+  
+  
+  <section><title>Using &RM; in a web page</title>
+  
+  <para>This document try to explain different ways of including your raphael markup drawing in html documents. </para>
+  
+  
+    
+  
+  <section><title>Embedding in HTML</title>
+  
+  <para>The most simple way of putting your &R; drawing in your html web pages
+  is putting the &lt;raphael> element in the same html file, toghether with the rest of the html code.
+  </para>
+  
+  <para>An example on how to do that is 
+  <ulink url="&RMBASE;/src/test/raphaeltest2.html">here</ulink>. The next is an extract with that example source's with explaining comments: 
+  </para>
+  
+  <programlisting>
+&lt;!DOCTYPE html>
+&lt;html>
+&lt;head>
+	&lt;script src="../deps/jquery-1.7.1.js">&lt;/script>
+	&lt;script src="../deps/raphael-min.js">&lt;/script>
+	&lt;script type="text/javascript" src="../rm.js">&lt;/script>
+&lt;/head>
+&lt;body>
+
+&lt;!-- our HTML will be formed by two things, a &lt;raphael> element with a 
+drawing inside and a script calling &RM; framework for rendering that drawing -->
+
+&lt;raphael xmlns="http://raphaeljs.com">	
+	&lt;paper class="paperclass1" x="10" y="10" width="400" height="400">
+		&lt;rect x="20" y="30" width="100" height="200" id="rect1">&lt;/rect>
+		&lt;rect x="200" y="30" width="100" height="200">&lt;/rect>
+		....
+	&lt;/paper>	
+&lt;/raphael>
+
+
+&lt;script type="text/javascript">
+/* render all raphaels elements in this document */
+rm.render();
+&lt;/script>
+&lt;/body>
+&lt;/html>
+  
+  </programlisting>
+  
+  <para>Important things to notice in the code are 1) include of 3 javascript files: jquery, raphael and &RM;. 
+  2) the &lt;raphael element just inside the html document's &lt;body>
+  3) at last, a javascript call to the framework to render all &lt;raphael> elements found in the HTMl document.</para>
+  	
+<note><para>For portability reasons is important that the &lt;raphael> elements declaration contains the <code>xmlns="http://raphaeljs.com"</code> attribute 
+exactly like in the example. </para></note>
+
+  <para></para>
+  <para></para>
+    
+  </section>
+  
+  
+  
+  
+  <section><title>Loading XML a la AJAX</title>
+  <para>&RM;support XML document asynchronous loading. This is the recomended way. Basically you put your XML 
+  document in a different XML document, and in your HTML file ask the framework to load it.  
+  </para>
+  
+  <para>In the following example we show a HTML source loading a XML drawing like this. <ulink url="&RMBASE;/src/test/raphaeltest_ajax.html">See example demo here. </ulink></para>
+  
+  <programlisting>
+&lt;!DOCTYPE html>
+&lt;html>
+&lt;head>
+	&lt;script src="../deps/jquery-1.7.1.js">&lt;/script>
+	&lt;script src="../deps/raphael-min.js">&lt;/script>
+	&lt;script type="text/javascript" src="../rm.js">&lt;/script>
+&lt;/head>
+&lt;body>
+
+&lt;script type="text/javascript">
+/* render the xml document drawing1.xml. The document must be in the same server. */
+rm.renderAjax("drawing1.xml", function (rdoc) {
+	/* rdoc is a ready to use jquery DOM object with our xml dom inside. 
+		we can access it for querying or even manipulate it: */
+	alert("the document has "+rdoc.find("rect")+" rectangles.");
+});
+&lt;/script>
+
+&lt;/body>
+&lt;/html>
+
+  </programlisting>
+  
+  <para>And the loaded drawing1.xml file:</para>
+  
+  <programlisting>
+&lt;raphael>
+	&lt;paper x="10" y="10" width="400" height="400">
+		&lt;rect x="20" y="30" width="100" height="200"/>
+		...
+	&lt;/paper>
+&lt;/raphael>
+  </programlisting>
+  
+  </section>
+  
+  
+  
+  
+  
+  
+  <section><title>Render the XML file directly using XSL stylesheet</title>
+  
+  <para>You can present your XMl drawing documents directly using a XSL 
+  (XML stylesheet) provided by the framework. For example, 
+  <ulink url="&RMBASE;/src/test/xsltest1/drawing1.xml">this drawing link</ulink> points to a XML file linking the 
+  framework XSL stylesheet. If you opened with a modern browser 
+  it should show you the drawing. (no HTML code needed at all!). The important thing is
+  including a xsl stylesheet called drawing1.xml using the following:  
+   </para> 
+
+<programlisting>
+&lt;?xml-stylesheet type="text/xsl" href="drawing1.xsl"?>
+</programlisting>
+
+<para>We must also write the configuration XSL file drawing1.xsl that must contain some information, like the path to dependency javascripts (jquery, raphael, etc), the title of the html document, and the path of the raphael.xsl, the main raphael markup XSL file for transforming a .xml docuemnt with our drawing into an xhtml document viewable by the browser. So create drawing1.xsl file in the same folder as drawing1.xml and with a content like this:</para>
+
+
+
+<programlisting>
+&lt;?xml version="1.0" encoding="ISO-8859-1"?>
+&lt;xsl:stylesheet version="1.0"
+	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">		
+	
+	&lt;!-- please fix the following variables and paths -->
+	&lt;xsl:variable name="doc.title" select="'raphael markup test1'" />
+	&lt;xsl:variable name="raphael.id" select="'raphaelDocument1'" />	
+	&lt;xsl:variable name="raphael.js.path" select="'../../deps/raphael-min.js'" />
+	&lt;xsl:variable name="jquery.js.path" select="'../../deps/jquery-1.7.1.min.js'" />
+	&lt;xsl:variable name="rm.js.path" select="'../../rm.js'" />
+	&lt;xsl:include href="../../raphael.xsl"/> 	
+	
+	&lt;xsl:template match="*">
+	&lt;/xsl:template>
+&lt;/xsl:stylesheet>
+</programlisting>
+
+<important><para>this only works in firefox and chrome and it is important, in the xml file to define the 
+&lt;raphael> element just without ANY attributes, like in the demo. 
+For this to work on IE the &lt;raphael> element must be defined like this:
+</para>
+
+<programlisting>
+&lt;raphael xmlns="http://raphaeljs.com">
+</programlisting>
+
+</important>
+ 
+   <note><para>This metodology for showing a XML drawing is not recommended to use 
+   in production because it is not fully tested yet-do not work in IE). It is more a prove of concept 
+   that a XML &RM;drawing XML stylesheet could be easily made using &RM; framework.</para></note>
+   
+   
+  </section>
+  
+  </section>
   
   
   

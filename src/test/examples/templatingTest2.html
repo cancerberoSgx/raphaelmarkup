@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="../../deps/jquery-1.7.1.js"></script>
+	<script src="../../deps/raphael-min.js"></script>
+	<script type="text/javascript" src="../../rm-core.js"></script>
+	<script type="text/javascript" src="../../rm-ext.js"></script>
+	
+<title>Raphael markup - template test 2</title>
+</head>
+<body>
+
+<p></p>
+
+<raphael style="display:none">
+
+
+<template name="ellipseButton">
+
+	<!-- with use-tag we can define a custom xml tag for use 
+		calling this template -->
+	<use-tag name="ellipse-button"></use-tag>
+
+	<!-- The following are template parameter declarations and are optional, 
+		here we put it for informative purposes and for default values -->
+		
+	<template-arg name="onclick" value="alert('clicked')"></template-arg>
+	<template-arg name="x" value="100"></template-arg>
+	<template-arg name="y" value="100"></template-arg>
+	<template-arg name="rx" value="10"></template-arg>	
+	<template-arg name="ry" value="10"></template-arg>
+	<template-arg name="fill" value="red"></template-arg>
+	<template-arg name="color" value="black"></template-arg>
+	<template-arg name="text" value="black"></template-arg>
+	<template-arg name="size" value="23"></template-arg>				
+
+	<!-- The template body is where we write the markup of the template. 
+		In this case we build the ellipse button usng a set with an 
+		ellipse and a text. Notice how we evaluate parameter values 
+		using {%= %} -->
+	<template-body>
+		<set class="ellipseButton button">
+			<ellipse x="{%= x %}" y="{%= y %}" rx="{%= rx %}" ry="{%= ry %}" 
+				fill="{%= fill %}" onclick="{%= onclick%}"					
+				onhoverin="rm.getShape(this).attr('fill', 'brown')"
+				onhoverout="rm.getShape(this).attr('fill', '{%= fill %}')"
+			></ellipse>
+			<text color="{%= color %}" x="{%= x %}" y="{%= y %}" 
+				onclick="{%= onclick%}" font-size="{%= size%}"
+				onhoverin="rm.getShape(this.prev()).attr('fill', 'brown')"
+				onhoverout="rm.getShape(this.prev()).attr('fill', '{%= fill %}')"
+			>{%= text%}</text>
+		</set>
+	</template-body>
+	
+</template>
+
+
+<template name="strange1">
+
+
+	<use-tag name="strange1-tag"></use-tag>
+
+	<!-- 	define our template first. this tempalte 
+	is a strange set with random circles inside  -->	
+
+	<!-- parameter definitions, are optional, 
+	here we put it for informative porpuses and for default values -->
+	
+	<template-arg name="cx" value="100"></template-arg>
+	<template-arg name="cy" value="100"></template-arg>
+	<template-arg name="size" value="100"></template-arg>
+	<template-arg name="circleCount" value="10"></template-arg>	
+	<template-arg name="circleMaxRadius" value="10"></template-arg>	
+	
+	<!-- this is the hard part of the template definition:
+	1) First of all, all template parameters will be of type string,
+	so we may need to cast them to numbers.
+	2) Inside a scriptlet {% .. %} we must scape all &lt; and &amp;, for example in 
+	"for(var i=0; i&lt;circleCount; i++) {"-->
+	<template-body>
+		<set class="strange1">
+			{%
+			circleCount=parseInt(circleCount);
+			size=parseInt(size);
+			circleMaxRadius=parseInt(circleMaxRadius);
+			cx=parseInt(cx);
+			cy=parseInt(cy);
+			for(var i=0; i&lt;circleCount; i++) { %}
+				&lt;circle cx="{%= cx+rm.randomBetween(-size/2, size/2)%}"
+					cy="{%= cy+rm.randomBetween(-size/2, size/2)%}"
+					fill="{%=rm.randomColor()%}"
+					r="{%=rm.randomBetween(2, circleMaxRadius)%}"
+					stroke-width="2" stroke="{%=rm.randomColor()%}">&lt;/circle>
+			{%}%}	
+		</set>
+	</template-body>
+</template>
+
+<!-- now deifne the paper with some shapes and then use our template: -->
+
+<paper x="10" y="100" width="600" height="600">
+
+	<ellipse-button x="120" y="100" rx="80" ry="21" text="Hello"
+		onclick="myapp.openSection('#section1PaperEl')" size="20">
+	</ellipse-button>
+		
+	<ellipse-button x="320" y="190" rx="80" ry="21" fill="blue"
+		text="World" size="40"
+		onclick="myapp.openSection('#section1PaperEl')">
+	</ellipse-button>
+			
+</paper>
+
+<style>
+
+paper rect { 
+	fill: blue;  
+	stroke-width: 10;
+} 
+.set1 {
+	fill: yellow;
+}
+.set1 circle { 
+	fill: black; 
+	stroke: red; 
+	stroke-width: 4; 
+}
+#strangeShape2 * {
+	fill:red;
+}
+.strange1Class1 * {
+	fill: blue;
+	stroke-width: 10
+}
+</style>
+
+</raphael>
+
+
+<script type="text/javascript">
+
+var rdoc = rm.render()[0];
+// alert(rdoc.find(".set1 circle").size())
+
+</script>
+
+</body>
+</html>

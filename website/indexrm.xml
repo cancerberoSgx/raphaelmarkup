@@ -37,12 +37,23 @@
 			<scene ellapse="55%" transform="S2.5 R144" easing="easy-in"></scene>
 			<scene ellapse="100%" transform="S1.0 R0" easing="elastic"></scene>
 		</animation>
+		
 		<rect  x="330" y="350" width="100" height="100"
 			fill="url(imgs/lblue018.gif)"
 			onhoverin="rm.animate(this, 'rectamin1', 3000)"
 			>
 		</rect>
-		
+<!-- 		rm.getShape(this).attr('fill', 'blue');  -->
+<!-- <rect  x="330" y="350" width="100" height="100"  -->
+<!-- 	radius="10" fill="red" -->
+<!-- 	ondragstart="alert('dragstart at: '+x+', '+y)"> -->
+<!-- </rect> -->
+
+<rect  x="330" y="350" width="100" height="100" 
+	radius="10" fill="red"
+	ondragmove="rm.getShape(this).transform('t'+dx+','+dy)">
+</rect>
+<!-- ondragmove="rm.getShape(this).attr({'x':x,'y':y})" -->
 		<ellipse-button2 x="470" y="300" rx="80" ry="21" text="about" size="20"
 			onclick="myapp.openSection('#section1PaperEl')"></ellipse-button2>
 			

@@ -32,6 +32,7 @@
 <template name="ellipseButton2">
 	<use-tag name="ellipse-button2"></use-tag>
 
+	<!-- accepted parameters -->
 	<template-arg name="onclick" value="alert('clicked')"></template-arg>
 	<template-arg name="x" value="100"></template-arg>
 	<template-arg name="y" value="100"></template-arg>
