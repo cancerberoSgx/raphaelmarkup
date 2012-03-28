@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- <raphael xmlns="http://raphaeljs.com"> -->
+
+<raphael
+	xmlns="http://raphaeljs.com"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://raphaeljs.com ../src/raphael.xsd">
+		
+<include src="indexrm_aux.xml"></include>
+
+<paper id="headerPaper1" x="0" y="0" width="950" height="1000" containerId="headerPaperEl">
+
+	<rect x="0" y ="0" width="950" height="200" fill="#b18c8c" 
+		stroke="#f89938" stroke-width="20" stroke-dasharray="."></rect>
+	
+	<print class="title" x="0" y="0"		
+		onhoverin="rm.animate(this, 'textglowing1', 1000)">
+		raphaelMarkup site</print>
+	
+	<imag erode="2" id="rmlogo" src="rm.png" x="570" y="90" width="105" height="105" 
+		onhoverin="var s = rm.getShape(this); s.stop(); s.animate({transform: 'r230t-100,20'}, 1000, '&gt;');"
+		onhoverout="var s = rm.getShape(this); s.stop(); s.animate({transform: 'R 0t+100,-20'}, 1000, '&lt;');"
+		></imag>
+		
+	
+	<ellipse-button2 x="470" y="300" rx="80" ry="21" text="About..." size="20"
+		onclick="rm.openInNewTab('http://code.google.com/p/raphaelmarkup/');"></ellipse-button2>
+		
+	<star-button1 x="270" y="300" text="Documentation" size="30"
+		onclick="myapp.openSection('#section1PaperEl')"></star-button1>
+		
+		
+		
+	<set x="50%" y="50%" width="100%" height="300" >
+		<ellipse-button2 x="500" y="500" rx="80" ry="21" text="About 2..." size="20"
+			onclick="myapp.openSection('#section1PaperEl')"></ellipse-button2>
+		
+		<star-button1 x="200" y="500" text="Documentation 2" size="30"
+			onclick="myapp.openSection('#section1PaperEl')"></star-button1>
+		
+	</set>
+	
+	<text x="100" y="200" width="200" fill="blue" font-size="17px">
+		raphaël markup brings the great raphaeljs library to the XML world.
+	</text>
+	
+</paper>
+
+	
+	
+<!-- 	section "about" paper -->
+
+<paper id="sectionAbout" x="0" y="0" width="700" height="600" 
+	containerId="section1PaperEl">
+	<rect x="0" y="0" width="700" height="600" fill="white"></rect>
+	<text x="100" y="200">hello</text>
+		
+		
+	<ellipse-button1 x="550" y="120" rx="50" ry="11" text="close2" size="30"
+		onclick="myapp.closeSection('#section1PaperEl')"></ellipse-button1>
+		
+	<ellipse-button2 x="600" y="100" rx="80" ry="21" text="close" size="30"
+		onclick="myapp.closeSection('#section1PaperEl')"></ellipse-button2>
+		
+</paper>
+	
+</raphael>

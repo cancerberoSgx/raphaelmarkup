@@ -3,19 +3,24 @@
 
 NAME=rm-user-guide
 #clean
-rm $NAME.pdf
-rm -r $NAME-htmls
+rm -rf $NAME-pdf
+mkdir $NAME-pdf
+
+rm -rf $NAME-htmls
+rm -rf $NAME-html
 rm $NAME.tgz
 
 #pdf
-dblatex $NAME.xml
+dblatex -o $NAME-pdf/$NAME.pdf $NAME.xml
 
 #multiple htmls
-#db2html $NAME.xml
-#cp -r images $NAME/images
-#mv $NAME $NAME-htmls
-#cp $NAME-htmls/t2.html $NAME-htmls/index.html
-#chmod -R a+x $NAME-htmls
+db2html $NAME.xml
+cp -r images $NAME/images
+mv $NAME $NAME-htmls
+cp $NAME-htmls/t1.html $NAME-htmls/index.html
+chmod -R a+x $NAME-htmls
 
 tar cvfz $NAME-htmls.tgz $NAME-htmls
-#db2html --nochunks $NAME.xml > $NAME.html
+
+mkdir $NAME-html
+db2html --nochunks $NAME.xml > $NAME-html/$NAME.html

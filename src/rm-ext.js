@@ -1,3 +1,5 @@
+(function () {
+	
 /* * * * 
  * 
  * raphaelmarkup extensions. 
@@ -22,77 +24,18 @@
  */
 
 
-//rm._include_handlers={};
-//rm._include_registerUrl=function(rdoc, dom, url, h) {
-//	if(!rm._include_handlers[rdoc])
-//		rm._include_handlers[rdoc]={};
-//	rm._include_handlers[rdoc][dom]=h;
-//	return $.ajax({
-//		"url": url,
-//		"success": function(data) {
-//			var domToInclude= $(data);
-//			domToInclude.insertAfter(this["dom"]);
-//			this["dom"].remove();
-//			//callback
-//			rm._include_handlers[this["rdoc"]][this["dom"]]();
-//		},
-//		"context": {"rdoc": rdoc, "dom": dom},
-//		"error": errorHandler,
-//		"dataType": "xml"
-//	});
-//}
-//rm._include_asyncPreproccess = function(rdoc) {
-//	var data=[];
-//	rdoc.find("include[src]").each(function(){
-//		data.push({
-//			"ajax": rm._include_registerUrl(rdoc, $(this), $(this).attr("src"))
-//		});
-//	});
-//
-//	return $.when(data).then(function(results){		
-//	});
-//	
-////	rm._include_onFinnish=onFinnish;
-//}
-//rm.asyncPreproccessRegister(rm._include_asyncPreproccess);
-
-
-
-
-
-////rm._include_handlers={};
-//rm._include_registerUrl=function(rdoc, dom, url, h) {
-////	if(!rm._include_handlers[rdoc])
-////		rm._include_handlers[rdoc]={};
-////	rm._include_handlers[rdoc][dom]=h;
-//	return $.ajax({
-//		"url": url,
-//		"success": function(data) {
-//			var domToInclude= $(data);
-//			$(domToInclude.prop("documentElement")).insertAfter(this["dom"]);
-//			this["dom"].remove();
-//			
-//			alert(rm.toXML(rdoc));
-//			rm.preproccess(rdoc);
-//			alert(rm.toXML(rdoc))
-//			
-//			rm.update(this["rdoc"], this["dom"].parent());
-//			rm._postRendering(rdoc);
-//		},
-//		"context": {"rdoc": rdoc, "dom": dom},
-//		"dataType": "xml"
-//	});
-//}
-//rm._include_asyncPreproccess = function(rdoc) {
-//	var data=[];
-//	rdoc.find("include[src]").each(function(){
-//		rm._include_registerUrl(rdoc, $(this), $(this).attr("src"));		
-//	});
-//	return rdoc;
-//}
-//rm.preproccessRegister(rm._include_asyncPreproccess);
-
-
+	
+	
+	
+//first some general purposes utilities
+/** opens link in a new tab simulating a click on a link */
+rm.openInNewTab = function(url) {
+	if($("#_openInNewTabAnchor").size()==0) 
+		$(document.body).append('<a id="_openInNewTabAnchor" onclick="window.open(this.href);return false;" target="_blank" ></a>');
+	$("#_openInNewTabAnchor").attr({"href": url});
+//	debugger;
+	$("#_openInNewTabAnchor").click();
+}
 
 
 
@@ -125,7 +68,7 @@ rm._preproccess_template1 = function(rdoc) {
 		var data = {}, paramDefaultValues = {};
 		
 		//load variables
-		$(this).find("var").each(function(i){
+		$(this).find("template-var").each(function(i){
 			data[$(this).attr("name")] = $(this).attr("value");
 		});
 		
@@ -169,13 +112,11 @@ rm._preproccess_template1 = function(rdoc) {
 	for(var i in rm._preproccess_template1_useTags[rdoc]) {
 		sel+=", "+i;
 	}
-//	alert(sel+" - "+rdoc.find(sel).size());
 	rdoc.find(sel).each(function(){
 		var name = $(this).attr("name"),  
 			tagName = rm._getTagName($(this)), 
 			templateObj = null;
 		
-//		debugger;
 		if(!name&&tagName=="template-use") {
 			return;
 		}
@@ -186,7 +127,6 @@ rm._preproccess_template1 = function(rdoc) {
 		var tmplData = {}, 
 			templateObj = rm._preproccess_template1_rocTmpls[rdoc][name];
 		
-//		alert("name: "+name)
 		if(!rm._preproccess_template1_rocTmpls[rdoc][name]) {
 			rm._error("<use>_ "+"with non existent template: "+name);
 			return; //template not found.
@@ -206,7 +146,6 @@ rm._preproccess_template1 = function(rdoc) {
 		var attrs = rm._getAttributeNames($(this))
 		for ( var i = 0; i < attrs.length; i++) {
 			if(attrs[i]!="name"&&attrs[i]!="id"&&attrs[i]!="class") {
-//				var attrName = "";
 				//_getAttributeNames() is buggy, so the next hack:
 				for(var j in tmplData) {
 					if(j.toLowerCase()==attrs[i].toLowerCase())
@@ -216,8 +155,6 @@ rm._preproccess_template1 = function(rdoc) {
 			}
 		}
 		//then copy template-arg
-//		var iasds=$(this).find("template-arg").size();
-//		alert($(this).find("template-arg").size());
 		$(this).find("template-arg").each(function(){
 			var an=$(this).attr("name"), av = $(this).attr("value");
 //			try {
@@ -243,14 +180,12 @@ rm._preproccess_template1 = function(rdoc) {
 		 * in the place (replace) of this use element.
 		 */
 		try {
-			//rm._log("\n\n"+out+"\n\n");
 			outDom = rm.parseXML(out);
 			if(rm.isDocument(outDom))
 				outDom=$(outDom.prop("documentElement"));
 		}catch(e) {
 			rm._error("<use>: Error parsing resulting output of template "+
 				name+". use id: "+$(this).attr("id")+" - error: "+e);
-//			return;
 		}
 		if(rm.isDocument(outDom))
 			outDom=$(outDom.prop("documentElement"));
@@ -302,8 +237,7 @@ rm._tmplCreateFunc = function(str, data) {
 	    // Introduce the data as local variables using with(){}
 	    "with(obj){p.push('" +
 	   
-	    // Convert the template into pure JavaScript
-	    
+	    // Convert the template into pure JavaScript	    
 	    str.replace(/[\r\t\n]/g, " ") .
 	    replace(/'(?=[^%]*%})/g,"\t") .
 	    split("'").join("\\'") .
@@ -342,18 +276,7 @@ rm._preproccesCSS = function(rdoc) {
 	/* first parse each <style> element against document. 
 	 * the DOM will be affected before rendering.*/
 	rdoc.find("style").each(function(i){
-//		if($(this).attr("href")) {
-//			$.ajax({
-//				"url": $(this).attr("href"),
-//				"context": rdoc,
-//				"success": function(data) {
-//					rm._applyCSS($(this), data);
-//				}
-//			});
-//		}
-//		else {
-			rm._applyCSS(rdoc, $(this).text());
-//		}
+		rm._applyCSS(rdoc, $(this).text());
 	});	
 	return rdoc;
 };
@@ -411,6 +334,8 @@ rm._removeComments= function(css) {
 
 
 
+
+
 /* * * * ANIMATIONS - 
  * define anims in XML and easily use them in javascript. 
  * the rdoc dom document will be poblated with function getAnimationById()
@@ -454,6 +379,22 @@ rm.animate = function(dom, animId, ms) {
 	shape.stop();
 	shape.animate(anim, ms);
 };
+rm.delay = function(dom, animId, ms, delayms) {
+	var rdoc = rm.getDocOf(dom), 
+		shape = rm.getShape(dom), 
+		anim = rdoc.getAnimById(animId),
+		ranim =  Raphael.animation(anim, ms).delay(delayms);
+	shape.stop();
+	shape.animate(ranim, ms);
+};
+rm.repeat = function(dom, animId, ms, repeatCount) {
+	var rdoc = rm.getDocOf(dom), 
+		shape = rm.getShape(dom), 
+		anim = rdoc.getAnimById(animId),
+		ranim =  Raphael.animation(anim, ms).repeat(repeatCount);
+	shape.stop();
+	shape.animate(ranim, ms);
+};
 rm._raphaelAnimAttrs = [
     "blur", "clip-rect", "cx", "cy", "fill", "fill-opacity", 
     "font-size", "height", "opacity", "path", "r", "rx", "ry", "stroke", 
@@ -469,39 +410,6 @@ rm._raphaelAnimAttrs = [
 
 
 
-//on path - don't work anymore.
-
-//rm._printonpath_do = function(text, paper, pathStr) {
-//	var p = paper.path(pathStr).attr({stroke: "none"});
-//	for ( var i = 0; i < text.length; i++) {		
-//		var letter = text[i];
-////		if(letter.rmtype!="letter")
-////			continue;
-//		var newP = p.getPointAtLength(letter.getBBox().x);
-//		var newTransformation = letter.transform()+
-//		 	"T"+(newP.x-letter.getBBox().x)+","+
-//	        (newP.y-letter.getBBox().y-letter.getBBox().height);
-//		
-//		//also rotate the letter to correspond the path angle of derivative
-//	    newTransformation+="R"+
-//	        (newP.alpha<360 ? 180+newP.alpha : newP.alpha);
-//	    alert(newTransformation);
-//	    letter.transform(newTransformation);
-//	}
-//	text._rm_topathPath=p;
-//};
-//
-//rm._printonpath_postRendering = function(rdoc) {
-//	rdoc.find("print").each(function(){
-//		if($(this).attr("onpath")) {
-//			alert(rm.getShape($(this)).type);
-//			rm._printonpath_do(rm.getShape($(this)), 
-//				rm.getShape($(this).parent("paper")), 
-//				$(this).attr("onpath"));
-//		}
-//	});
-//};
-
 
 
 
@@ -510,10 +418,12 @@ rm._raphaelAnimAttrs = [
 
 
 /* * * * * EVENTS * * * * */
+
 /*events onclick, ondblclick, onmouseoever, etc are available
 in the event's code "this" refers to the jquery DOM object pointing to xml event source element  
 and "evt" is the event object. if you wnt to get the raphal shape use rm.getShape(this)  
 */
+
 rm._events_postRendering = function(rdoc) {
 	rdoc.find("imag, text, print, circle, ellipse, rect, path").each(function(){
 		if(!rm.getShape($(this)))
@@ -641,6 +551,7 @@ rm._text_widthrwrappPostRendering = function(rdoc) {
 	});;
 	return rdoc;
 }
+
 
 
 
@@ -798,39 +709,493 @@ rm._percentDim_postRendering = function(rdoc) {
 
 
 
-//
-///** * * * * html "inside" - this just get a given html element 
-// * over a paper and shape it. User is responsible for
-// * creating the html take care abuut zindex.etc. 
-// * 
-// * Because this is not really html content inserting, the html elements won't respond to any raphael attrs or transfmrtions.
-// * 
-// * coopeates with percentDim, shuld be registered after it. 
-// * height and width are provided by html
-// * * * * 
-// */
-//rm._html_postrendering=function(rdoc) {
-//	rdoc.find("include-html[element]").each(function(){
-//		var dom = $($(this).attr("element"));
-//		if(dom.size()>0 && $(this).attr("x") && 
-//			$(this).attr("y")) {
-//			
-//			var paper = rm.getShape($(this).parents("paper")), 
-//				paperPos = $(paper.canvas).offset();
-//			
-//			dom.parent().css({"x-index": 9999});
-//			
-//			dom.css({
-//				"x-index": 9999,
-//				"position": "absolute",
-//				"display": "block",
-//				"top": (paperPos.top+parseInt($(this).attr("y")))+"px",
-//				"left": (paperPos.left+parseInt($(this).attr("x")))+"px",
-//			});
-//		}
-//	});
-//	return rdoc;
-//}
+
+
+/* * * * gradient * * * */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* * * * * * * 
+ * raphael extension's extension
+ * effect and filters not supported by raphaeljs like blur, 
+ * emboss, and other supported only in svg. these rm extensions 
+ * will also define a raphael plugin and use it.
+ * Note that almost all of these will be only post renderer extensions (dont do any xml preproccessing).
+ */
+
+rm._blurPostRendering=function(rdoc) {
+	rdoc.find("*[blur]").each(function(){
+		var blur = parseFloat($(this).attr("blur")), 
+			shape = rm.getShape(this);
+		shape.blur(blur);
+	});
+};
+
+rm._embossPostRendering=function(rdoc) {
+	rdoc.find("*[emboss]").each(function(){
+		var factor = parseFloat($(this).attr("emboss")), 
+			shape = rm.getShape(this);
+		shape.emboss(factor);
+	});
+};
+rm._morphologyPostRendering=function(rdoc) {
+//	morphology(morphname, operator, radius)
+	rdoc.find("*[erode], *[dilate]").each(function(){
+		var shape = rm.getShape(this);
+		if($(this).attr("erode"))		
+			shape.morphology("rmErode", "erode", parseFloat($(this).attr("erode")));
+		if($(this).attr("dilate"))		
+			shape.morphology("rmDilate", "dilate", parseFloat($(this).attr("dilate")));
+	});
+};
+rm._colorMatrix=function(rdoc) {
+	rdoc.find("*[erode], *[dilate]").each(function(){
+		var shape = rm.getShape(this);
+		if($(this).attr("erode"))		
+			shape.morphology("rmErode", "erode", parseFloat($(this).attr("erode")));
+		if($(this).attr("dilate"))		
+			shape.morphology("rmDilate", "dilate", parseFloat($(this).attr("dilate")));
+	});
+};
+
+
+
+
+
+//now raphael plugins :
+//blur plugin: use like shape1.blur(2);
+(function () {
+  if (Raphael.vml) {
+      var reg = / progid:\S+Blur\([^\)]+\)/g;
+      Raphael.el.blur = function (size) {
+          var s = this.node.style,
+              f = s.filter;
+          f = f.replace(reg, "");
+          if (size != "none") {
+              s.filter = f + " progid:DXImageTransform.Microsoft.Blur(pixelradius=" + (+size || 1.5) + ")";
+              s.margin = Raphael.format("-{0}px 0 0 -{0}px", Math.round(+size || 1.5));
+          } else {
+              s.filter = f;
+              s.margin = 0;
+          }
+      };
+  } else {
+      var $ = function (el, attr) {
+          if (attr) {
+              for (var key in attr) if (attr.hasOwnProperty(key)) {
+                  el.setAttribute(key, attr[key]);
+              }
+          } else {
+              return document.createElementNS("http://www.w3.org/2000/svg", el);
+          }
+      };
+      Raphael.el.blur = function (size) {
+          // Experimental. No WebKit support.
+          if (size != "none") {
+              var fltr = $("filter"),
+                  blur = $("feGaussianBlur");
+              fltr.id = "r" + (Raphael.idGenerator++).toString(36);
+              $(blur, {stdDeviation: +size || 1.5});
+              fltr.appendChild(blur);
+              this.paper.defs.appendChild(fltr);
+              this._blur = fltr;
+              $(this.node, {filter: "url(#" + fltr.id + ")"});
+          } else {
+              if (this._blur) {
+                  this._blur.parentNode.removeChild(this._blur);
+                  delete this._blur;
+              }
+              this.node.removeAttribute("filter");
+          }
+      };
+  }
+})();
+//emboss plugin, use like shape1.emboss(1.0)
+(function () {
+  if (Raphael.vml) {
+      var reg = / progid:\S+Emboss\([^\)]+\)/g;
+      Raphael.el.emboss = function (bias) {
+          var s = this.node.style,
+              f = s.filter;
+          f = f.replace(reg, "");
+          if (bias != "none") {
+              s.filter = f + " progid:DXImageTransform.Microsoft.Emboss(bias=" + (bias || 0.0) + ")";
+              //s.margin = Raphael.format("-{0}px 0 0 -{0}px", Math.round(+size || 1.5));
+          } else {
+              s.filter = f;
+              //s.margin = 0;
+          }
+      };
+  } else {        
+      Raphael.el.emboss = function (bias) {
+          // Experimental. No WebKit support.
+      	if(bias==null) {
+      		return this.convolveClear(Raphael.el.emboss.EMBOSS_TRANS_NAME);
+      	}
+      	else {
+      		var factor = 1.0;        				
+      		var embossKernel =[
+      				factor*-1,	0, 		0, 
+      				0,			1, 		0,
+      				0,			0, 		factor]; 
+      			
+//      			[-1.0, -1.0, 0.0, 
+//  			    -1.0, 0.0, 1.0,
+//  			    0.0, 1.0, 1.0];
+      		
+//      		Raphael.el.convolve = function (convolutionName, kernelXSize, kernel, 
+//              		divisor, bias,  preserveAlpha) 
+      		return this.convolve(Raphael.el.emboss.EMBOSS_TRANS_NAME, 
+      			3, embossKernel, 1.0, bias, null);
+      	}
+      };
+      Raphael.el.emboss.EMBOSS_TRANS_NAME="embossTransformation";
+  }
+})();
+
+
+
+/*
+ * pixel convolution tranformation (only svg). only squeare kernels allowed.
+ * you can add many convolutions. Their name must be a valid html id. For example:
+ * image.convolve("emboss1", 3, 3, [0.4,0,0,0,1,0,0,0,0.5])
+ * image.convolve("conv2", 2,2,[1,2,2,3])
+ * image.convolveClear("emboss1")
+ * @author: SebastiÃ¡n Gurin <sgurin @ montevideo  DOT com  DOT uy>
+ */
+(function () {
+    if (Raphael.vml) {    	
+    	//TODO
+    	Raphael.el.convolve = function (convolutionName, kernelXSize, kernel, 
+        		divisor, bias,  preserveAlpha) {
+    		return this;
+    	};
+    	 Raphael.el.convolveClear = function (convolutionName) {
+    		 return this;
+    	 };
+    } 
+    else {
+        var $ = function (el, attr) {
+            if (attr) {
+                for (var key in attr) if (attr.hasOwnProperty(key)) {
+                    el.setAttribute(key, attr[key]);
+                }
+            } else {
+                return document.createElementNS("http://www.w3.org/2000/svg", el);
+            }
+        };
+        Raphael.el.convolve = function (convolutionName, kernelXSize, kernel, 
+        		divisor, bias,  preserveAlpha) {
+        	
+        	//convolution configuration
+            var convolveConfig = {
+            	order: kernelXSize+"",
+            	kernelMatrix: kernel.join(" ")
+            };
+            if(divisor) convolveConfig["divisor"]=divisor;
+            if(bias) convolveConfig["bias"]=bias;
+            if( preserveAlpha) convolveConfig["preserveAlpha"]= preserveAlpha;            
+            else convolveConfig["preserveAlpha"]="true";
+            
+        	//if not exists create a main filter element
+        	if(this.mainFilter==null) {
+        		this.mainFilter = $("filter");
+        		this.mainFilter.id = "convolutionMainFilter"
+                this.paper.defs.appendChild(this.mainFilter);
+        		$(this.node, {filter: "url(#convolutionMainFilter)"});
+        	}
+        	
+            //create or gets the filter primitive element feConvolveMatrix:
+            var convolveFilter = this._convolutions==null?null:this._convolutions[convolutionName];
+            if(convolveFilter==null){
+            	convolveFilter = $("feConvolveMatrix");
+            }
+            this.mainFilter.appendChild(convolveFilter);
+            
+            //apply configuration and register
+            $(convolveFilter, convolveConfig);  
+            if(! this._convolutions)
+            	 this._convolutions={}
+            this._convolutions[convolutionName] = convolveFilter;
+            
+	        return this;
+        };
+        
+        Raphael.el.convolveClear = function (convolutionName) {
+        	if (this._convolutions!=null && this._convolutions[convolutionName]!=null &&
+        			this.mainFilter!=null) {   
+        		try {
+        			this.mainFilter.removeChild(this._convolutions[convolutionName]);
+        			this._convolutions[convolutionName]=null;
+        		}catch(ex){alert("error removing filter for conv named : "+convolutionName);}
+        		
+            }  
+            return this;
+        };
+        Raphael.el.convolveClearAll=function() {
+        	if(this.mainFilter!=null) {
+	        	this.paper.defs.removeChild(this.mainFilter);
+	        	this.mainFilter=null;
+	        	this._convolutions=null;
+	        	this.node.removeAttribute("filter");
+        	}
+        };
+    }
+    
+})();
+    
+    
+/*
+ * colorMatrix support  for raphael. Only available on svg
+ * @author: SebastiÃ¡n Gurin <sgurin @ montevideo  DOT com  DOT uy>
+ */
+(function () {
+    if (Raphael.vml) {    	
+    	//TODO
+    } 
+    else {
+        var $ = function (el, attr) {
+            if (attr) {
+                for (var key in attr) if (attr.hasOwnProperty(key)) {
+                    el.setAttribute(key, attr[key]);
+                }
+            } else {
+                return document.createElementNS("http://www.w3.org/2000/svg", el);
+            }
+        };
+        Raphael.el.colorMatrix = function (tname, matrix) {        	
+            var filterConfig = {
+            	type: "matrix", 
+            	values : matrix.join(" ")
+            };
+        	//if not exists create a main filter element
+        	if(this.colorMainFilter==null) {
+        		this.colorMainFilter = $("filter");
+        		this.colorMainFilter.id = "colorMainFilter"
+                this.paper.defs.appendChild(this.colorMainFilter);
+        		$(this.node, {filter: "url(#colorMainFilter)"});
+        	}
+        	
+            //create or gets the filter primitive element feColorMatrix:
+            var colorFilter = this._colorFilters==null?null:this._colorFilters[tname];
+            if(colorFilter==null){
+            	colorFilter = $("feColorMatrix");
+            }
+            this.colorMainFilter.appendChild(colorFilter);
+            
+            //apply configuration and register
+            $(colorFilter, filterConfig);  
+            if(! this._colorFilters)
+            	 this._colorFilters={}
+            this._colorFilters[tname] = colorFilter;
+            
+	        return this;
+        };
+        
+        Raphael.el.colorMatrixClear = function (tName) {
+        	if (this._colorFilters!=null && this._colorFilters[tName]!=null &&
+        			this.colorMainFilter!=null) {   
+        		try {
+        			this.colorMainFilter.removeChild(this._colorFilters[tName]);
+        			this._colorFilters[tName]=null;
+        		}catch(ex){alert("error removing filter for color matrix named : "+tName);}
+        		
+            }  
+            return this;
+        };
+        Raphael.el.colorMatrixClearAll=function() {
+        	if(this.colorMainFilter!=null) {
+	        	this.paper.defs.removeChild(this.colorMainFilter);
+	        	this.colorMainFilter=null;
+	        	this._colorFilters=null;
+	        	this.node.removeAttribute("filter");
+        	}
+        };
+    }
+})();     
+    
+/* raphael support for http://www.w3.org/TR/SVG/filters.html#feComponentTransfer (SVG ONLY!)
+ * in this first version, only type="linear" supported
+ * @author: SebastiÃ¡n Gurin <sgurin @ montevideo  DOT com  DOT uy>
+ */
+(function () {
+    if (Raphael.vml) { 
+		//TODO
+    } 
+    else {
+        var $ = function (el, attr) {
+            if (attr) {
+                for (var key in attr) if (attr.hasOwnProperty(key)) {
+                    el.setAttribute(key, attr[key]);
+                }
+            } else {
+                return document.createElementNS("http://www.w3.org/2000/svg", el);
+            }
+        };
+			/**use like this:
+				el.componentTransferLinear("myTransf1", {funcR: {slope: 4, intercept: -1}, funcG: {slope: 4, intercept: -1}, funcB: {slope: 4, intercept: -1}})
+			*/
+        Raphael.el.componentTransferLinear = function (tName, funcs) {       	
+//        	alert("componentTransferLinear");
+	     	//if not exists create a main filter element
+	     	if(this.componentTransfersMainFilter==null) {
+	     		alert("***componentTransfersMainFilter created");
+	     		this.componentTransfersMainFilter = $("filter");
+	     		this.componentTransfersMainFilter.id = "componentTransfersMainFilter"
+	             this.paper.defs.appendChild(this.componentTransfersMainFilter);
+	     		$(this.node, {filter: "url(#componentTransfersMainFilter)"});
+	     	}
+        	
+            //create or gets the filter primitive element feComponentTransfer with its feFuncX childs:
+            var componentTransferFilter = this._componentTransfers==null?null:this._componentTransfers[tName], 
+					funcR=null, funcG=null, funcB=null ;
+            if(componentTransferFilter==null){
+//            	debugger;
+//            	alert("*componentTransfersMainFilter created");
+            	componentTransferFilter = $("feComponentTransfer");
+				funcR = $("feFuncR");
+				funcG = $("feFuncG");
+				funcB = $("feFuncB");
+				componentTransferFilter.appendChild(funcR);
+				componentTransferFilter.appendChild(funcG);
+				componentTransferFilter.appendChild(funcB);
+            }
+            else {
+            	funcR = componentTransferFilter.childNodes[0];
+            	funcG = componentTransferFilter.childNodes[1];
+            	funcB = componentTransferFilter.childNodes[2];
+            }
+            //debugger;
+            $(funcR, funcs["funcR"]); funcR.setAttribute("type", "linear");
+            $(funcG, funcs["funcG"]); funcG.setAttribute("type", "linear");
+            $(funcB, funcs["funcB"]); funcB.setAttribute("type", "linear");            
+            this.componentTransfersMainFilter.appendChild(componentTransferFilter);
+            
+            //register          
+            if(! this._componentTransfers)
+            	 this._componentTransfers={}
+            this._componentTransfers[tName] = componentTransferFilter;
+            
+	        return this;
+        };
+        
+        Raphael.el.componentTransferClear = function (tName) {
+        	if (this._componentTransfers!=null && this._componentTransfers[tName]!=null &&
+        			this.componentTransfersMainFilter!=null) {   
+        		try {
+        			this.componentTransfersMainFilter.removeChild(this._componentTransfers[tName]);
+        			this._componentTransfers[tName]=null;
+        		}catch(ex){alert("error removing filter for conv named : "+tName);}
+        		
+            }  
+            return this;
+        };
+        Raphael.el.componentTransferClearAll=function() {
+        	if(this.componentTransfersMainFilter!=null) {
+	        	this.paper.defs.removeChild(this.componentTransfersMainFilter);
+	        	this.componentTransfersMainFilter=null;
+	        	this._componentTransfers=null;
+	        	this.node.removeAttribute("filter");
+        	}
+        };
+    }
+    
+})();
+/*
+ *  'feMorphology' support  for raphael. Only available on svg
+ *  use shape1.morphology(morphname, operator, radius)
+ *  where operator cah be "erode" or "dilate" and radius an int. morphname is 
+ *  the name of your transformation and can be used later for unregistering the 
+ *  transf using shape1.morphologyClear(morphname).
+ * @author: SebastiÃ¡n Gurin <sgurin @ montevideo  DOT com  DOT uy>
+ */
+(function () {
+    if (Raphael.vml) {    	
+    	//TODO
+    } 
+    else {
+        var $ = function (el, attr) {
+            if (attr) {
+                for (var key in attr) if (attr.hasOwnProperty(key)) {
+                    el.setAttribute(key, attr[key]);
+                }
+            } else {
+                return document.createElementNS("http://www.w3.org/2000/svg", el);
+            }
+        };
+        Raphael.el.morphology = function (tname, operator, radius) {        	
+            var filterConfig = {
+            	"operator": operator, 
+            	"radius" : radius
+            };
+        	//if not exists create a main filter element
+        	if(this.morphologyMainFilter==null) {
+        		this.morphologyMainFilter = $("filter");
+        		this.morphologyMainFilter.id = "morphologyMainFilter"
+            this.paper.defs.appendChild(this.morphologyMainFilter);
+        		$(this.node, {filter: "url(#morphologyMainFilter)"});
+        	}
+        	
+            //create or gets the filter primitive element feColorMatrix:
+            var morphologyFilter = this._morphologyFilters==null?null:this._morphologyFilters[tname];
+            if(morphologyFilter==null){
+            	morphologyFilter = $("feMorphology");
+            }
+            this.morphologyMainFilter.appendChild(morphologyFilter);
+            
+            //apply configuration and register
+            $(morphologyFilter, filterConfig);  
+            if(! this._morphologyFilters)
+            	 this._morphologyFilters={}
+            this._morphologyFilters[tname] = morphologyFilter;
+            
+	        return this;
+        };
+        
+        Raphael.el.morphologyClear = function (tName) {
+        	if (this._morphologyFilters!=null && this._morphologyFilters[tName]!=null &&
+        			this.morphologyMainFilter!=null) {   
+        		try {
+        			this.morphologyMainFilter.removeChild(this._morphologyFilters[tName]);
+        			this._morphologyFilters[tName]=null;
+        		}catch(ex){alert("error removing filter for morphology named : "+tName);}
+        		
+            }  
+            return this;
+        };
+        Raphael.el.morphologyClearAll=function() {
+        	if(this.morphologyMainFilter!=null) {
+	        	this.paper.defs.removeChild(this.morphologyMainFilter);
+	        	this.morphologyMainFilter=null;
+	        	this._morphologyFilters=null;
+	        	this.node.removeAttribute("filter");
+        	}
+        };
+    }
+})();     
+    
+
+
+
+
+
+
+
+
+
 
 
 
@@ -857,6 +1222,19 @@ rm.postRendererRegister(rm._text_widthrwrappPostRendering);
 rm.postRendererRegister(rm._toFrontBackPostRendering);
 rm.postRendererRegister(rm._percentDim_postRendering);
 //rm.postRendererRegister(rm._html_postrendering);
+rm.postRendererRegister(rm._blurPostRendering);
+rm.postRendererRegister(rm._embossPostRendering);
+rm.postRendererRegister(rm._morphologyPostRendering);
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -879,6 +1257,16 @@ rm.postRendererRegister(rm._percentDim_postRendering);
 /* * * * PRINT - onpath 
  * replace a <print onpath="nonempty"> witha <set> with paths for each letter (previous print() raphael impl) and align the letters on the path
  * * * * */
+
+rm.printLetters=function(paper, x, y, str, font, size, origin, letterSpace) {
+	paper.setStart();
+	for ( var i = 0; i < str.length; i++) {
+		var letter = paper.print(x,y,str.charAt(i),font,size,origin,letterSpace);
+		
+	}
+	return paper.setFinish();
+}
+
 //rm._printonpath_count=0;
 //rm._printonpath_getId = function(){
 //	rm._printonpath_count++;
@@ -972,3 +1360,144 @@ rm.postRendererRegister(rm._percentDim_postRendering);
 //
 //
 //
+
+//
+///** * * * * html "inside" - this just get a given html element 
+// * over a paper and shape it. User is responsible for
+// * creating the html take care abuut zindex.etc. 
+// * 
+// * Because this is not really html content inserting, the html elements won't respond to any raphael attrs or transfmrtions.
+// * 
+// * coopeates with percentDim, shuld be registered after it. 
+// * height and width are provided by html
+// * * * * 
+// */
+//rm._html_postrendering=function(rdoc) {
+//	rdoc.find("include-html[element]").each(function(){
+//		var dom = $($(this).attr("element"));
+//		if(dom.size()>0 && $(this).attr("x") && 
+//			$(this).attr("y")) {
+//			
+//			var paper = rm.getShape($(this).parents("paper")), 
+//				paperPos = $(paper.canvas).offset();
+//			
+//			dom.parent().css({"x-index": 9999});
+//			
+//			dom.css({
+//				"x-index": 9999,
+//				"position": "absolute",
+//				"display": "block",
+//				"top": (paperPos.top+parseInt($(this).attr("y")))+"px",
+//				"left": (paperPos.left+parseInt($(this).attr("x")))+"px",
+//			});
+//		}
+//	});
+//	return rdoc;
+//}
+
+//rm._include_handlers={};
+//rm._include_registerUrl=function(rdoc, dom, url, h) {
+//	if(!rm._include_handlers[rdoc])
+//		rm._include_handlers[rdoc]={};
+//	rm._include_handlers[rdoc][dom]=h;
+//	return $.ajax({
+//		"url": url,
+//		"success": function(data) {
+//			var domToInclude= $(data);
+//			domToInclude.insertAfter(this["dom"]);
+//			this["dom"].remove();
+//			//callback
+//			rm._include_handlers[this["rdoc"]][this["dom"]]();
+//		},
+//		"context": {"rdoc": rdoc, "dom": dom},
+//		"error": errorHandler,
+//		"dataType": "xml"
+//	});
+//}
+//rm._include_asyncPreproccess = function(rdoc) {
+//	var data=[];
+//	rdoc.find("include[src]").each(function(){
+//		data.push({
+//			"ajax": rm._include_registerUrl(rdoc, $(this), $(this).attr("src"))
+//		});
+//	});
+//
+//	return $.when(data).then(function(results){		
+//	});
+//	
+////	rm._include_onFinnish=onFinnish;
+//}
+//rm.asyncPreproccessRegister(rm._include_asyncPreproccess);
+////rm._include_handlers={};
+//rm._include_registerUrl=function(rdoc, dom, url, h) {
+////	if(!rm._include_handlers[rdoc])
+////		rm._include_handlers[rdoc]={};
+////	rm._include_handlers[rdoc][dom]=h;
+//	return $.ajax({
+//		"url": url,
+//		"success": function(data) {
+//			var domToInclude= $(data);
+//			$(domToInclude.prop("documentElement")).insertAfter(this["dom"]);
+//			this["dom"].remove();
+//			
+//			alert(rm.toXML(rdoc));
+//			rm.preproccess(rdoc);
+//			alert(rm.toXML(rdoc))
+//			
+//			rm.update(this["rdoc"], this["dom"].parent());
+//			rm._postRendering(rdoc);
+//		},
+//		"context": {"rdoc": rdoc, "dom": dom},
+//		"dataType": "xml"
+//	});
+//}
+//rm._include_asyncPreproccess = function(rdoc) {
+//	var data=[];
+//	rdoc.find("include[src]").each(function(){
+//		rm._include_registerUrl(rdoc, $(this), $(this).attr("src"));		
+//	});
+//	return rdoc;
+//}
+//rm.preproccessRegister(rm._include_asyncPreproccess);
+
+//on path - don't work anymore.
+
+//rm._printonpath_do = function(text, paper, pathStr) {
+//	var p = paper.path(pathStr).attr({stroke: "none"});
+//	for ( var i = 0; i < text.length; i++) {		
+//		var letter = text[i];
+////		if(letter.rmtype!="letter")
+////			continue;
+//		var newP = p.getPointAtLength(letter.getBBox().x);
+//		var newTransformation = letter.transform()+
+//		 	"T"+(newP.x-letter.getBBox().x)+","+
+//	        (newP.y-letter.getBBox().y-letter.getBBox().height);
+//		
+//		//also rotate the letter to correspond the path angle of derivative
+//	    newTransformation+="R"+
+//	        (newP.alpha<360 ? 180+newP.alpha : newP.alpha);
+//	    alert(newTransformation);
+//	    letter.transform(newTransformation);
+//	}
+//	text._rm_topathPath=p;
+//};
+//
+//rm._printonpath_postRendering = function(rdoc) {
+//	rdoc.find("print").each(function(){
+//		if($(this).attr("onpath")) {
+//			alert(rm.getShape($(this)).type);
+//			rm._printonpath_do(rm.getShape($(this)), 
+//				rm.getShape($(this).parent("paper")), 
+//				$(this).attr("onpath"));
+//		}
+//	});
+//};
+
+
+
+
+
+
+
+
+})(); //end of main ninja mode

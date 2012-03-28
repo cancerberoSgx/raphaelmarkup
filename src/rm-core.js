@@ -312,6 +312,11 @@ _renderPrint: function(dom, paper) {
 		dom.attr("size"), dom.attr("origin"), 
 		dom.attr("letter-spacing"));
 	
+//	shape = rm.printLetters(paper, dom.attr("x"), dom.attr("y"), text,
+//		paper.getFont(dom.attr("font")), 
+//		dom.attr("size"), dom.attr("origin"), 
+//		dom.attr("letter-spacing"));
+	
 //	shape.type="print";
 	
 	/* mark all the letters (for differentiating them from other artificial shapes in the text like decorations */
