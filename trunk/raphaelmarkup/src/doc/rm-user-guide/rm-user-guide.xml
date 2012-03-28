@@ -3,10 +3,11 @@
 <!DOCTYPE article [
     <!ENTITY R "raphaël">
     <!ENTITY RM "raphaëlMarkup">
-    <!ENTITY RMBASE "http://localhost:8081/rm">
+    
+    <!ENTITY RMBASE "http://cancerbero.vacau.com/raphaelmarkup">
       
 ]>
-
+<!-- <!ENTITY RMBASE "http://localhost:8081/rm"> -->
 <article version="5.0" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -45,16 +46,20 @@
   	<para>This document is available in the following formats:</para>  
   	<orderedlist>    
 	  <listitem><formalpara><title>pdf</title><para>
-	  <ulink url="../rm-user-guide.pdf">raphaelMarkup User Guide</ulink></para></formalpara></listitem>
+	  <ulink url="../rm-user-guide-pdf/rm-user-guide.pdf">&RM; User Guide</ulink></para></formalpara></listitem>
 	  
 	  <listitem><formalpara><title>html fragmented</title><para>
-	  <ulink url="../rm-user-guide-htmls">raphaelMarkup User Guide</ulink></para></formalpara></listitem>
+	  <ulink url="../rm-user-guide-htmls/t1.html">&RM; User Guide</ulink></para></formalpara></listitem>
+	  
+	    <listitem><formalpara><title>html all in one </title><para>
+	  <ulink url="../rm-user-guide-html/rm-user-guide.html">&RM; User Guide</ulink></para></formalpara></listitem>
+	  
 	  
 	  <listitem><formalpara><title>docbook (sources) </title><para>
-	  <ulink url="../rm-user-guide.xml">raphaelMarkup User Guide</ulink></para></formalpara></listitem>
+	  <ulink url="../rm-user-guide.xml">&RM; User Guide</ulink></para></formalpara></listitem>
 	  
 	  <listitem><formalpara><title>download htmls</title><para>
-	  <ulink url="../rm-user-guide-htmls.tgz">raphaelMarkup User Guide</ulink></para></formalpara></listitem>
+	  <ulink url="../rm-user-guide-htmls.tgz">&RM; User Guide</ulink></para></formalpara></listitem>
   
   	</orderedlist>
   </section>
@@ -576,9 +581,52 @@ rect.attr({"fill": "red", "stroke": "blue"});
     
     <formalpara><title>Parameters</title><para>The important thing about parameters is that they all are strings, so
     perhaps it is required to parse them as numbers in case of numerical calculations (like in the second example). </para></formalpara>
-    <formalpara><title>Printing</title><para></para></formalpara>
-    <formalpara><title>Printing</title><para></para></formalpara>
     
+	
+    </section>
+    
+    <section><title>Other features</title>
+    <formalpara><title>Variables</title><para>In a template, you can define variables using "template-var" element like template-arg:</para>
+    <programlisting>
+&lt;template>
+&lt;template-var name="var1" value="123"/>
+&lt;template-body>
+&lt;text>var1={%= var1%}&lt;/text>
+&lt;/template-body>
+&lt;/template>
+    </programlisting>
+    </formalpara>
+    
+    
+    
+    <formalpara><title>Custom tag</title>
+    
+    <para>As we have seen in the first example, we can use &lt;use-tag> element for defining a custom tag
+    for calling our template. In the example, in the tempalte definition we declared 
+    <code>&lt;use-tag name="ellipse-button">&lt;/use-tag></code> and then in the paper we just 
+    have to call 
+    <code>&lt;ellipse-button x="22" y="33" ...>&lt;/ellipse-button></code>. </para>
+    
+    <para>But as we have seen in second example, cusom xml tags are optional, and we can use 
+    <code>&lt;template-use name="ellipse-button"</code> for calling our template. </para>
+    
+    <important><para>Be careful with elements names. Do not use any html element tag name, and try to be specific, like &lt;myproduct-element1>. </para></important>
+    
+    </formalpara>
+    
+    
+    <formalpara><title>Passing attributes</title>. When you call a template wither with template-use or using its 
+    custom tag, all calling element attribute will be copied to the generated (first) element. 
+    
+    For example, in the case of the ellipse-button
+    if I call the template like this <code>&lt;ellipse-button ... id="button1"...>&lt;/ellipse-button></code>, the first 
+    generated element in the template, in this case the &lt;set, will have the id "button1" (<code>&lt;set id="button1"..>&lt;/set></code>)eill have the clas attribute equals to </formalpara>
+    
+    <formalpara><title>How this work</title>
+    <para>At XML preproccessing we perform two tasks. First get all &lt;template and compile each one, for fast rendering. 
+    Second all &lt;template-use> elements are evaluated  </para>
+    </formalpara>
+    <formalpara><title>Parameters</title><para></para></formalpara>
 	
     </section>
     
@@ -647,6 +695,10 @@ rect.attr({"fill": "red", "stroke": "blue"});
 
 
 
+
+
+
+
     <section id="exts-animation"><title>Animations</title>
     <para>The animation extension provide support for two things 1) be able to define animations in XML and 
     2) provide utilities for easy animation calling using javascript from eventshandlers and other js code.</para>
@@ -672,9 +724,32 @@ rect.attr({"fill": "red", "stroke": "blue"});
 &lt;/raphael>
     </programlisting>
     
-    <para>As you can see we made two things, first define an entire animation and name it "textglowing1", using the &lt;animation> tag. Second, 
-    easily use that animation for animating a shape when it is clicked.</para>
+    <para>As you can see we made two things, first define an entire animation and name 
+    it "textglowing1", using the &lt;animation> tag. Second, 
+    easily use that animation for animating a shape when it is clicked.
+    In this case we call <code>rm.animate()</code> for calling the animation once, but we can an animation with a delay or a re</para>
+    
+    <itemizedlist>
+    
+    <listitem><formalpara><title>rm.animate()</title>
+    <para>Call <code>rm.animate(this, anim1, animMs)</code> for animate this shape with animation anim1 </para></formalpara></listitem>
+    
+    <listitem><formalpara><title>rm.delay()</title>
+    <para>Call <code>rm.repeat(this, anim1, animMs, delayMs)</code> for applying animation anim1 with duration animMs milisecond and with a delay time of delayMs miliseconds. </para></formalpara></listitem>
+    
+    <listitem><formalpara><title>rm.repeat()</title>
+    <para>Call <code>rm.repeat(this, anim1, animMs, repeatTimes)</code> for applying an animation anim1 
+    repeatead animTimes number of timesm each time dutin animMs miliseconds.  </para></formalpara></listitem>
+    
+    </itemizedlist>
+    
+    <para>Also, animation extension provide for easy invoking defined animations 
+    from javascript, f</para>
     </section>
+	
+	
+	
+	
 	
 	
 	
@@ -685,6 +760,10 @@ rect.attr({"fill": "red", "stroke": "blue"});
 	<para>A &lt;script> tag just like html's is supported for putting (javascript) scripts inside
 	&RM; markup. </para>
 	</section>
+	
+	
+	
+	
 	
 	
 	
@@ -717,6 +796,9 @@ rect.attr({"fill": "red", "stroke": "blue"});
 	use templates and don't use include. </para>
 	
 	</section>
+	
+	
+	
 	
 	
 	
@@ -771,8 +853,52 @@ Will be translated to the following markup at preproccessing
 	 transformation at postrendering.)</para>
 	 <para>in the case of print will be the same as paths</para>
 	 <para>In the case of text only position will work.</para>
+	 
+	 </section>
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 <section id="exts-textwrapp"><title>Text Wrapping</title>
+	 <para>&RM; comes with an extension that adds support for text wrapping. If you specify a <code>width</code>
+	 attribute to any &lt;text> the framework will add the neccessary new line characters to wrpp the text to the specified width, for example</para>
+	 
+	 <programlisting>
+&lt;text x="100" y="200" width="200" fill="blue" font-size="17px">
+	A very long long text
+&lt;/text>
+	 </programlisting>
+	 
+	 <para>Of course, you can take advantge of percentual bounds extensions, documented in <xref linkend="exts-percentual"/>,
+	 for specify a perentual width. </para>
+	 </section>
+	 
+	 
+	 
+	 <section id="exts-tofrontback"><title>toFront and toBack attributes. </title>
+	 <para>&RM; comes with an extension that adds support for text wrapping. If you specify a <code>width</code>
+	 attribute to any &lt;text> the framework will add the neccessary new line characters to wrpp the text to the specified width, for example</para>
+	 
+	 <programlisting>
+&lt;text x="100" y="200" width="200" fill="blue" font-size="17px">
+	A very long long text
+&lt;/text>
+	 </programlisting>
+	 
+	 <para>Of course, you can take advantge of percentual bounds extensions, documented in <xref linkend="exts-percentual"/>,
+	 for specify a perentual width. </para>
 	 </section>
   </section>
+  
+  
+  
+  
+  
   
   
   
@@ -953,24 +1079,39 @@ For this to work on IE the &lt;raphael> element must be defined like this:
   
   
   
-  <section><title>Exporting and loading from other sources. </title>
+  <section><title>Integration</title>
   
   <para>&RM; is designed to be integrated in a number of ways. It not only serves for drawing in XML but also
   export and load data from different format and sources, load a native &R; javascript paper object to a XML DOM
   for reading/modifying and later re-render the original paper for updating changes. In this section we will disccuss 
   this and other related scenarios. </para>
   
+  
+  <section><title>Accessing a &R; native paper with &RM; XML API</title>   
+  <para>&RM; support loading of any raphael paper into an XML DOM object. This XML DOM object can then be transversed using XML 
+  utilities like CSS3 selectors. Then if you make modifications to the dom, you can re-render them in other paper or update the original.
+  Since &RM; avocates for a more intensive use of sets for declaring element parentship, with that in mind, accessing a paper with some 
+  structure given by sets is sometimes more convenient to do in XML than in javascript with raphaeljs api.</para> 
+  <para>In the following example we show how to load a &RM; drawing from an existing paper.</para></section>
+  
+   
   <section><title>Reading and writing XML</title>
   <para></para></section>
   
   
   <section><title>Reading and writing JSON</title>
-  <para></para></section>
+  <para>&R; library support exporting and importing data in JSON format. For example
+  <ulink url="http://raphaeljs.com/reference.html#Paper.add"><code>paper.add()</code>
+  will add all the shapes defined in a json string into a paper. In the &R; world json format seems to be the
+  preffered way of storing raphael drawings, for example, <ulink url="">Charles SVG to Raphaël converter</ulink>
+  can convert SVG into &R; JSON format, </ulink></para>
   
-   <section><title>Reading a &R; paper in a XML DOM and updating changes</title>
+  <para>&RM; support importing this kind of JSON data. There is an example showing just this 
+  <ulink url="$RMBASE;/src/test/examples/jsonTest1.html">here. </ulink></para>
+  
+  </section>
+  
    
-   
-  <para></para></section>
   
   </section>
   

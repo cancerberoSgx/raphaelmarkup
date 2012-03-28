@@ -14,6 +14,10 @@
 
 	<paper id="headerPaper1" x="0" y="0" width="950" height="1000" containerId="headerPaperEl">
 	
+		<set x="0" y="0" width="30%" height="100%">
+		
+		</set>
+	
 		
 		<rect x="0" y ="0" width="950" height="200" fill="#b18c8c" 
 			stroke="#f89938" stroke-width="20" stroke-dasharray="."
@@ -25,8 +29,8 @@
 		raphaelMarkup site</print>
 		
 		<imag id="rmlogo" src="rm.png" x="570" y="90" width="105" height="105"
-			onhoverin="rm.getShape(this).animate({transform: 'R 180'}, 1000, '&gt;');"
-			onhoverout="rm.getShape(this).animate({transform: 'R 0'}, 1000, '&lt;');"></imag>
+			onhoverin="var s = rm.getShape(this); s.stop(); s.animate({transform: 'r 180'}, 1000, '&gt;');"
+			onhoverout="var s = rm.getShape(this); s.stop(); rm.getShape(this).animate({transform: 'R 0'}, 1000, '&lt;');"></imag>
 		
 <!-- 		<ellipse x="470" y="300" rx="460" ry="100"></ellipse> -->
 <!-- 		<circle  cx="470" cy="300" r="40" fill="red"  -->
