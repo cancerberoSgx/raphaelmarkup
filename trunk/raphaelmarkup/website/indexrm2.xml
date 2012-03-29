@@ -18,7 +18,7 @@
 		onhoverin="rm.animate(this, 'textglowing1', 1000)">
 		raphaelMarkup site</print>
 	
-	<imag erode="2" id="rmlogo" src="rm.png" x="570" y="90" width="105" height="105" 
+	<imag erode="3" id="rmlogo" src="rm.png" x="570" y="90" width="105" height="105" emboss="0.2"
 		onhoverin="var s = rm.getShape(this); s.stop(); s.animate({transform: 'r230t-100,20'}, 1000, '&gt;');"
 		onhoverout="var s = rm.getShape(this); s.stop(); s.animate({transform: 'R 0t+100,-20'}, 1000, '&lt;');"
 		></imag>
@@ -32,7 +32,7 @@
 		
 		
 		
-	<set x="50%" y="50%" width="100%" height="300" >
+	<set x="50%" y="50%" width="100%" height="300" dilate="2">
 		<ellipse-button2 x="500" y="500" rx="80" ry="21" text="About 2..." size="20"
 			onclick="myapp.openSection('#section1PaperEl')"></ellipse-button2>
 		

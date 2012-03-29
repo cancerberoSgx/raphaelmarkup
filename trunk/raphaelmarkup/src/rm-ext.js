@@ -59,37 +59,63 @@ rm._preproccess_template1 = function(rdoc) {
 	rm._preproccess_template1_useTags[rdoc]={};
 	
 	//first read each template
-	rdoc.find("template").each(function(index){
+	rdoc.find("template").each(function(){		
 		
-		//do nothing for templates withtout name of body
+		//do nothing for templates without name of body		
 		if(!$(this).attr("name") || $(this).find("template-body").size()==0)
 			return;
 		
-		var data = {}, paramDefaultValues = {};
+		var data = {}, paramDefaultValues = {}, argTypes = {};
 		
-		//load variables
-		$(this).find("template-var").each(function(i){
+		//load variables		
+		$(this).find("template-var").each(function(){
 			data[$(this).attr("name")] = $(this).attr("value");
+			if($(this).attr("type")) {
+				if(!argTypes[$(this).attr("type")])
+					argTypes[$(this).attr("type")]=[];
+				argTypes[$(this).attr("type")].push($(this).attr("name"));
+			}
 		});
 		
-		//load param default values
-		$(this).find("template-arg").each(function(i){
+		//load param default values - get types		
+		$(this).find("template-arg").each(function(){
 			paramDefaultValues[$(this).attr("name")] = $(this).attr("value");
+			if($(this).attr("type")) {
+				if(!argTypes[$(this).attr("type")])
+					argTypes[$(this).attr("type")]=[];
+				argTypes[$(this).attr("type")].push($(this).attr("name"));
+			}
 		});
 		
 		//load template
-		var tmplCode = null;
+		var tmplCode = "";
 		
-//		try {
-//			window.alert( $(this).find("template-body").get(0).innerHTML);
-			var tmplCode = "";
-			$(this).find("template-body").children().each(function(){
-				tmplCode += rm.toXML($(this));
-			});
-//		}catch(ex) {
-//			rm._error("cannot ghet template body html - "+e);
+		//first add type conversion code 
+		var typeData = argTypes["int"];
+		if(typeData) {
+			tmplCode+="{%";
+			for ( var i = 0; i < typeData.length; i++) {				
+				var pname = typeData[i];
+				tmplCode += pname+"=parseInt("+pname+");";
+			}
+			tmplCode+="%}";
+		}
+//		typeData = argTypes["float"];
+//		if(typeData) for ( var i = 0; i < typeData.length; i++) {
+//			var pname = typeData[i];
+//			tmplCode += pname+"=parseFloat("+pname+");";
 //		}
-		var tmpl = rm.tmpl(tmplCode), tmplInfo = {
+		//TODO: other types like date, regexp, array
+		
+		//then add the body
+		$(this).find("template-body").children().each(function(){
+			tmplCode += rm.toXML($(this));
+		});
+		
+		//compile template
+		var tmpl = rm.tmpl(tmplCode);
+		
+		var tmplInfo = {
 			"name": $(this).attr("name"),
 			"tmpl": tmpl,
 			"data": data, 
@@ -710,6 +736,45 @@ rm._percentDim_postRendering = function(rdoc) {
 
 
 
+/* * * * z-index * * * * 
+ * register BEFORE toFront/toBack extension. 
+ * TODO: if set contains zindex then all its children whill inherith it.
+ */
+rm._zindexDoSet=function(set, zindex) {
+	set.children().each(function(){
+		if(!$(this).attr("z-index"))
+			$(this).attr("z-index", zindex);
+		if(rm._getTagName($(this))=="set")
+			rm._zindexDoSet($(this), $(this).attr("z-index")||zindex);
+	});
+};
+rm._zindexPostRendering=function(rdoc) {
+	var zindexes = {};
+	rdoc.find("set[z-index]").each(function(){
+		rm._zindexDoSet($(this));
+	});
+	rdoc.find("*[z-index]").each(function(){
+		var zindex=$(this).attr("z-index");
+		if(!zindexes[zindex])
+			zindexes[zindex]=[];
+		zindexes[zindex].push($(this));
+	});
+	var zindexArr = [];
+	for(var i in zindexes)
+		zindexArr.push(i);
+	zindexArr=zindexArr.sort();
+	for ( var i = 0; i < zindexArr.length; i++) {
+		var els = zindexes[zindexArr[i]];
+		if(els && els.length) {
+			for ( var j = 0; j < els.length; j++) {
+				rm.getShape(els[j]).toFront();
+			}
+		}
+	}
+	
+	return rdoc;
+}
+
 
 /* * * * gradient * * * */
 
@@ -755,6 +820,10 @@ rm._morphologyPostRendering=function(rdoc) {
 //	morphology(morphname, operator, radius)
 	rdoc.find("*[erode], *[dilate]").each(function(){
 		var shape = rm.getShape(this);
+		
+		alert(Raphael.st)
+//		var set = shape.paper.set();
+//		debugger;
 		if($(this).attr("erode"))		
 			shape.morphology("rmErode", "erode", parseFloat($(this).attr("erode")));
 		if($(this).attr("dilate"))		
@@ -933,7 +1002,13 @@ rm._colorMatrix=function(rdoc) {
             
 	        return this;
         };
-        
+        Raphael.st.convolve =  function(convolutionName, kernelXSize, kernel, 
+        		divisor, bias,  preserveAlpha) {
+        	for ( var i = 0; i < this.items.length; i++) {
+				this.items[i].convolve(convolutionName, kernelXSize, kernel, 
+		        		divisor, bias,  preserveAlpha);
+			}
+        };
         Raphael.el.convolveClear = function (convolutionName) {
         	if (this._convolutions!=null && this._convolutions[convolutionName]!=null &&
         			this.mainFilter!=null) {   
@@ -1004,7 +1079,12 @@ rm._colorMatrix=function(rdoc) {
             
 	        return this;
         };
-        
+
+        Raphael.st.colorMatrix =  function(tname, matrix) {
+        	for ( var i = 0; i < this.items.length; i++) {
+				this.items[i].colorMatrix(tname, matrix);
+			}
+        };
         Raphael.el.colorMatrixClear = function (tName) {
         	if (this._colorFilters!=null && this._colorFilters[tName]!=null &&
         			this.colorMainFilter!=null) {   
@@ -1090,6 +1170,11 @@ rm._colorMatrix=function(rdoc) {
             this._componentTransfers[tName] = componentTransferFilter;
             
 	        return this;
+        };
+        Raphael.st.componentTransferLinear =  function(tname, funcs) {
+        	for ( var i = 0; i < this.items.length; i++) {
+				this.items[i].componentTransferLinear(tname, funcs);
+			}
         };
         
         Raphael.el.componentTransferClear = function (tName) {
@@ -1184,6 +1269,12 @@ rm._colorMatrix=function(rdoc) {
 	        	this.node.removeAttribute("filter");
         	}
         };
+        
+        Raphael.st.morphology =  function(tname, operator, radius) {
+        	for ( var i = 0; i < this.items.length; i++) {
+				this.items[i].morphology(tname, operator, radius);
+			}
+        }
     }
 })();     
     
@@ -1219,13 +1310,16 @@ rm.postRendererRegister(rm._events_postRendering);
 //rm.postRendererRegister(rm._printonpath_postRendering);
 //rm.postRendererRegister(rm._printunderline_postRendering);
 rm.postRendererRegister(rm._text_widthrwrappPostRendering);
+
+rm.postRendererRegister(rm._zindexPostRendering);
 rm.postRendererRegister(rm._toFrontBackPostRendering);
+
 rm.postRendererRegister(rm._percentDim_postRendering);
 //rm.postRendererRegister(rm._html_postrendering);
+
 rm.postRendererRegister(rm._blurPostRendering);
 rm.postRendererRegister(rm._embossPostRendering);
 rm.postRendererRegister(rm._morphologyPostRendering);
-
 
 
 

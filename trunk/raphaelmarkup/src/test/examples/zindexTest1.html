@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="../../deps/jquery-1.7.1.js"></script>
+	<script src="../../deps/raphael-min.js"></script>
+	<script type="text/javascript" src="../../rm-core.js"></script>
+	<script type="text/javascript" src="../../rm-ext.js"></script>
+	
+<title>Raphael markup - zindex test 1</title>
+</head>
+<body>
+
+<p></p>
+
+<raphael style="display:none">
+
+
+
+<paper x="10" y="100" width="600" height="600">
+
+<!-- this set elements (little green rect) should be covered by other shapes, but because we use a z-index=2 it is seen.-->
+<set z-index="2">
+<rect x="70" y="70" width="40" height="30" fill="green"></rect>
+</set>
+
+
+<!-- two rects, the blue should be on front, but because we set a z-index to the first, the red one is on the front.  -->
+
+<rect x="50" y="50" width="70" height="60" fill="red" z-index="1"></rect>
+<rect x="80" y="80" width="60" height="80" fill="blue"></rect>
+
+</paper>
+
+<script type="text/javascript">
+
+var rdoc = rm.render()[0];
+// alert(rdoc.find(".set1 circle").size())
+
+</script>
+
+</body>
+</html>
