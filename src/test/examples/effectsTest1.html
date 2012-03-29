@@ -14,43 +14,17 @@
 
 <raphael style="display:none">
 
+<!-- a template that draws each one of the shape types and pass attributes -->
+<template name="allShapes">
 
-<template name="ellipseButton">
-
-	<!-- with use-tag we can define a custom xml tag for use 
-		calling this template -->
-	<use-tag name="ellipse-button"></use-tag>
-
-	<!-- The following are template parameter declarations and are optional, 
-		here we put it for informative purposes and for default values -->
+	<use-tag name="all-shapes"></use-tag>es and for default values -->
 		
-	<template-arg name="onclick" value="alert('clicked')"></template-arg>
+	<template-arg name="attrs" value=""></template-arg>
 	<template-arg name="x" value="100"></template-arg>
 	<template-arg name="y" value="100"></template-arg>
-	<template-arg name="rx" value="10"></template-arg>	
-	<template-arg name="ry" value="10"></template-arg>
-	<template-arg name="fill" value="red"></template-arg>
-	<template-arg name="color" value="black"></template-arg>
-	<template-arg name="text" value="black"></template-arg>
-	<template-arg name="size" value="23"></template-arg>				
-
-	<!-- The template body is where we write the markup of the template. 
-		In this case we build the ellipse button usng a set with an 
-		ellipse and a text. Notice how we evaluate parameter values 
-		using {%= %} -->
+	
 	<template-body>
-		<set class="ellipseButton button">
-			<ellipse x="{%= x %}" y="{%= y %}" rx="{%= rx %}" ry="{%= ry %}" 
-				fill="{%= fill %}" onclick="{%= onclick%}"					
-				onhoverin="rm.getShape(this).attr('fill', 'brown')"
-				onhoverout="rm.getShape(this).attr('fill', '{%= fill %}')"
-			></ellipse>
-			<text color="{%= color %}" x="{%= x %}" y="{%= y %}" 
-				onclick="{%= onclick%}" font-size="{%= size%}"
-				onhoverin="rm.getShape(this.prev()).attr('fill', 'brown')"
-				onhoverout="rm.getShape(this.prev()).attr('fill', '{%= fill %}')"
-			>{%= text%}</text>
-		</set>
+	<imag x="{%= parseInt(x)%}"
 	</template-body>
 	
 </template>
@@ -111,6 +85,29 @@
 	</ellipse-button>
 			
 </paper>
+
+<style>
+
+paper rect { 
+	fill: blue;  
+	stroke-width: 10;
+} 
+.set1 {
+	fill: yellow;
+}
+.set1 circle { 
+	fill: black; 
+	stroke: red; 
+	stroke-width: 4; 
+}
+#strangeShape2 * {
+	fill:red;
+}
+.strange1Class1 * {
+	fill: blue;
+	stroke-width: 10
+}
+</style>
 
 </raphael>
 

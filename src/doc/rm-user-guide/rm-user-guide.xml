@@ -469,7 +469,7 @@ rect.attr({"fill": "red", "stroke": "blue"});
 	
 &lt;template name="strange1">
 
-	&lt;use-tag name="strange1-tag">&lt;/use-tag>
+	&lt;use-tag name="strange1">&lt;/use-tag>
 	
 	&lt;!-- parameters: -->
 	&lt;template-arg name="cx" value="100">&lt;/template-arg>	
@@ -491,7 +491,7 @@ rect.attr({"fill": "red", "stroke": "blue"});
 			circleMaxRadius=parseInt(circleMaxRadius);
 			cx=parseInt(cx);
 			cy=parseInt(cy);
-			for(var i=0; i&lt;circleCount; i++) { %}
+			for(var i=0; i&amp;lt;circleCount; i++) { %}
 				&lt;circle cx="{%= cx+rm.randomBetween(-size/2, size/2)%}"
 					cy="{%= cy+rm.randomBetween(-size/2, size/2)%}"
 					fill="{%=rm.randomColor()%}"
@@ -540,8 +540,8 @@ rect.attr({"fill": "red", "stroke": "blue"});
 		
 		
 		or use the tag defined with use-tag eleent in template definition:
-	&lt;strange1-tag class="strange1Class1" name="strange1" 
-		cx="250" cy="220" size="160" circleCount="78" circleMaxRadius="50">&lt;/strange1-tag>
+	&lt;strange1 class="strange1Class1" name="strange1" 
+		cx="250" cy="220" size="160" circleCount="78" circleMaxRadius="50">&lt;/strange1>
 &lt;/paper>
 &lt;/raphael>
 
@@ -579,8 +579,57 @@ rect.attr({"fill": "red", "stroke": "blue"});
 	</para></important>
 	</formalpara>
     
-    <formalpara><title>Parameters</title><para>The important thing about parameters is that they all are strings, so
-    perhaps it is required to parse them as numbers in case of numerical calculations (like in the second example). </para></formalpara>
+    <formalpara><title>Parameter types</title><para>The important thing about parameters is that by default they all are strings, so
+    perhaps it is required to parse them as numbers in case of numerical calculations (like in the second example). </para>
+    
+    <para>Nevertheless, you can declare a parameter type so you can spect the desired parameter value type in the template body. 
+    For example, in our previus example, in template "strange1" body's we needed to cast some parameters to numbers at body's beggining, 
+    because we need numbers for calculations, and we have done it like this:
+    </para>
+    
+    <programlisting>
+&lt;template-body>
+	&lt;set class="strange1">
+		{%
+		circleCount=parseInt(circleCount);
+		size=parseInt(size);
+		....
+    </programlisting>
+    <para>But we can save that work declaring the type of the parameter in the &lt;template-arg> tag, int this case of type "int". 
+    Then we can spect numbers inside our body, so no cast is needed. 
+    In the following example we show how to do this; compare to prevois "strange2" template definition:"  
+    </para>
+    
+    <programlisting>
+
+&lt;template name="strange1">
+	&lt;use-tag name="strange1">&lt;/use-tag>
+	
+	&lt;template-arg name="cx" value="100" type="int">&lt;/template-arg>
+	&lt;template-arg name="cy" value="100" type="int">&lt;/template-arg>
+	&lt;template-arg name="size" value="100" type="int">&lt;/template-arg>
+	&lt;template-arg name="circleCount" value="10" type="int">&lt;/template-arg>	
+	&lt;template-arg name="circleMaxRadius" value="10" type="int">&lt;/template-arg>	
+	
+	&lt;template-body>
+		&lt;set class="strange1">
+			{%
+			for(var i=0; i&amp;lt;circleCount; i++) { %}
+				&lt;circle cx="{%= cx+rm.randomBetween(-size/2, size/2)%}"
+					cy="{%= cy+rm.randomBetween(-size/2, size/2)%}"
+					fill="{%=rm.randomColor()%}"
+					r="{%=rm.randomBetween(2, circleMaxRadius)%}"
+					stroke-width="2" stroke="{%=rm.randomColor()%}">&lt;/circle>
+			{%}%}	
+		&lt;/set>
+	&lt;/template-body>
+&lt;/template>
+    </programlisting>
+    
+    <para>This example is available online <ulink url="&RMBASE;/src/test/examples/templatingTest3.html">here</ulink>. </para>
+    <para>Current supported types are "int" for integers and "float" for floating point numbers. </para>
+    
+    </formalpara>
     
 	
     </section>
@@ -595,6 +644,7 @@ rect.attr({"fill": "red", "stroke": "blue"});
 &lt;/template-body>
 &lt;/template>
     </programlisting>
+    <para>Like template parameters, variables are suceptible of having a type. </para>
     </formalpara>
     
     
@@ -615,16 +665,42 @@ rect.attr({"fill": "red", "stroke": "blue"});
     </formalpara>
     
     
+    
     <formalpara><title>Passing attributes</title>. When you call a template wither with template-use or using its 
     custom tag, all calling element attribute will be copied to the generated (first) element. 
     
     For example, in the case of the ellipse-button
     if I call the template like this <code>&lt;ellipse-button ... id="button1"...>&lt;/ellipse-button></code>, the first 
-    generated element in the template, in this case the &lt;set, will have the id "button1" (<code>&lt;set id="button1"..>&lt;/set></code>)eill have the clas attribute equals to </formalpara>
+    generated element in the template, in this case the &lt;set, will have the id "button1" 
+    (<code>&lt;set id="button1"..>&lt;/set></code>). This is the case of all attributes except "class". 
+    In the case of class, the template-call element's classes will be added to target classes instead of replace them. For example, in the next drawing:</formalpara>
+    
+    <programlisting>
+...
+&lt;template>
+	&lt;template-body>
+	&lt;text class="class1">hello&lt;/text>
+	&lt;/template-body>
+&lt;/template>
+...
+&lt;paper...>
+	..   
+	&lt;ellipse-button ... class="class2"...>
+	&lt;/ellipse-button>
+&lt;/paper>
+...
+   	</programlisting>
+    <para>the generated shape in the ellipse-button calling will be <code>&lt;text class="class1 class2">hello&lt;/text></code>. 
+    This desition is meant to facilitate things when stylizing template generated shapes. 
+    So in CSS we can reffere both to the class defined in the template cvlalling element and in the tempalte body elements. </para>
+    
     
     <formalpara><title>How this work</title>
+    
     <para>At XML preproccessing we perform two tasks. First get all &lt;template and compile each one, for fast rendering. 
-    Second all &lt;template-use> elements are evaluated  </para>
+    Second all &lt;template-use> elements are evaluated and replaced in the dom with the result of evaluate the template 
+    using the parameters provided by the user in the template-calling tag. As simple as that.... :-$ </para>
+    
     </formalpara>
     <formalpara><title>Parameters</title><para></para></formalpara>
 	
@@ -880,7 +956,10 @@ Will be translated to the following markup at preproccessing
 	 
 	 
 	 
-	 <section id="exts-tofrontback"><title>toFront and toBack attributes. </title>
+	 
+	 
+	 <section id="exts-tofrontback">
+	 <title>toFront and toBack attributes. </title>
 	 <para>&RM; comes with an extension that adds support for text wrapping. If you specify a <code>width</code>
 	 attribute to any &lt;text> the framework will add the neccessary new line characters to wrpp the text to the specified width, for example</para>
 	 
@@ -893,6 +972,46 @@ Will be translated to the following markup at preproccessing
 	 <para>Of course, you can take advantge of percentual bounds extensions, documented in <xref linkend="exts-percentual"/>,
 	 for specify a perentual width. </para>
 	 </section>
+	 
+	 
+	  <section id="exts-zindex"><title>z-index</title>
+	 <para>Similar than toFront/toBack extension, &RM; also support the <code>z-index</code>
+	 attribute, similar to CSS z-index. In the following example, we draw two rects, the blue should be on front, 
+	 but because we set a z-index to the first, the red one is on the front</para>
+	 
+	 <programlisting>
+&lt;rect x="50" y="50" width="160" height="160" fill="red" z-index="1">&lt;/rect>
+&lt;rect x="110" y="110" width="260" height="120" fill="blue">&lt;/rect>
+	 </programlisting>
+	 
+	 <para>Also, notice that if you set a z-index to a &lt;set> then all its children will inherith that z-index. 
+	 int the following example, we add a set with a little green rect that, because it is first on the markup it 
+	 should be covered by other shapes, but because we use a z-index=2 it is seen: </para>
+	 
+	 <programlisting>
+&lt;!-- this set elements (little green rect) should be covered by other shapes, but because we use a z-index=2 it is seen.-->
+&lt;set z-index="2">
+&lt;rect x="70" y="70" width="40" height="30" fill="green">&lt;/rect>
+&lt;/set>
+
+&lt;!-- two rects, the blue should be on front, but because we set a z-index to the first, the red one is on the front.  -->
+
+&lt;rect x="50" y="50" width="70" height="60" fill="red" z-index="1">&lt;/rect>
+&lt;rect x="80" y="80" width="60" height="80" fill="blue">&lt;/rect>
+	 </programlisting>
+	 
+	 <para>This exact example can be opened <ulink url="&RMBASE;/src/test/examples/zindexTest1.html">here. </ulink></para>
+	 
+	 </section>
+	 
+	 
+	 
+	 <section><title>Blur</title>
+	 <para>&RM;support apply a blur effect over any shape, you only have to use the attribute blur="1". 
+	 The higher the number the more blurred the object will appear. </para>
+	 
+	 </section>
+	 
   </section>
   
   
