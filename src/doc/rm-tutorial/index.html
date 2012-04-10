@@ -1,0 +1,97 @@
+<!DOCTYPE HTML>
+<html >
+<head>
+<meta charset="UTF-8"/>
+<title>raphael markup usage</title>
+	<script src="../../deps/jquery-1.7.1.min.js"></script>
+	<script src="../../deps/raphael-min.js"></script>
+	<script type="text/javascript" src="../../rm-core.js"></script>
+	<script type="text/javascript" src="../../rm-ext.js"></script>
+	
+	
+<style>
+.header1 {
+	text-align: center;
+}
+</style>
+
+
+</head>
+<body>
+
+
+<div class="header1">
+<h1><a href="http://code.google.com/p/raphaelmarkup/">raphaëlMarkup tutorial</a></h1>
+
+<p>@author: Sebastián Gurin</p>
+<p>Here I will show you how to draw in your web pages using XML. 
+We will go from a very simple use case to the most advanced features, example by example living in this page itself. 
+</p>
+</div>
+
+
+<div class="example">
+<h2>Getting started</h2>
+<p>First of all download and uncompress the latest version of <a href="http://code.google.com/p/raphaelmarkup/">raphaëlMarkup</a>. 
+from there we will need the following files</p>
+
+
+<ul>
+<li><a href="http://cancerbero.vacau.com/raphaelmarkup/rm-min.js">rm-min.js</a> - 
+ raphaëlMarkup javascript file </li>
+ 
+<li><a href="http://cancerbero.vacau.com/raphaelmarkup/deps/raphael-min.js">deps/raphael-min.js</a> - 
+a javascript library needed by raphaël - the drawing library in which raphaelMarkup is based.</li>
+
+<li><a href="http://cancerbero.vacau.com/raphaelmarkup/deps/jquery-1.7.1.min.js">deps/jquery-1.7.1.min.js</a> - 
+a javascript library needed by raphaëlMarkup</li>
+
+</ul>
+
+<p>Now create a new directory named "drawing1" and put these three files inside. Also create a new file named drawing1.html with the following content</p>
+
+<pre>
+&lt;!DOCTYPE HTML>
+&lt;html>
+&lt;head>
+	&lt;meta charset="UTF-8"/>
+	&lt;title>drawing 1&lt;/title>
+	&lt;script src="jquery-1.7.1.min.js">&lt;/script>
+	&lt;script src="raphael-min.js">&lt;/script>
+	&lt;script type="text/javascript" src="rm-min.js">&lt;/script>
+&lt;/head>
+&lt;body>
+
+&lt;table>
+&lt;tr>
+&lt;td>And at the right, there is my first drawing using raphaelMarkup: 
+&lt;/td>
+
+&lt;td id="example1Container">
+
+	&lt;raphael style="display:none">
+	&lt;paper width="400" height="400" container-id="example1Container">
+	&lt;circle cx="200" cy="200" radius="160" fill="red">&lt;/circle>
+	&lt;text x="50%" y="50%" font-size="18" fill="brown">A circle and some text
+	not so much...
+	&lt;/text>
+	&lt;/paper>
+	&lt;/raphael>
+
+&lt;/td>
+&lt;/tr>
+&lt;/table>
+
+&lt;script>
+rm.render();
+&lt;/script>
+&lt;/body>
+&lt;/html>
+</pre>
+
+<p>you can open this exact example and for viewing it with your favourite browser
+<a href="http://cancerbero.vacau.com/raphaelmarkup/src/doc/rm-tutorial/example1.html">here. </a></p>
+</div>
+
+</body>
+</html>

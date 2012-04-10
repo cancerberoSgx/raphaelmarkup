@@ -1,0 +1,38 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="UTF-8"/>
+	<title>drawing 1</title>
+	<script src="../../deps/jquery-1.7.1.min.js"></script>
+	<script src="../../deps/raphael-min.js"></script>
+	<script type="text/javascript" src="../../rm-core.js"></script>
+	<script type="text/javascript" src="../../rm-ext.js"></script>
+</head>
+<body>
+
+<table>
+<tr>
+<td>And at the right, there is my first drawing using raphaelMarkup: 
+</td>
+
+<td id="example1Container">
+
+<raphael style="display:none">
+<paper width="400" height="400" container-id="example1Container">
+<circle cx="200" cy="200" radius="160" fill="red"></circle>
+<text x="50%" y="50%" font-size="18" fill="brown">A circle and some text
+not so much...
+</text>
+</paper>
+</raphael>
+
+</td>
+</tr>
+</table>
+
+<script>
+rm.render();
+</script>
+</body>
+</html>

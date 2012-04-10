@@ -1,19 +1,13 @@
-<?xml version="1.0"?>
-
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
-<!-- 	<script src="../deps/jquery-1.7.1.min.js"></script> -->
-	<script src="../deps/raphael.js"></script>
-<!--   	<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" /> -->
-<!-- 	<script type="text/javascript" src="qunit.js"></script> -->
-<!-- 	<script type="text/javascript" src="../rm.js"></script> -->
-	
+	<script src="../deps/raphael-min.js"></script>	
 	<script type="text/javascript" src="fonts/my-underwood.cufonfonts.js"></script>
 	<script type="text/javascript" src="fonts/Acquaintance_400.font.js"></script>
 	
-<title>Raphael markup test 1</title>
+	<title>Raphael markup test 1</title>
 </head>
+
 <body>
 
 <!--  <h1 id="qunit-header">QUnit raphael markup tests</h1> -->
@@ -24,59 +18,100 @@
 <!--  <div id="qunit-fixture">test markup, will be hidden</div> -->
  
 
-<script type="text/javascript">
+<script type="text/javascript">		    
 
-// t.attr("text", tempText.substring(1));
-
-/**
- * @return a new text shape
- */
-function textWrapp(paper, content, width) {
-	var t = paper.text(width, width).attr('text-anchor', 'start');	
-	var words = content.split(" ");
-	var tempText = "";
-	for (var i=0; i<words.length; i++) {
-	  t.attr("text", tempText + " " + words[i]);
-	  if (t.getBBox().width > maxWidth) {
-	    tempText += "\n" + words[i];
-	  } else {
-	    tempText += " " + words[i];
-	  }
-	}
-	t.attr("text", tempText.substring(1));
-	return t;
-}
-
-function textWrapp2(t, width) {
-//	var t = paper.text(width, width).attr(attrs).attr('text-anchor', 'start');
-	t.attr({'text-anchor': 'start'});
-	var	content = t.attr("text"), 
-		words = content.split(" "), tempText = "";
-	for (var i=0; i<words.length; i++) {
-	  t.attr("text", tempText + " " + words[i]);
-	  if (t.getBBox().width > maxWidth) {
-	    tempText += "\n" + words[i];
-	  } else {
-	    tempText += " " + words[i];
-	  }
-	}
-	t.attr("text", tempText.substring(1));
-}
+(function() {
+	/**
+	 * do the job of putting all letters in a set returned bu printLetters in a path
+	 * @param p - can be a rpahael path obejct or string
+	 */
+	var _printOnPath = function(text, paper, p) {
+		if(typeof(p)=="string")
+			p = paper.path(p).attr({stroke: "none"});
+		for ( var i = 0; i < text.length; i++) {		
+			var letter = text[i];
+			var newP = p.getPointAtLength(letter.getBBox().x);
+			var newTransformation = letter.transform()+
+			 	"T"+(newP.x-letter.getBBox().x)+","+
+		        (newP.y-letter.getBBox().y-letter.getBBox().height);		
+			//also rotate the letter to correspond the path angle of derivative
+		    newTransformation+="R"+
+		        (newP.alpha<360 ? 180+newP.alpha : newP.alpha);
+		    letter.transform(newTransformation);
+		}
+		text._rm_topathPath=p;
+	};
+	
+	/** print letter by letter, and return the set of letters (paths), just like the old raphael print() method did. */
+	Raphael.fn.printLetters = function(x, y, str, font, size, 
+			letter_spacing, line_height, onpath) {
+		letter_spacing=letter_spacing||size/1.5;
+		line_height=line_height||size;
+		this.setStart();
+		var x_=x, y_=y;
+		for ( var i = 0; i < str.length; i++) {
+			if(str.charAt(i)!='\n') {
+				var letter = this.print(x_,y_,str.charAt(i),font,size);
+				x_+=letter_spacing;				
+			}
+			else {
+				x_=x;
+				y_+=line_height;
+			}
+		}
+		var set = this.setFinish();
+		if(onpath) {
+			_printOnPath(set, this, onpath);
+		}
+		return set;
+	};
+	
+})();
 
 
 var r = Raphael(0, 0, 500, 500);
-var p = r.path("M3.3999999999999986,-29.6C3.3999999999999986,-29.6,-4.600000000000001,-41,-4.600000000000001,-41C-4.600000000000001,-41,-10,-20,-10,-20C-10,-20,-28.8,-32.8,-28.8,-32.8C-28.8,-32.8,-24.8,-13.399999999999999,-24.8,-13.399999999999999C-24.8,-13.399999999999999,-44.2,-11.399999999999999,-44.2,-11.399999999999999C-44.2,-11.399999999999999,-31.400000000000002,4,-31.400000000000002,4C-31.400000000000002,4,-49.6,10,-49.6,10C-49.6,10,-34.2,21.6,-34.2,21.6C-34.2,21.6,-43.8,33.00000000000001,-43.8,33.00000000000001C-43.8,33.00000000000001,-27.4,35.00000000000001,-27.4,35.00000000000001C-27.4,35.00000000000001,-26.8,50.6,-26.8,50.6C-26.8,50.6,-14.799999999999997,34.4,-14.799999999999997,34.4C-14.799999999999997,34.4,-9.399999999999999,41.800000000000004,-9.399999999999999,41.800000000000004C-9.399999999999999,41.800000000000004,-4,30.800000000000004,-4,30.800000000000004C-4,30.800000000000004,4.200000000000003,37.800000000000004,4.200000000000003,37.800000000000004C4.200000000000003,37.800000000000004,6.800000000000004,24.199999999999996,6.800000000000004,24.199999999999996C6.800000000000004,24.199999999999996,19.6,30.800000000000004,19.6,30.800000000000004C19.6,30.800000000000004,18.199999999999996,16.800000000000004,18.199999999999996,16.800000000000004C18.199999999999996,16.800000000000004,37.800000000000004,22.800000000000004,37.800000000000004,22.800000000000004C37.800000000000004,22.800000000000004,26.199999999999996,7.399999999999999,26.199999999999996,7.399999999999999C26.199999999999996,7.399999999999999,35.00000000000001,2.6000000000000014,35.00000000000001,2.6000000000000014C35.00000000000001,2.6000000000000014,29.000000000000007,-6,29.000000000000007,-6C29.000000000000007,-6,50.6,-18.8,50.6,-18.8C50.6,-18.8,26.199999999999996,-19.4,26.199999999999996,-19.4C26.199999999999996,-19.4,33.800000000000004,-35,33.800000000000004,-35C33.800000000000004,-35,17.6,-22.8,17.6,-22.8C17.6,-22.8,19.000000000000007,-49.6,19.000000000000007,-49.6C19.000000000000007,-49.6,3.3999999999999986,-29.6,3.3999999999999986,-29.6C3.3999999999999986,-29.6,3.3999999999999986,-29.6,3.3999999999999986,-29.6C3.3999999999999986,-29.6,3.3999999999999986,-29.6,3.3999999999999986,-29.6");
-// p.transform("T-250,-250S0.2");
-// alert(Raphael.mapPath(p.attr("path"), p.matrix));
+var path1 = "M 50 100 C 100 50 150 0 200 50" +
+	" C 250 100 300 150 350 100" +
+	" C 400 50 450 50 450 50";
+var text1 = r.printLetters(20, 150, "habia una vez una vaca", 
+		r.getFont("my underwood"), 30, null, null, path1).attr({
+	fill : "red",
+	stroke : "black"
+});
+text1.click(function(evt){
+	text1.animate({transform: "...r150s2,2"}, 3000);
+});
 
-// var t = r.text(100, 100).attr('text-anchor', 'start');
-// var maxWidth = 100;
-
-// var content = "Mauris mauris ante, blandit et, ultrices a, suscipit eget, quam. Integer ut neque. Vivamus nisi metus, molestie vel, gravida in, condimentum sit amet, nunc. Nam a nibh. Donec suscipit eros. Nam mi. Proin viverra leo ut odio. Curabitur malesuada. Vestibulum a velit eu ante scelerisque vulputate. ";
-// var t = r.text(100, 100, content).attr('text-anchor', 'start');
-// textWrapp2(t, maxWidth); 
+var r = r.rect(300,300,40,60).attr({fill: "red"});
+//for working with matrix, we need to add some non trivial transformation
+r.transform("S1.01");
+r.click(function(evt){
+	// will rotate the rect, 45 degrees with rotation center evt.clientX, evt.clientY
+	var m2 = r.matrix.clone();
+	m2.rotate(45, evt.clientX, evt.clientY);
+ 	r.attr({"transform": m2.toTransformString()});
+});
+/**
+ * @param text must be a print2() returned value (a set of paths, each for a letter)
+ * @param path - a raphael path string or path object.
+ */
+_printonpath_do = function(text, paper, p) {
+	if(typeof(p)=="string")
+		p = paper.path(p).attr({stroke: "none"});
+	for ( var i = 0; i < text.length; i++) {		
+		var letter = text[i];
+		var newP = p.getPointAtLength(letter.getBBox().x);
+		var newTransformation = letter.transform()+
+		 	"T"+(newP.x-letter.getBBox().x)+","+
+	        (newP.y-letter.getBBox().y-letter.getBBox().height);		
+		//also rotate the letter to correspond the path angle of derivative
+	    newTransformation+="R"+
+	        (newP.alpha<360 ? 180+newP.alpha : newP.alpha);
+	    letter.transform(newTransformation);
+	}
+	text._rm_topathPath=p;
+};
 </script>
-
 
 </body>
 </html>

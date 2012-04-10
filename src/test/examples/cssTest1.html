@@ -3,7 +3,8 @@
 <head>
 	<script src="../../deps/jquery-1.7.1.js"></script>
 	<script src="../../deps/raphael-min.js"></script>
-	<script type="text/javascript" src="../../rm.js"></script>
+	<script type="text/javascript" src="../../rm-core.js"></script>
+	<script type="text/javascript" src="../../rm-ext.js"></script>
 <title>Raphael markup - exporting any raphaël paper instance to XML</title>
 </head>
 <body>
@@ -20,21 +21,20 @@ Some comments indicates the differences between RaphaelMarkup style syntax and t
 		<circle cx="20" cy="300" radius="20" stroke="red"></circle>
 		
 		<set class="set1">
-			<circle cx="220" cy="300" radius="40" stroke="red"></circle>
+			<circle cx="220" cy="300" radius="40" stroke="green"></circle>
 			<rect x="333" y="130" width="20" height="40"></rect>
 			<ellipse x="333" y="330" rx="20" ry="40"></ellipse>
 		</set>
 	</paper>
 	
-	<style>
-	
+	<style>	
 	paper * {
 		opacity: 0.2;
 	}
 	paper rect { 
  		fill: blue;  
  		stroke-width: 10;
- 	} 
+ 	}
 	.set1 {
 		fill: yellow;
 	}
