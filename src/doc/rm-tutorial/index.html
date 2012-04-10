@@ -2,12 +2,13 @@
 <html >
 <head>
 <meta charset="UTF-8"/>
+<base href="http://localhost:8081/rm/"></base>
 <title>raphael markup usage</title>
-	<script src="../../deps/jquery-1.7.1.min.js"></script>
-	<script src="../../deps/raphael-min.js"></script>
-	<script type="text/javascript" src="../../rm-core.js"></script>
-	<script type="text/javascript" src="../../rm-ext.js"></script>
-	
+	<script src="src/deps/jquery-1.7.1.min.js"></script>
+	<script src="src/deps/raphael-min.js"></script>
+	<script type="text/javascript" src="src/rm-core.js"></script>
+	<script type="text/javascript" src="src/rm-ext.js"></script>
+	<script type="text/javascript" src="src/doc/rm-tutorial/generated_toc.js"></script>
 	
 <style>
 .header1 {
@@ -29,26 +30,30 @@ We will go from a very simple use case to the most advanced features, example by
 </p>
 </div>
 
+<h2>Introduction</h2>
+<p>It is recommended that the user know the basics of XML language and a little javascript. </p>
 
-<div class="example">
+
 <h2>Getting started</h2>
 <p>First of all download and uncompress the latest version of <a href="http://code.google.com/p/raphaelmarkup/">raphaëlMarkup</a>. 
 from there we will need the following files</p>
 
 
 <ul>
-<li><a href="http://cancerbero.vacau.com/raphaelmarkup/rm-min.js">rm-min.js</a> - 
+<li><a href="src/rm-min.js">src/rm-min.js</a> - 
  raphaëlMarkup javascript file </li>
  
-<li><a href="http://cancerbero.vacau.com/raphaelmarkup/deps/raphael-min.js">deps/raphael-min.js</a> - 
+<li><a href="src/deps/raphael-min.js">src/deps/raphael-min.js</a> - 
 a javascript library needed by raphaël - the drawing library in which raphaelMarkup is based.</li>
 
-<li><a href="http://cancerbero.vacau.com/raphaelmarkup/deps/jquery-1.7.1.min.js">deps/jquery-1.7.1.min.js</a> - 
+<li><a href="src/deps/jquery-1.7.1.min.js">src/deps/jquery-1.7.1.min.js</a> - 
 a javascript library needed by raphaëlMarkup</li>
 
 </ul>
 
-<p>Now create a new directory named "drawing1" and put these three files inside. Also create a new file named drawing1.html with the following content</p>
+<p>Now create a new directory named "drawing1" and put these three files inside. 
+Also create a new file named drawing1.html in the same directory 
+with the following content</p>
 
 <pre>
 &lt;!DOCTYPE HTML>
@@ -69,13 +74,14 @@ a javascript library needed by raphaëlMarkup</li>
 
 &lt;td id="example1Container">
 
-	&lt;raphael style="display:none">
-	&lt;paper width="400" height="400" container-id="example1Container">
-	&lt;circle cx="200" cy="200" radius="160" fill="red">&lt;/circle>
-	&lt;text x="50%" y="50%" font-size="18" fill="brown">A circle and some text
-	not so much...
-	&lt;/text>
-	&lt;/paper>
+	&lt;raphael>
+		&lt;paper width="400" height="400" container-id="example1Container">
+			&lt;circle cx="200" cy="200" radius="160" fill="red">&lt;/circle>
+			&lt;text x="50%" y="50%" font-size="18" fill="brown">
+			A circle and some text
+			not so much...
+			&lt;/text>
+		&lt;/paper>
 	&lt;/raphael>
 
 &lt;/td>
@@ -83,15 +89,150 @@ a javascript library needed by raphaëlMarkup</li>
 &lt;/table>
 
 &lt;script>
-rm.render();
+$(document).ready(functino(){
+	rm.render();
+})
 &lt;/script>
 &lt;/body>
 &lt;/html>
 </pre>
 
 <p>you can open this exact example and for viewing it with your favourite browser
-<a href="http://cancerbero.vacau.com/raphaelmarkup/src/doc/rm-tutorial/example1.html">here. </a></p>
+<a href="src/doc/rm-tutorial/example1.html">here. </a></p>
+
+<p>Congratullations you just drawed your first shapes in your html document using raphaelMarkup.
+The important things to notice here are: </p>
+
+<ul>
+<li>this is a simple html page that shows a table with some text at first column and a drawing in the 
+second column. </li>
+<li>Inside the second &lt;td> we put a &lt;raphael> element. with a &lt;paper inside. The paper references the parent html element
+in which the paper must be rendered, with <pre>container-id="example1Container"</pre></li>
+<li>At last there is a script that calls rm.render() when the document is loaded. This calls the raphaelMarkup render engine 
+and renders each &lt;raphael> element found in the </li>
+</ul>
+<p>Inside the paper we draw two shapes, a red circle and a brown text. Try for example, changing the color of the circle editing fill="yellow" and refresh the html page for seing the changes.  </p>
+
+<p>For simplicity In the following examples, we will only give you the code under the &lt;raphael> tag. 
+More information about how to inserting your XML drawing in a html web page can be found in 
+<a href="src/doc/usage.html">Using raphaelMarkup examples</a></p>
+
+<p>It is also noticeable that this document it self s an example of an html page with raphaelMarkup XML drawings in it. </p>
+
+
+
+<div class="example">
+<h2>Simple shapes and attributes</h2>
+<p>In the following example we draw some shapes setting some of its attributes both explicitly in the XML element and using CSS like syntax</p>
+<pre>
+&lt;raphael>
+&lt;paper width="500" height="400">
+	&lt;circle cx="100" cy="100" radius="50" fill="red" stroke-width="20" stroke="blue">&lt;/circle>
+	&lt;ellipse cx="100" cy="100" rx="80" ry="20" fill="yellow" opacity="0.5">&lt;/ellipse>
+	&lt;path stroke-width="5" stroke-color="brown" fill="green" opacity="0.2">
+	m141.42508,88.60652l-19.93359,-70.83847l-41.15945,-6.60992l17.75754,140.41547l-89.66449,-87.96709l12,103l28,77.00002l75,-63.00002l45,-58l-27,-34z&lt;/path>
+	&lt;text x="150" y="120" transform="r45" font-size="22">strange and easy&lt;/text>
+&lt;/paper>
+&lt;/raphael>
+</pre>
+
+
+<div class="paper-container" id="example1Container">
+<raphael>
+<paper width="400" height="300" container-id="example1Container">
+	<circle cx="100" cy="100" radius="50" fill="red" stroke-width="20" stroke="blue"></circle>
+	<ellipse cx="100" cy="100" rx="80" ry="20" fill="yellow" opacity="0.5"></ellipse>
+	<path stroke-width="5" stroke-color="brown" fill="green" opacity="0.2">
+	m141.42508,88.60652l-19.93359,-70.83847l-41.15945,-6.60992l17.75754,140.41547l-89.66449,-87.96709l12,103l28,77.00002l75,-63.00002l45,-58l-27,-34z</path>
+	<text x="150" y="120" transform="r45" font-size="22">...strange and easy...</text>
+</paper>
+</raphael>
 </div>
 
+<p>Things to notice here: </p>
+<ul>
+<li>We define a paper with four shapes inside, a circle, an ellipse a path and a text. </li>
+<li>Shapes are printed in order, newer in front of older. In this example, the text appears in the front while the circle appears at the back of them all. </li>
+</ul>
+</div>
+
+
+
+
+<div class="example">
+<h2>Grouping shapes with sets</h2>
+<p>In the following example we will draw the same strange drawing but repeated twise, and each one
+inside a set.l We will apply a little rotation to the first set and a more large rotation and translation 
+to the second set: </p>
+<pre>
+</pre>
+
+
+<div class="paper-container" id="example2Container">
+<raphael>
+<paper width="500" height="300" container-id="example2Container">
+
+<set transform="r36">
+	
+	<circle cx="100" cy="100" radius="50" fill="red" stroke-width="20" stroke="blue"></circle>
+	<ellipse cx="100" cy="100" rx="80" ry="20" fill="yellow" opacity="0.5"></ellipse>
+	<path stroke-width="5" stroke-color="brown" fill="green" opacity="0.2">
+	m141.42508,88.60652l-19.93359,-70.83847l-41.15945,-6.60992l17.75754,140.41547l-89.66449,-87.96709l12,103l28,77.00002l75,-63.00002l45,-58l-27,-34z</path>
+	<text x="150" y="120" transform="r45" font-size="22">...strange and easy...</text>
+	
+</set>
+
+<set transform="t200,0r66" font-family="courier">
+	
+	<circle cx="100" cy="100" radius="50" fill="red" stroke-width="20" stroke="blue"></circle>
+	<ellipse cx="100" cy="100" rx="80" ry="20" fill="yellow" opacity="0.5"></ellipse>
+	<path stroke-width="5" stroke-color="brown" fill="green" opacity="0.2">
+	m141.42508,88.60652l-19.93359,-70.83847l-41.15945,-6.60992l17.75754,140.41547l-89.66449,-87.96709l12,103l28,77.00002l75,-63.00002l45,-58l-27,-34z</path>
+	<text x="150" y="120" transform="r45" font-size="22">...strange and easy...</text>
+	
+</set>
+	
+</paper>
+</raphael>
+</div>
+
+
+<pre>
+&lt;paper width="500" height="300" container-id="example2Container">
+
+&lt;set transform="r36">
+	
+	&lt;circle cx="100" cy="100" radius="50" fill="red" stroke-width="20" stroke="blue">&lt;/circle>
+	&lt;ellipse cx="100" cy="100" rx="80" ry="20" fill="yellow" opacity="0.5">&lt;/ellipse>
+	&lt;path stroke-width="5" stroke-color="brown" fill="green" opacity="0.2">
+	m141.42508,88.60652l-19.93359,-70.83847l-41.15945,-6.60992l17.75754,140.41547l-89.66449,-87.96709l12,103l28,77.00002l75,-63.00002l45,-58l-27,-34z&lt;/path>
+	&lt;text x="150" y="120" transform="r45" font-size="22">...strange and easy...&lt;/text>
+	
+&lt;/set>
+
+&lt;set transform="t200,0r66" font-family="courier">
+	
+	&lt;circle cx="100" cy="100" radius="50" fill="red" stroke-width="20" stroke="blue">&lt;/circle>
+	&lt;ellipse cx="100" cy="100" rx="80" ry="20" fill="yellow" opacity="0.5">&lt;/ellipse>
+	&lt;path stroke-width="5" stroke-color="brown" fill="green" opacity="0.2">
+	m141.42508,88.60652l-19.93359,-70.83847l-41.15945,-6.60992l17.75754,140.41547l-89.66449,-87.96709l12,103l28,77.00002l75,-63.00002l45,-58l-27,-34z&lt;/path>
+	&lt;text x="150" y="120" transform="r45" font-size="22">...strange and easy...&lt;/text>
+	
+&lt;/set>
+	
+&lt;/paper>
+&lt;/raphael>
+</pre>
+<p>Things to notice here: </p>
+<ul>
+<li>We created two sets with the same contents. Applying a transformation to the set will transform all shapes inside it.</li>
+<li>The second set also specify a font-family="courier" so all texts inside it will have that font fmily unless other specified.</li>
+</ul>
+</div>
+
+
+<script>
+rm.render();
+</script>
 </body>
 </html>
