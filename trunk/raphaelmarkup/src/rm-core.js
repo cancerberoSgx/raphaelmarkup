@@ -59,6 +59,7 @@ _doInclude: function(rdoc, onFinnish) {
 render: function() {
 	var docs = [];
 	$("raphael").each(function(index) {
+		$(this).hide();
 		var rdoc = rm.buildRDocFromDOM($(this));
 		docs.push(rdoc);
 		rm._render(document, rdoc);
@@ -317,6 +318,9 @@ _renderAttrs : function(dom, shape, paper) {
 		if(!paper)
 			paper = shape.paper;
 		var attrs = rm.getRaphaelAttrs(dom);
+		if(shape.type=="set") { /* for integration with _sets_ extension */
+			attrs["transform"]="";			
+		}
 		shape.attr(attrs);
 	}
 },
@@ -345,6 +349,7 @@ _renderText: function(rdoc, dom, paper) {
 	var text = dom.attr("text") ? dom.attr("text") : rm._getInmediateText(dom), 
 		shape=null;
 	shape = paper.text(dom.attr("x"), dom.attr("y"), text);
+//	alert("rendertext: "+dom.attr("transform"))
 	rm._renderAttrs(dom, shape, paper);	
 	return shape;
 },

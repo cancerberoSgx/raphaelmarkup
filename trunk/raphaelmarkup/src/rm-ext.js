@@ -290,9 +290,30 @@ rm._tmplCache={};
 
 
 
-
-
-
+/* * * * SET stuff */
+rm._sets = {};
+rm._setsPreproccess = function(rdoc) {
+	
+	//first append the transform in the set to each children.
+	rdoc.find("paper>set").each(function(){
+		rm._setsPreproccess_(rdoc, $(this));
+	});
+	return rdoc;
+};
+rm._setsPreproccess_=function(rdoc, set) {
+	if(set.attr("transform")) {
+		set.children().each(function(){
+			var t = set.attr("transform").indexOf("...")==set.attr("transform").length-3 ? 
+					set.attr("transform") : set.attr("transform")+"...";
+			t=$(this).attr("transform") ? t+$(this).attr("transform") : t;
+//			alert(t+" - "+rm._getTagName($(this)))
+			$(this).attr("transform", t);
+			if(rm._getTagName($(this))=="set") {
+				rm._setsPreproccess_(rdoc, $(this));
+			}
+		});
+	}
+};
 
 
 
@@ -1370,6 +1391,7 @@ rm.preproccessRegister(rm._preproccesCSS);
 rm.preproccessRegister(rm._percentDimPreproccess);
 rm.preproccessRegister(rm._script_preproccess);
 rm.preproccessRegister(rm._anims_preproccess);
+rm.preproccessRegister(rm._setsPreproccess);
 
 
 
