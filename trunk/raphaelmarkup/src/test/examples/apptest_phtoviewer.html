@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="../../deps/jquery-1.7.1.js"></script>
+	<script src="../../deps/raphael-min.js"></script>
+	<script type="text/javascript" src="../../rm-core.js"></script>
+	<script type="text/javascript" src="../../rm-ext.js"></script>
+	
+<title>image viewer template</title>
+</head>
+<body>
+
+<p>demonstrates the use of template-style for doing CSS for template call elements</p>
+
+<raphael style="display:none">
+
+<template name="strange1">
+	<use-tag name="strange1"></use-tag>
+	
+	<template-arg name="x" value="100" type="int"></template-arg>
+	<template-arg name="y" value="100" type="int"></template-arg>
+	<template-arg name="width" value="100" type="int"></template-arg>
+	<template-arg name="height" value="10" type="int"></template-arg>	
+	<template-arg name="src" value="http://www.some/image1.jpg" type="string"></template-arg>	
+	
+	<template-body>
+		<set class="strange1">
+			{%
+			for(var i=0; i&lt;circleCount; i++) { %}
+				&lt;circle cx="{%= cx+rm.randomBetween(-size/2, size/2)%}"
+					cy="{%= cy+rm.randomBetween(-size/2, size/2)%}"
+					fill="{%=rm.randomColor()%}"
+					r="{%=rm.randomBetween(2, circleMaxRadius)%}"
+					stroke-width="2" stroke="{%=rm.randomColor()%}">&lt;/circle>
+			{%}%}	
+		</set>
+	</template-body>
+</template>
+
+<paper x="10" y="100" width="600" height="600">
+	<strange1 class="strange1Class1" name="strange1" 
+		cx="250" cy="220" size="160" circleCount="78" circleMaxRadius="50"></strange1>
+</paper>
+
+</raphael>
+
+
+<script type="text/javascript">
+var rdoc = rm.render()[0];
+</script>
+
+</body>
+</html>

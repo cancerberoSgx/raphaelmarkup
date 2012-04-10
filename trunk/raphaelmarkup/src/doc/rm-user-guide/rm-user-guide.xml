@@ -22,7 +22,7 @@
       <personname><firstname>Sebastián</firstname><surname>Gurin</surname></personname>
 
       <affiliation>
-        <orgname>softpoint</orgname>
+        <orgname>&RM;</orgname>
       </affiliation>
     </author>
 
@@ -81,24 +81,7 @@
     <imageobject> <imagedata fileref="img/rm1.png" format="PNG"/> </imageobject>
     <textobject> <phrase>first look at raphaelmarkup as a component</phrase> </textobject>
     </mediaobject>
-    
-    <para>&RM; can be divided in two main sections. First, the core part that define and implement a base &R; XML API. 
-    It also implements a simple xml preproccessing and raphael shape post rendering extension mechanism. </para>
-    <para>The sencond part is called EXT because the are a bunch of CORE EXTENSIONS 
-    that perform some job before XML proccess (preproccessing) or after raphael shape rendering (postrendering). </para>    
-    
-    <para>While the core module peovide simple base and definition for shape rendering from XML the extensions 
-    module provide very usefull utilities and API support, like 
-    1) animation XML definition and usage tools, 2) CSS styles for shapes, 3) templates javascript, 
-    4) relative bounds, 5) script and events, etc.
-    So the following is a more elaborated perspective view of &RM; :  </para>
-    
-    <mediaobject>
-    <imageobject> <imagedata fileref="img/rm2.png" format="PNG"/> </imageobject>
-    <textobject> <phrase>complete look at raphaelmarkup as a component</phrase> </textobject>
-    </mediaobject>
-    
-    
+   
     
   </section>
   
@@ -231,9 +214,9 @@ rect.attr({"fill": "red", "stroke": "blue"});
    
    
      
-  <section id="raphael-tags">
+  <section id="sec-raphael-base">
   
-    <title>&R; elements</title>
+    <title>&R; Base elements</title>
     <para>In this section we will describe &R; related tags. These are what we 
     use for drawing text, path, shapes and images. 
      </para>
@@ -333,10 +316,20 @@ rect.attr({"fill": "red", "stroke": "blue"});
   
   
   
-   <section id="sec-extensions">
-    <title >Extensions</title>
-	<para>In this section we will document each extension specifics.</para>
+   <section id="sec-raphael-extensions">
+   
+    <title >Raphael extensions. </title>
+    
+    <para>Previus section teach the basic raphael elements. In this extension we will describe
+    more &RM; functionality that complete &R; API like events, animations, or add some out-of-box functionality, 
+    like css styling or templates. </para>
+    
+	<para>In <xref linkend="sec-rm-extensions"/> &RM; extension mechanism internals are explained and also 
+an introduction about how to build your own &RM; extensions.. In this section we will document each of these extension specifics.</para>
+	
 	<para>TODO: Explain exactly what extensions are - preproccesing - postrendering </para>
+	
+	
 	
 	
 	
@@ -359,8 +352,11 @@ rect.attr({"fill": "red", "stroke": "blue"});
     </section>
     
     
+    
+    
       
-    <section id="exts-template">
+    <section id="sec-exts-template">
+    
     <title>Templates</title>
     <para>&RM; supports the concept of templates. You can define a template, for example, a cool 
     button, panel or whatever and then reuse that component any time you want in your XML. More, you can define 
@@ -695,18 +691,31 @@ rect.attr({"fill": "red", "stroke": "blue"});
     So in CSS we can reffere both to the class defined in the template cvlalling element and in the tempalte body elements. </para>
     
     
-    <formalpara><title>How this work</title>
+  
+    
+    
+    <formalpara><title>template-style</title>
+    <para>Similar to the tag &lt;style> for specifying elements style, you 
+    can use the tag &lt;template-stype> for setting the style of template 
+    calls.</para>
+    </formalpara>
+	
+    </section>
+    
+    
+    
+    <section>
+    <title>Extension Internals</title>
+      <formalpara><title>How this work</title>
     
     <para>At XML preproccessing we perform two tasks. First get all &lt;template and compile each one, for fast rendering. 
     Second all &lt;template-use> elements are evaluated and replaced in the dom with the result of evaluate the template 
     using the parameters provided by the user in the template-calling tag. As simple as that.... :-$ </para>
     
     </formalpara>
-    <formalpara><title>Parameters</title><para></para></formalpara>
-	
+    
+    
     </section>
-    
-    
     </section>
     
     
@@ -1196,6 +1205,164 @@ For this to work on IE the &lt;raphael> element must be defined like this:
   
   
   
+  <section id="sec-rm-extensions">
+  <title>Developing &RM; extensions</title>
+  
+  <para></para>  
+   
+    <para>&RM; can be divided in two main sections. First, the core part that define and implement a base &R; XML API. 
+    It also implements a simple xml preproccessing and raphael shape post rendering extension mechanism. </para>
+    <para>The sencond part is called EXT because the are a bunch of CORE EXTENSIONS 
+    that perform some job before XML proccess (preproccessing) or after raphael shape rendering (postrendering). </para>    
+        
+    <figure id="sec-rm-extensions-img1">
+       <title>Picture's Title</title>
+       <graphic fileref="img/rm2.png"></graphic>
+    </figure>
+            
+    <para>The core part support the core functionality, that is basic XML parsing and support base raphael tags 
+    discussed in See <xref linkend="sec-raphael-base"/>. It also support simple mechanism for extending this core 
+    functionality and add new behaviour both ath XML preproccessing and raphael shape post rendering. The core part 
+    of &RM; is located at <filename>src/rm-core.js</filename></para>
+    
+    <para>The extension part is located in <filename>src/rm-extension.js</filename> and are a group of &RM; extensions 
+    (using the extension mechanism defined in the core part described above). Some parts of &R; XML API implementation and utilities 
+    like events and animations are in fact &RM; extensions. Other extensions offer out-of-the-box features like CSS-like styling, 
+    templates, etc </para>
+    
+    <para>&RM; support three types of extension mechanisms, and each one will be described next.</para>
+    
+    
+    
+    
+    <section><title>Custom tag renderers</title>
+	    <para>&RM; core support base &R; elements like circle, rect, set, text, print, etc. Each one correspond 
+	    to a base &R; type and it has assigned a XML tag for "calling" them..
+	    But what if you want to define a new XML tag for your own &R; native shape?</para>
+	    
+	    <para>With Custom Tag Renderers you can register a javascript function that will render a certain XML node in a raphael paper and so 
+	    expand the set of base shapes supported by the &RM; core. </para>
+	    
+	    <para>A tag renderer is a javascript function that perform some job on a raphael
+	     paper according on the information of some XML node. For example, creating some raphael shapes and setting some of its attributes according to 
+	     the XML element attributes. 
+	    For example, this is the tag renderer for <code>rect</code> (taken from rm-core.js): </para>
+	    
+	    <programlisting>
+_renderRect: function(rdoc, dom, paper) {
+	var shape =  paper.rect(dom.attr("x"), dom.attr("y"), 
+		dom.attr("width"), dom.attr("height"), dom.attr("radius"));
+	rm._renderAttrs(dom, shape, paper);	
+	return shape;
+},
+	    </programlisting>
+	    
+	    <para>In the following example we show part of an htmn with a &RM; document that contains a custom tag renderer for 
+	    creating a strange shape with lines and assign to it the XML tag name "strange-lines". Notice that in javascript, before calling rm.render()
+	    I create and register a function that do this job. Then in my paper I can use the new tag name (&lt;strange-shapes>). Also notice that I call 
+	    rm._renderAttrs() so my new shape supports base raphael attributes, like opacity, etc.</para>
+	    
+	    <programlisting>
+
+&lt;body>
+&lt;p>custom tags examples &lt;/p>
+
+&lt;raphael>	
+
+	&lt;paper x="10" y="10" width="800" height="800">
+		&lt;!-- in our paper we render some "strange-lines" shapes -->
+		 &lt;strange-lines x="40" y="130" width="100" height="100"opacity="0.5">&lt;/strange-lines>
+		 &lt;strange-lines x="40" y="230" width="200" height="200"opacity="0.5">&lt;/strange-lines>
+		 &lt;strange-lines x="220" y="230" width="60" height="200"opacity="0.5">&lt;/strange-lines>
+		 &lt;strange-lines x="230" y="230" width="300" height="400"opacity="0.5">&lt;/strange-lines>
+		 &lt;strange-lines x="130" y="130" width="300" height="40" opacity="0.5">&lt;/strange-lines>
+		 &lt;strange-lines x="230" y="230" width="300" height="140" opacity="0.5">&lt;/strange-lines>
+		 &lt;strange-lines x="130" y="160" width="300" height="400" opacity="0.5">&lt;/strange-lines>
+	&lt;/paper>	
+	
+	&lt;style>
+	&lt;/style>
+	
+&lt;/raphael>
+
+&lt;script type="text/javascript">
+//define a new custom tag renderer
+var strangeLinesRenderer = function(rdoc, dom, paper) {
+	var x = parseInt(dom.attr("x")), 
+		y = parseInt(dom.attr("y")),
+		w = parseInt(dom.attr("width")), 
+		h = parseInt(dom.attr("height")), 
+		count = dom.attr("count")?parseInt(dom.attr("count")) : 300;
+	paper.setStart();
+	for(var i = 0; i&lt;count; i++) {
+		
+		var ps = " M "+rm.randomBetween(x, x+w)+","+rm.randomBetween(y,y+h)+
+			" L "+rm.randomBetween(x, x+w)+","+rm.randomBetween(y,y+h);
+		
+		var path = paper.path(ps).attr({"stroke": rm.randomColor()});
+		
+		/* using rm._renderAttrs(dom, shape, paper) we can copy  any base 
+		raphael attribute to this shape. In this case we want that because 
+		we want our shape to support base raphael api.
+		This is optionally perhaps our shape don't want to support raphael 
+		attributes or want to redefine them. */
+		rm._renderAttrs(dom, path, paper);
+	}
+	return paper.setFinish();
+}
+
+//register the renderer under the tag name of strange-lines
+rm._registerTagRenderer(strangeLinesRenderer, "strange-lines");
+
+//and finally render the document
+var rdoc = rm.render();
+
+&lt;/script>
+
+&lt;/body>
+
+	    </programlisting>
+	    <para>This example is available online <ulink url="&RMBASE;/src/test/examples/customTagRenderers.html">here. </ulink></para>
+	    
+	    <para>As you can see the renderer function <code>strangeLinesRenderer</code> only has to create some shapes and set some attributes 
+	    to those shapes according to XML atributes values. </para>
+	    
+	    <section><title>Custom renderers and templates</title>	    
+	    <para>
+As we have seen in <xref linkend="sec-exts-template"/> we also can define custom tags for our own complex drawings using &RM; templates. 
+So it is important to understand the dirreferences between new types defined with templates and those defined with custom renderers. </para>
+
+<para>Templates are XML transformations at XML pre-proccessing time from your custom tags to base tags. So templates are based on base tabs 
+and cannot go beyond base tags supported by &RM; </para>
+
+<para>Custom renderers in the other way will help you expand the base set of elements, so you can use them in your templates.
+An exaple about defining a custom tab renderer and then use it on a template is
+<ulink url="&RMBASE;/src/test/examples/customTagRenderersAndTemplates.html">available here. </ulink></para>
+
+
+</section>
+    </section>
+    
+    
+    
+    <section><title>XML pre-proccessing</title>
+    <para>A &RM; XML preprocesssing extension will transform the original XML document into the real XML DOM that will be consumed by the render engine. 
+    See <xref linkend="sec-rm-extensions-img1"/>. So using preproccessing extensions you will be able to transform custom XML elements into a set of 
+    base elements supported by &RM; core. For example, the template extension is a XML preproccessing extension, this means is it all done at XML Preproccessing. 
+    It will read all &lt;template> definitions first, and then will transform all &lt;template-use and other custom tempalte tabs and render there the template. 
+    The tempalte body should only be using base &RM; tags so the renderer knows how to render the output. </para>
+    
+    <para>So preproccessing extensions can be used to expand the XML syntax for doing something usefull but always at the boundaries of the core base functionality.</para>
+    </section>
+    
+    
+    
+    <section><title>&R; shape post-rendering</title>
+    <para>bla</para>
+    </section>
+    
+  </section>
+  
   
   
   <section><title>Integration</title>
@@ -1220,13 +1387,15 @@ For this to work on IE the &lt;raphael> element must be defined like this:
   
   <section><title>Reading and writing JSON</title>
   <para>&R; library support exporting and importing data in JSON format. For example
-  <ulink url="http://raphaeljs.com/reference.html#Paper.add"><code>paper.add()</code>
+  <ulink url="http://raphaeljs.com/reference.html#Paper.add"><code>paper.add()</code></ulink>
   will add all the shapes defined in a json string into a paper. In the &R; world json format seems to be the
-  preffered way of storing raphael drawings, for example, <ulink url="">Charles SVG to Raphaël converter</ulink>
-  can convert SVG into &R; JSON format, </ulink></para>
+  preffered way of storing raphael drawings, for example, 
+  <ulink url="">http://irunmywebsite.com/raphael/SVGTOHTML_LIVE.php</ulink> or <ulink url="http://toki-woki.net/p/SVG2RaphaelJS/">this other SVG conversor</ulink> 
+  can convert SVG into &R; JSON format.</para>
+  <para>Like &RM; propose with XML, this format can be used to store raphael drawings in text.</para>
   
-  <para>&RM; support importing this kind of JSON data. There is an example showing just this 
-  <ulink url="$RMBASE;/src/test/examples/jsonTest1.html">here. </ulink></para>
+  <para>&RM; support importing this kind of JSON data directly into a XML DOM. There is an example showing just this 
+  <ulink url="&RMBASE;/src/test/examples/jsonTest1.html">here. </ulink></para>
   
   </section>
   

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="../../deps/jquery-1.7.1.js"></script>
+	<script src="../../deps/raphael-min.js"></script>
+	<script type="text/javascript" src="../../rm-core.js"></script>
+	<script type="text/javascript" src="../../rm-ext.js"></script>
+	
+<title>template css - template-style tag</title>
+</head>
+<body>
+
+<p>demonstrates the use of template-style for doing CSS for template call 
+elements, as you can see we aren't specifying circleCount and circleMaxRadius
+in the strange1 element, but with CSS using the template-style tag.</p>
+
+<raphael style="display:none">
+
+<template name="strange1">
+	<use-tag name="strange1"></use-tag>
+	
+	
+	<template-arg name="cx" value="100" type="int"></template-arg>
+	<template-arg name="cy" value="100" type="int"></template-arg>
+	<template-arg name="size" value="100" type="int"></template-arg>
+	<template-arg name="circleCount" value="10" type="int"></template-arg>	
+	<template-arg name="circleMaxRadius" value="10" type="int"></template-arg>	
+	
+	
+	<template-body>
+		<set class="strange1">
+			{%
+			for(var i=0; i&lt;circleCount; i++) { %}
+				&lt;circle cx="{%= cx+rm.randomBetween(-size/2, size/2)%}"
+					cy="{%= cy+rm.randomBetween(-size/2, size/2)%}"
+					fill="{%=rm.randomColor()%}"
+					r="{%=rm.randomBetween(2, circleMaxRadius)%}"
+					stroke-width="2" stroke="{%=rm.randomColor()%}">&lt;/circle>
+			{%}%}	
+		</set>
+	</template-body>
+</template>
+
+
+<template-style>
+strange1 {
+	circleCount: 80; 
+	circleMaxRadius: 10;
+	size: 145;
+}
+strange1.third {
+cx: 470; cy: 100;circleCount: 180; opacity: 0.5;
+}
+</template-style>
+
+<paper x="10" y="100" width="600" height="600">
+		
+	<strange1
+		cx="50" cy="320"></strange1>
+			
+	<strange1
+		cx="250" cy="120"></strange1>
+		
+	<strange1 class="third"></strange1>
+</paper>
+
+</raphael>
+
+
+<script type="text/javascript">
+var rdoc = rm.render()[0];
+</script>
+
+</body>
+</html>

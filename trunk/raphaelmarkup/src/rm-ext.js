@@ -52,7 +52,7 @@ rm._preproccess_template1_useTags = {};
 rm._preproccess_template1 = function(rdoc) {
 	
 	if(!rdoc) {
-		debugger;
+//		debugger;
 		return;
 	}
 	rm._preproccess_template1_rocTmpls[rdoc]={};
@@ -220,16 +220,21 @@ rm._preproccess_template1 = function(rdoc) {
 		$(this).parent().append(outDom);
 //		$(this).remove();
 		
-		if($(this).attr("id")) {
-			outDom.attr("id", $(this).attr("id"));
+		//copy all the attrs of this to outDom, with the execption of attr class that is appended.
+		var thisAttrNames = rm._getAttributeNames(this);
+		for ( var i = 0; i < thisAttrNames.length; i++) {
+			if(thisAttrNames[i]!="class") {
+				outDom.attr(thisAttrNames[i], $(this).attr(thisAttrNames[i]));
+			}
 		}
+//		if($(this).attr("id")) {
+//			outDom.attr("id", $(this).attr("id"));
+//		}
 		if($(this).attr("class")) {
 			var oldClass= $(this).attr("class")?$(this).attr("class"):"";
 			outDom.attr("class", oldClass+" "+$(this).attr("class"));
 		}
 		
-		//TODO: replace the id of generated docuemtnElement with the <use id
-		//TODO: add the class <use> to generated documentelement 
 	});
 	//also remove all template and template-use elements 
 //	rdoc.remove("template");
@@ -293,7 +298,7 @@ rm._tmplCache={};
 
 
 
-/* * * * CSS * * * */
+/* * * * CSS (after template preproccessing) - tag style * * * */
 
 /**
  * preprocess al style elements. 
@@ -306,16 +311,54 @@ rm._preproccesCSS = function(rdoc) {
 	});	
 	return rdoc;
 };
+
+/* * * * CSS (before template preproccessing) - tag template-style
+ * (we separate style for template call elements from style for final 
+ * base elements into style and template-style for performance reasons.)
+ * * * * */
 /**
- * this apply a css source string in a DOM. very simple version - not CSS conformant
+ * preprocess al template-style elements. 
+ */
+rm._preproccesTemplateCSS = function(rdoc) {	
+	rdoc.find("template-style").each(function(i){
+		rm._applyCSS(rdoc, $(this).text());
+	});	
+	return rdoc;
+};
+/** a private el->{attr->boolean} mapping used for not overwriting
+ * explicit elements attirbutes with css */
+rm._css_elemAttrs={};
+/**
+ * this apply a css source string in a DOM. very simple version - 
+ * not CSS conformant
  */
 rm._applyCSS= function(doc, cssStr) {
 	
 	var css = rm._parseCSS(cssStr);
 	for ( var i = 0; i < css.__order.length; i++) {
 		var sel = css.__order[i];
-		var els = doc.find(sel);
-		els.attr(css[sel]);
+//		var els = doc.find(sel);
+		doc.find(sel).each(function(){
+			var id=$(this).attr("id");
+			if(!rm._css_elemAttrs[id]) {
+				rm._css_elemAttrs[id]=rm._getAttributes(this);
+			}
+			var finalAttrs = rm._objdiff(css[sel], rm._css_elemAttrs[id]);
+//			alert("setting to "+id+" - "+rm._dump(css[sel])+" - "+
+//					rm._dump(rm._css_elemAttrs[id])	)
+			$(this).attr(finalAttrs);
+		});
+//		els.attr(css[sel]);
+//		for ( var j = 0; j < els.length; j++) {
+//			var el = $(els[j]), id=el.attr("id");
+//			if(!rm._css_elemAttrs[id]) {
+//				rm._css_elemAttrs[id]=rm._getAttributes(el);
+//			}
+//			var finalAttrs = rm._objdiff(css[sel], rm._css_elemAttrs[id]);
+//			alert("setting to "+id+" - "+rm._dump(css[sel])+" - "+
+//					rm._dump(rm._css_elemAttrs[id])	)
+//			$(el).attr(finalAttrs);
+//		}
 	}
 };
 rm._parseCSS= function(css) {
@@ -357,6 +400,24 @@ rm._removeComments= function(css) {
 
 
 
+
+
+/* * * * id to all 
+ *  internal preproccessing extension to assing an unique id to all elements  
+ */
+rm._idToAllCounter =  {};
+rm._idToAllPreproccess = function(rdoc) {
+	rdoc.find("*").each(function(){
+		if(!$(this).attr("id")) {
+			var tagName = rm._getTagName(this);
+			if(!rm._idToAllCounter[tagName])
+				rm._idToAllCounter[tagName]=1;
+			rm._idToAllCounter[tagName]++;
+			$(this).attr("id", tagName+rm._idToAllCounter[tagName]);
+		}
+	});
+	return rdoc;
+};
 
 
 
@@ -1296,13 +1357,20 @@ rm._colorMatrix=function(rdoc) {
 
 
 
-//register all extensions (preproccessing)
 
+
+
+
+//register all extensions (preproccessing)
+rm.preproccessRegister(rm._idToAllPreproccess);
+rm.preproccessRegister(rm._preproccesTemplateCSS);
 rm.preproccessRegister(rm._preproccess_template1);
 rm.preproccessRegister(rm._preproccesCSS);
+
 rm.preproccessRegister(rm._percentDimPreproccess);
 rm.preproccessRegister(rm._script_preproccess);
 rm.preproccessRegister(rm._anims_preproccess);
+
 
 
 //register all extensions (post rendering)
@@ -1342,6 +1410,27 @@ rm.postRendererRegister(rm._morphologyPostRendering);
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //not in use:
 
 
@@ -1351,24 +1440,69 @@ rm.postRendererRegister(rm._morphologyPostRendering);
 /* * * * PRINT - onpath 
  * replace a <print onpath="nonempty"> witha <set> with paths for each letter (previous print() raphael impl) and align the letters on the path
  * * * * */
+//a raphael
+(function() {
+	/**
+	 * do the job of putting all letters in a set returned bu printLetters in a path
+	 * @param p - can be a rpahael path obejct or string
+	 */
+	var _printOnPath = function(text, paper, p) {
+		if(typeof(p)=="string")
+			p = paper.path(p).attr({stroke: "none"});
+		for ( var i = 0; i < text.length; i++) {		
+			var letter = text[i];
+			var newP = p.getPointAtLength(letter.getBBox().x);
+			var newTransformation = letter.transform()+
+			 	"T"+(newP.x-letter.getBBox().x)+","+
+		        (newP.y-letter.getBBox().y-letter.getBBox().height);		
+			//also rotate the letter to correspond the path angle of derivative
+		    newTransformation+="R"+
+		        (newP.alpha<360 ? 180+newP.alpha : newP.alpha);
+		    letter.transform(newTransformation);
+		}
+		text._rm_topathPath=p;
+	};
+	
+	/** print letter by letter, and return the set of letters (paths), just like the old raphael print() method did. */
+	Raphael.fn.printLetters = function(x, y, str, font, size, 
+			letter_spacing, line_height, onpath) {
+		letter_spacing=letter_spacing||size/1.5;
+		line_height=line_height||size;
+		this.setStart();
+		var x_=x, y_=y;
+		for ( var i = 0; i < str.length; i++) {
+			if(str.charAt(i)!='\n') {
+				var letter = this.print(x_,y_,str.charAt(i),font,size);
+				x_+=letter_spacing;				
+			}
+			else {
+				x_=x;
+				y_+=line_height;
+			}
+		}
+		var set = this.setFinish();
+		if(onpath) {
+			_printOnPath(set, this, onpath);
+		}
+		return set;
+	};	
+})();
 
-rm.printLetters=function(paper, x, y, str, font, size, origin, letterSpace) {
-	paper.setStart();
-	for ( var i = 0; i < str.length; i++) {
-		var letter = paper.print(x,y,str.charAt(i),font,size,origin,letterSpace);
-		
-	}
-	return paper.setFinish();
+/**
+* this preproccess will replace print[onpath] with a <set of <prints, each one for a letter
+*/
+rm._printonpath_preproccessing = function(rdoc) {
 }
+
 
 //rm._printonpath_count=0;
 //rm._printonpath_getId = function(){
 //	rm._printonpath_count++;
 //	return "printonpath"+rm._printonpath_count;
 //}
-/**
- * this preproccess will replace print[onpath] with a <set of <prints, each one for a letter
- */
+///**
+// * this preproccess will replace print[onpath] with a <set of <prints, each one for a letter
+// */
 //rm._printonpath_preproccessing = function(rdoc) {
 //	rdoc.find("print[onpath]").each(function(){
 //		var text = $(this).attr("text") || rm._getInmediateText($(this)), 
@@ -1556,25 +1690,25 @@ rm.printLetters=function(paper, x, y, str, font, size, origin, letterSpace) {
 
 //on path - don't work anymore.
 
-//rm._printonpath_do = function(text, paper, pathStr) {
-//	var p = paper.path(pathStr).attr({stroke: "none"});
-//	for ( var i = 0; i < text.length; i++) {		
-//		var letter = text[i];
-////		if(letter.rmtype!="letter")
-////			continue;
-//		var newP = p.getPointAtLength(letter.getBBox().x);
-//		var newTransformation = letter.transform()+
-//		 	"T"+(newP.x-letter.getBBox().x)+","+
-//	        (newP.y-letter.getBBox().y-letter.getBBox().height);
-//		
-//		//also rotate the letter to correspond the path angle of derivative
-//	    newTransformation+="R"+
-//	        (newP.alpha<360 ? 180+newP.alpha : newP.alpha);
-//	    alert(newTransformation);
-//	    letter.transform(newTransformation);
-//	}
-//	text._rm_topathPath=p;
-//};
+rm._printonpath_do = function(text, paper, pathStr) {
+	var p = paper.path(pathStr).attr({stroke: "none"});
+	for ( var i = 0; i < text.length; i++) {		
+		var letter = text[i];
+//		if(letter.rmtype!="letter")
+//			continue;
+		var newP = p.getPointAtLength(letter.getBBox().x);
+		var newTransformation = letter.transform()+
+		 	"T"+(newP.x-letter.getBBox().x)+","+
+	        (newP.y-letter.getBBox().y-letter.getBBox().height);
+		
+		//also rotate the letter to correspond the path angle of derivative
+	    newTransformation+="R"+
+	        (newP.alpha<360 ? 180+newP.alpha : newP.alpha);
+	    alert(newTransformation);
+	    letter.transform(newTransformation);
+	}
+	text._rm_topathPath=p;
+};
 //
 //rm._printonpath_postRendering = function(rdoc) {
 //	rdoc.find("print").each(function(){

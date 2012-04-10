@@ -136,6 +136,8 @@ buildRDocFromDOM : function(dom) {
 	return rdoc;
 },
 
+
+
 /**
  * @param targetHtmlDoc
  * @param rdoc a parsed jquery object with the raphael markup document or a string for selecting the raphael element. Must be valid raphael.xsd
@@ -143,9 +145,8 @@ buildRDocFromDOM : function(dom) {
  */
 _render : function(targetHtmlDoc, rdoc)	{
 	
-	/* first of all do the async preproccessing for include tegas */
-	rm._doInclude(rdoc, function(rdoc){
-		
+	/* first of all do the async preproccessing for <include> tags */
+	rm._doInclude(rdoc, function(rdoc){		
 
 		/* first of all perorm preprosessing operations. 
 		 * TODO: we are discarding original document... 
@@ -158,13 +159,10 @@ _render : function(targetHtmlDoc, rdoc)	{
 		if(!rdoc||rdoc.size()==0) {		
 			alert("error when preproccessing. ");
 		}
-		
-		/* css note: we will evaluate CSS selectors using jquery, 
-		 * so all supported jquery selectors will be available. */
-		
-		/* TODO: use xml mutation events for being notified with class 
-		 * or ids change?? http://en.wikipedia.org/wiki/DOM_Events. won't be supported on old IE*/
-			
+				
+		//now register base renderes and do rendering and then execute post rendering extensions
+		rm._doRegisterBaseRenderers();
+					
 		rdoc.find("paper").each(function(i){
 			var paper = null;
 			
@@ -173,8 +171,7 @@ _render : function(targetHtmlDoc, rdoc)	{
 		
 		rm._postRendering(rdoc);
 		
-	});
-	
+	});	
 	
 	return rdoc;
 },
@@ -222,14 +219,12 @@ updateShape : function(rdoc, dom) {
 		rm._renderEl(rdoc, dom, paper);
 	}
 },
-/**
- * @param el jquery object with paper xml dom
- * @param paper - the raphael paper object
+/** 
  */
 _renderPaper: function(rdoc, dom) {
 	var paper = null;
-	if(dom.attr("containerId")) {
-		paper = Raphael(dom.attr("containerId"), 
+	if(dom.attr("container-id")) {
+		paper = Raphael(dom.attr("container-id"), 
 			parseInt(dom.attr("width")), parseInt(dom.attr("height")));
 	}
 	else {
@@ -237,36 +232,63 @@ _renderPaper: function(rdoc, dom) {
 			parseInt(dom.attr("width")), parseInt(dom.attr("height")));
 	}
 	
-	dom.children().each(function(index){
+	dom.children().each(function(){
 		rm._renderEl(rdoc, $(this), paper);
 	});
 	paper.type="paper";
 	rm._register(rdoc, "paper", paper, dom);
 	return paper;
 },
+
+
+/* tags renderers - user can register custom renderer for custom xml tags.
+ * here we define renderers for base raphael types */
+_tagRenderers : {},
+_registerTagRenderer: function(renderer, tagName) {
+	rm._tagRenderers[tagName]=renderer;
+},
+_getTagRenderer: function(tagName) {
+	return rm._tagRenderers[tagName];
+},
+_doRegisterBaseRenderers : function() {
+	rm._registerTagRenderer(rm._renderImage, "imag");
+	rm._registerTagRenderer(rm._renderPrint, "print");
+	rm._registerTagRenderer(rm._renderText, "text");
+	rm._registerTagRenderer(rm._renderEllipse, "ellipse");
+	rm._registerTagRenderer(rm._renderRect, "rect");
+	rm._registerTagRenderer(rm._renderPath, "path");
+	rm._registerTagRenderer(rm._renderSet, "set");
+	rm._registerTagRenderer(rm._renderCircle, "circle");
+},
+
 /**
  * @param el the jquery object for xml dom el def
  * @param paper the raphael paper 
  */
 _renderEl: function(rdoc, dom, paper) {
 	
-	var shape = null, tag = rm._getTagName(dom);
-	if(tag=="imag") 
-		shape=this._renderImage(dom, paper);
-	else if(tag=="text") 
-		shape=this._renderText(dom, paper);
-	else if(tag=="print") 
-		shape=this._renderPrint(dom, paper);
-	else if(tag=="rect")
-		shape=this._renderRect(dom, paper);
-	else if(tag=="path")
-		shape=this._renderPath(dom, paper);
-	else if(tag=="set")
-		shape=this._renderSet(rdoc, dom, paper);
-	else if(tag=="circle")
-		shape=this._renderCircle(dom, paper);	
-	else if(tag=="ellipse")
-		shape=this._renderEllipse(dom, paper);
+	var shape = null, tag = 
+		rm._getTagName(dom), 
+		renderer = rm._getTagRenderer(tag);
+	if(renderer)
+		shape = renderer(rdoc, dom, paper);
+
+//	if(tag=="imag") 
+//		shape=this._renderImage(dom, paper);
+//	else if(tag=="text") 
+//		shape=this._renderText(dom, paper);
+//	else if(tag=="print") 
+//		shape=this._renderPrint(dom, paper);
+//	else if(tag=="rect")
+//		shape=this._renderRect(dom, paper);
+//	else if(tag=="path")
+//		shape=this._renderPath(dom, paper);
+//	else if(tag=="set")
+//		shape=this._renderSet(rdoc, dom, paper);
+//	else if(tag=="circle")
+//		shape=this._renderCircle(dom, paper);	
+//	else if(tag=="ellipse")
+//		shape=this._renderEllipse(dom, paper);
 	
 	if(shape!=null) {
 		rm._register(rdoc, shape.type, shape, dom);
@@ -298,64 +320,50 @@ _renderAttrs : function(dom, shape, paper) {
 		shape.attr(attrs);
 	}
 },
-_renderImage: function(dom, paper) {
+_renderImage: function(rdoc, dom, paper) {
 	var shape = paper.image(dom.attr("src"), dom.attr("x"), 
 		dom.attr("y"), dom.attr("width"), dom.attr("height"));
-	this._renderAttrs(dom, shape, paper);
+	rm._renderAttrs(dom, shape, paper);
 	return shape;
 },
-_renderPrint: function(dom, paper) {
+
+_renderPrint: function(rdoc, dom, paper) {
 	var text = dom.attr("text") ? dom.attr("text") : rm._getInmediateText(dom), 
 		
 	shape = paper.print(dom.attr("x"), dom.attr("y"), text,
 		paper.getFont(dom.attr("font")), 
 		dom.attr("size"), dom.attr("origin"), 
 		dom.attr("letter-spacing"));
-	
-//	shape = rm.printLetters(paper, dom.attr("x"), dom.attr("y"), text,
-//		paper.getFont(dom.attr("font")), 
-//		dom.attr("size"), dom.attr("origin"), 
-//		dom.attr("letter-spacing"));
-	
-//	shape.type="print";
-	
-	/* mark all the letters (for differentiating them from other artificial shapes in the text like decorations */
-	for ( var i = 0; i < shape.length; i++) {
-		shape[i].rmtype="letter";
-	}
-	return shape;
-},
-_renderText: function(dom, paper) {
-	var text = dom.attr("text") ? dom.attr("text") : rm._getInmediateText(dom), 
-		shape=null;
-//	if(dom.attr("font") && paper.getFont(dom.attr("font"))) {
-//		shape = paper.print(dom.attr("x"), dom.attr("y"), text,
-//				paper.getFont(dom.attr("font")), 
-//				dom.attr("size"), dom.attr("origin"), 
-//				dom.attr("letter-spacing"))
-//	} 
-//	else {
-		shape = paper.text(dom.attr("x"), dom.attr("y"), text);
-		this._renderAttrs(dom, shape, paper);		
+	rm._renderAttrs(dom, shape, paper);	
+//	/* mark all the letters (for differentiating them from other artificial shapes in the text like decorations */
+//	for ( var i = 0; i < shape.length; i++) {
+//		shape[i].rmtype="letter";
 //	}
 	return shape;
 },
-_renderEllipse: function(dom, paper) {
+_renderText: function(rdoc, dom, paper) {
+	var text = dom.attr("text") ? dom.attr("text") : rm._getInmediateText(dom), 
+		shape=null;
+	shape = paper.text(dom.attr("x"), dom.attr("y"), text);
+	rm._renderAttrs(dom, shape, paper);	
+	return shape;
+},
+_renderEllipse: function(rdoc, dom, paper) {
 	var shape =  paper.ellipse(dom.attr("x"), dom.attr("y"), 
 		dom.attr("rx"), dom.attr("ry"));
-	this._renderAttrs(dom, shape, paper);
+	rm._renderAttrs(dom, shape, paper);
 	return shape;
 },
-_renderRect: function(dom, paper) {
+_renderRect: function(rdoc, dom, paper) {
 	var shape =  paper.rect(dom.attr("x"), dom.attr("y"), 
 		dom.attr("width"), dom.attr("height"), dom.attr("radius"));
-	this._renderAttrs(dom, shape, paper);	
+	rm._renderAttrs(dom, shape, paper);	
 	return shape;
 },
-_renderPath: function(dom, paper) {
+_renderPath: function(rdoc, dom, paper) {
 	var path = dom.attr("path")?dom.attr("path"):rm._getInmediateText(dom);
 	var shape = paper.path(path);
-	this._renderAttrs(dom, shape, paper);
+	rm._renderAttrs(dom, shape, paper);
 	return shape;
 },
 _renderSet: function(rdoc, dom, paper) {
@@ -376,13 +384,12 @@ _renderSet: function(rdoc, dom, paper) {
 	});	
 	return set;
 },
-_renderCircle: function(dom, paper) {
+_renderCircle: function(rdoc, dom, paper) {
 	var shape =  paper.circle(dom.attr("cx"), dom.attr("cy"), 
 		dom.attr("radius"));
-	this._renderAttrs(dom, shape, paper);
+	rm._renderAttrs(dom, shape, paper);
 	return shape;
 },	
-
 
 
 
@@ -426,12 +433,32 @@ _getInmediateText: function(dom) {
 	return dom.contents().filter(function(){ return(this.nodeType == 3); }).text();
 },
 _getAttributeNames: function(dom) {
+	dom=$(dom);
 	var el = dom.get(0);
 	var arr = [];
 	for (var i=0, attrs=el.attributes, l=attrs.length; i<l; i++){
 	    arr.push(attrs.item(i).nodeName);
 	}
 	return arr;
+},
+/**
+ * return a object with attributes names->values
+ */
+_getAttributes: function(dom) {
+	dom=$(dom);
+	var attrNames = rm._getAttributeNames(dom), attrs={};
+	for ( var i = 0; i < attrNames.length; i++) {
+		attrs[attrNames[i]]=dom.attr(attrNames[i]);
+	}
+	return attrs;
+},
+_objdiff: function(obj1, obj2) {
+	var r = {};
+	for(var i in obj1) {
+		if(!obj2[i])
+			r[i]=obj1[i];
+	}
+	return r;
 },
 _repeatStr: function(str, times) {
 	if(str&&times) {		
@@ -478,6 +505,7 @@ createElement: function(parent, tagName, attrs) {
 	return e;
 },
 _getTagName: function(dom) {
+	dom=$(dom);
 	return dom.get(0).tagName.toLowerCase()
 },
 isDocument: function(dom) {

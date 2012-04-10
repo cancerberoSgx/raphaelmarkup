@@ -1,0 +1,90 @@
+	<!DOCTYPE html>
+<html>
+<head>
+	<script src="../../deps/jquery-1.7.1.js"></script>
+	<script src="../../deps/raphael-min.js"></script>
+<!-- 	<script type="text/javascript" src="../../rm.js"></script> -->
+	<script type="text/javascript" src="../../rm-core.js"></script>
+	<script type="text/javascript" src="../../rm-ext.js"></script>
+<title>Raphael markup - custom tags renderers</title>
+</head>
+<body>
+
+<p>this is a example show how to define a new bse tag using custom tag renderers and then use that custom base tag in a template. </p>
+
+<script>
+
+</script>
+<raphael>	
+
+<!-- a template example that use our new custom base element -->
+<template name="strange-lines-templated">
+	<use-tag name="strange-lines-templated"></use-tag>
+	
+	<template-arg name="x" value="100" type="int"></template-arg>
+	<template-arg name="y" value="100" type="int"></template-arg>
+	<template-arg name="w" value="100" type="int"></template-arg>
+	<template-arg name="h" value="10" type="int"></template-arg>	
+	<template-arg name="text" value="" type="string"></template-arg>	
+	
+	<template-body>
+		<set class="strange1">		
+		
+			{%
+			for(var i=0; i&lt;20; i++) { %}
+			
+				&lt;strange-lines x="{%= rm.randomBetween(x,x+w-100) %}" 
+					y="{%=rm.randomBetween(y,y+h-100)%}" 
+					width="{%= rm.randomBetween(100,w) %}" 
+					height="{%= rm.randomBetween(100,h)%}" opacity="0.5">&lt;/strange-lines>
+			
+			{%}%}	
+			
+			&lt;text font-size="44">{%= text%}&lt;/text>
+		</set>
+	</template-body>
+</template>
+
+
+	<paper x="10" y="10" width="800" height="800">
+	<strange-lines-templated x="100" y="100" w="400" h="500" text="HELLO"></strange-lines-templated>
+	</paper>
+	
+</raphael>
+
+
+
+<script type="text/javascript">
+//define a new custom tag renderer
+var strangeLinesRenderer = function(rdoc, dom, paper) {
+	var x = parseInt(dom.attr("x")), 
+		y = parseInt(dom.attr("y")),
+		w = parseInt(dom.attr("width")), 
+		h = parseInt(dom.attr("height")), 
+		count = dom.attr("count")?parseInt(dom.attr("count")) : 100;
+	paper.setStart();
+	paper.rect(x,y,w,h);
+	for(var i = 0; i<count; i++) {
+		
+		var ps = " M "+rm.randomBetween(x, x+w)+","+rm.randomBetween(y,y+h)+
+			" L "+rm.randomBetween(x, x+w)+","+rm.randomBetween(y,y+h);
+		
+		var path = paper.path(ps).attr({"stroke": rm.randomColor()});
+		
+		/* using rm._renderAttrs(dom, shape, paper) we can copy  any base raphael attribute to this shape.
+		In this case we want that because we want our shape to support base raphael api.
+		This is optionally perhaps our shape don't want to support raphael attributes or want to redefine them. */
+		rm._renderAttrs(dom, path, paper);
+	}
+	return paper.setFinish();
+}
+//register the renderer under the tag name of strange-lines
+rm._registerTagRenderer(strangeLinesRenderer, "strange-lines");
+
+var rdoc = rm.render();
+
+
+</script>
+
+</body>
+</html>
